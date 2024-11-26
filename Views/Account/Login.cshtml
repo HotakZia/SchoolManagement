@@ -1,0 +1,78 @@
+﻿
+
+
+
+
+
+
+
+
+
+<section class="pt-100 login-register">
+    <div class="container">
+        <div class="row login-register-cover">
+            <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
+                <div class="text-center">
+                    <p class="font-sm text-brand-2">Welcome back! </p>
+                    <h2 class="mt-10 mb-5 text-brand-1">Member Login</h2>
+                    <p class="font-sm text-muted mb-30">Access to all features. No credit card required.</p>
+                    @*<button class="btn social-login hover-up mb-20"><img src="assets/imgs/template/icons/icon-google.svg" alt="jobbox"><strong>Sign in with Google</strong></button>
+                        <div class="divider-text-center"><span>Or continue with</span></div>*@
+                </div>
+
+                <form action="Login" method="post" data-ajax-success="LoginPass" data-ajax-begin="lOnBegin" data-ajax-complete="lOnComplete" data-ajax-failure="lOnFailure" data-ajax="true">
+                    @Html.AntiForgeryToken()
+
+
+                    @Html.Hidden("SyetemRandomNumber", (string)ViewBag.RandomNumber)
+
+                    <div id="_viewLogin">
+                        @Html.Partial("_LoginPartial")
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="img-1 d-none d-lg-block"><img class="shape-1" src="~/Content/JobBox/assets/imgs/page/login-register/img-4.svg" alt="hadaf.af"></div>
+            <div class="img-2"><img src="~/Content/JobBox/assets/imgs/page/login-register/img-3.svg" alt="hadaf.af"></div>
+
+        </div>
+    </div>
+</section>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- jQuery Unobtrusive Validation -->
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.unobtrusive-ajax/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+<script>
+    function lOnBegin() {
+        $("#_btnText").text("checking credentials...");
+        $('#_btnLogin').prop('disabled', true);
+
+        $("#_btnLoader").show();
+    }
+    function LoginPass(data) {
+        alert();
+
+        if (data == "true") {
+                 //$("#_btnText").text("redirecting to dashboard...");
+              @*document.location.href = "@Url.Action("cPanel","BasePanal")",true;*@
+
+            window.location.href = '@Url.Action("Index", "Home")';
+        }
+        else {
+
+            $("#_viewLogin").html(data);
+        }
+
+    }
+    function lOnFailure(data) { }
+    function lOnComplete(data) {
+
+                $('#_btnLogin').prop('disabled', false);
+
+
+    }
+</script>
