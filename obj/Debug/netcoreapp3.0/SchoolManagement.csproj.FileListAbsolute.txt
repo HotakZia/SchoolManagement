@@ -181,3 +181,4 @@ D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcore
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.Views.pdb
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.csproj.CopyComplete
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Shared\_LoginPartial.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.csprojAssemblyReference.cache
