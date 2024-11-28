@@ -76,6 +76,7 @@ namespace SchoolManagement.Controllers
        //[Route("login")]
         public async Task<IActionResult> LoginAsync(string returnUrl)
         {
+            return RedirectToAction("Index", "Home");
             ViewBag.ReturnUrl = returnUrl;
             ViewBag.pTitle = "Welcome Back: Log in for Access to Exclusive Content";
 
@@ -182,7 +183,8 @@ namespace SchoolManagement.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login([Bind] Users model)
         {
-               dynamic showMessageString = string.Empty;
+            
+            dynamic showMessageString = string.Empty;
             bool connection = false;
             try
             {

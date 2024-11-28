@@ -1,44 +1,114 @@
 ﻿
 
+@{
+
+    Layout = null;
+}
 
 
 
 
 
+<!DOCTYPE html>
+<html lang="en">
 
+<!-- Mirrored from preschool.dreamstechnologies.com/template/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 10:39:18 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
+    <title>HADAF School - Login</title>
 
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="~/template/assets/img/favicon.png">
 
-<section class="pt-100 login-register">
-    <div class="container">
-        <div class="row login-register-cover">
-            <div class="col-lg-4 col-md-6 col-sm-12 mx-auto">
-                <div class="text-center">
-                    <p class="font-sm text-brand-2">Welcome back! </p>
-                    <h2 class="mt-10 mb-5 text-brand-1">Member Login</h2>
-                    <p class="font-sm text-muted mb-30">Access to all features. No credit card required.</p>
-                    @*<button class="btn social-login hover-up mb-20"><img src="assets/imgs/template/icons/icon-google.svg" alt="jobbox"><strong>Sign in with Google</strong></button>
-                        <div class="divider-text-center"><span>Or continue with</span></div>*@
-                </div>
+    <!-- Fontfamily -->
+    <link href="~/lib/Genral.css" rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/template/assets/css/bootstrap.min.css">
 
-                <form action="Login" method="post" data-ajax-success="LoginPass" data-ajax-begin="lOnBegin" data-ajax-complete="lOnComplete" data-ajax-failure="lOnFailure" data-ajax="true">
-                    @Html.AntiForgeryToken()
+    <!-- Feathericon CSS -->
+    <link rel="stylesheet" href="~/template/assets/plugins/feather/feather.css">
 
+    <!-- Pe7 CSS -->
+    <link rel="stylesheet" href="~/template/assets/plugins/icons/flags/flags.css">
 
-                    @Html.Hidden("SyetemRandomNumber", (string)ViewBag.RandomNumber)
+    <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="~/template/assets/plugins/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="~/template/assets/plugins/fontawesome/css/all.min.css">
 
-                    <div id="_viewLogin">
-                        @Html.Partial("_LoginPartial")
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="~/template/assets/css/style.css">
+</head>
+<body>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper login-body">
+        <div class="login-wrapper">
+            <div class="container">
+                <div class="loginbox">
+                    <div class="login-left">
+                        <img class="img-fluid" src="~/template/assets/img/login.png" alt="Logo">
                     </div>
+                    <div class="login-right">
+                        <div class="login-right-wrap">
+                            <h1>Welcome to Preskool</h1>
+                            <p class="account-subtitle">Need an account?  <a href="register.html">Sign Up</a></p>
+                            <h2>Sign in</h2>
+                            <!-- Form -->
+                            <form action="Login" method="post" data-ajax-success="LoginPass" data-ajax-begin="lOnBegin" data-ajax-complete="lOnComplete" data-ajax-failure="lOnFailure" data-ajax="true">
+                                @Html.AntiForgeryToken()
 
 
-                </form>
+                                @Html.Hidden("SyetemRandomNumber", (string)ViewBag.RandomNumber)
+
+                                <div id="_viewLogin">
+                                    @Html.Partial("_LoginPartial")
+                                </div>
+
+
+                            </form>
+                            <!-- /Form -->
+
+                            <div class="login-or">
+                                <span class="or-line"></span>
+                                <span class="span-or">or</span>
+                            </div>
+
+                            <!-- Social Login -->
+                            <div class="social-login">
+                                <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            </div>
+                            <!-- /Social Login -->
+
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="img-1 d-none d-lg-block"><img class="shape-1" src="~/Content/JobBox/assets/imgs/page/login-register/img-4.svg" alt="hadaf.af"></div>
-            <div class="img-2"><img src="~/Content/JobBox/assets/imgs/page/login-register/img-3.svg" alt="hadaf.af"></div>
-
         </div>
     </div>
-</section>
+    <!-- /Main Wrapper -->
+    <!-- jQuery -->
+    <script src="~/template/assets/js/jquery-3.7.1.min.js" type="edc00698f51a1d9b3409b134-text/javascript"></script>
+
+    <!-- Bootstrap Core JS -->
+    <script src="~/template/assets/js/bootstrap.bundle.min.js" type="edc00698f51a1d9b3409b134-text/javascript"></script>
+
+    <!-- Feather Icon JS -->
+    <script src="~/template/assets/js/feather.min.js" type="edc00698f51a1d9b3409b134-text/javascript"></script>
+
+    <!-- Custom JS -->
+    <script src="~/template/assets/js/script.js" type="edc00698f51a1d9b3409b134-text/javascript"></script>
+
+    <script src="../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="edc00698f51a1d9b3409b134-|49" defer></script>
+</body>
+
+<!-- Mirrored from preschool.dreamstechnologies.com/template/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 10:39:19 GMT -->
+</html>
+
+
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

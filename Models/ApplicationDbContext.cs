@@ -14,7 +14,11 @@ using Microsoft.Extensions.Options;
 
 namespace SchoolManagement.Models
 {
- 
+    /// <summary>
+    /// how to connecto to Database
+    /// </summary>
+    //Scaffold-DbContext "Data Source=Dell; Initial Catalog=School_db;user=sa;password=123; Integrated Security=True; Connect Timeout=30; Encrypt=False; TrustServerCertificate=False; ApplicationIntent=ReadWrite; MultiSubnetFailover=False" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models/db -force
+
     public class CustomUserRequireClaim : IAuthorizationRequirement
     {
        

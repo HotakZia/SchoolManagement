@@ -1,52 +1,46 @@
 ﻿
 
 @model SchoolManagement.Models.Users
-@*@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-            @Html.AntiForgeryToken()
-
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
-                </li>
-                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
-            </ul>
-
-    }*@
 
 
 <script src='https://www.google.com/recaptcha/api.js'></script>
+
 <div style="  display: flex;
       justify-content: center;">
     @Html.ValidationSummary(true, "", new { @class = "text-danger text-align:center" })
 
 </div>
-<div class="form-group">
-    <label class="form-label" for="input-1">Username or Email address *</label>
-    <input class="form-control" id="input-1" type="text" value="@ViewBag.email" required="" name="EmailId" placeholder="Zia">
-</div>
-<div class="form-group">
-    <label class="form-label" for="input-4">Password *</label>
-    <input class="form-control" id="input-4" type="password" required="" name="password" placeholder="************">
-</div>
-@if (ViewBag.Connection == true)
-{
-    <div class="login_footer form-group d-flex justify-content-between">
-        <div id="rR" class="g-recaptcha" data-sitekey="6LcCtQIqAAAAAEXZkytzq7UtrWm8dXANLxfZ9PZo"></div>
-
-
-        @*<label class="cb-container">
-                <input type="checkbox"><span class="text-small">Remenber me</span><span class="checkmark"></span>
-            </label><a class='text-muted' >Forgot Password</a>*@
+<form action="">
+    <div class="form-group">
+        <label>Username <span class="login-danger">*</span></label>
+        <input class="form-control" type="text" name="EmailId">
+        <span class="profile-views"><i class="fas fa-user-circle"></i></span>
     </div>
-}
+    <div class="form-group">
+        <label>Password <span class="login-danger">*</span></label>
+        <input class="form-control pass-input" type="text" name="Password">
+        <span class="profile-views feather-eye toggle-password"></span>
+    </div>
+    @if (ViewBag.Connection == true)
+    {
+        <div class="login_footer form-group d-flex justify-content-between">
+            <div id="rR" class="g-recaptcha" data-sitekey="6LcCtQIqAAAAAEXZkytzq7UtrWm8dXANLxfZ9PZo"></div>
 
-<div class="form-group" id="_loginButton">
-    @*<button class="btn btn-brand-1 hover-up w-100" type="submit" id="_btnLogin" name="login">Sign In</button>*@
-    <button class="btn btn-primary hover-up w-100" type="submit" id="_btnLogin" name="login">
-        <span class="spinner-border spinner-border-sm" style="display:none" id="_btnLoader" role="status" aria-hidden="true"></span>
-        <span class="sr-only" id="_btnText">Sign In</span>
-    </button>
-</div>
 
-<div class="text-muted text-center">Don't have an Account? <a href='~/Account/Register'>Sign up</a></div>
+
+        </div>
+    }
+    <div class="forgotpass">
+        <div class="remember-me">
+            <label class="custom_check mr-2 mb-0 d-inline-flex remember-me">
+                Remember me
+                <input type="checkbox" name="radio">
+                <span class="checkmark"></span>
+            </label>
+        </div>
+        <a href="forgot-password.html">Forgot Password?</a>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary btn-block" type="submit">Login</button>
+    </div>
+</form>

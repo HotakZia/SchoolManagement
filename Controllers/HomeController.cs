@@ -20,7 +20,7 @@ namespace SchoolManagement.Controllers
         }
         //[Route("dashboard")]
 
-        [Authorize(Roles = ("Authorize"))]
+        //[Authorize(Roles = ("Authorize"))]
         public IActionResult Index()
         {
             return View();
