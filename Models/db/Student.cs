@@ -15,8 +15,7 @@ namespace SchoolManagement.Models.db
         public string Street { get; set; }
         public string City { get; set; }
         public string Province { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
+        public string Contact { get; set; }
         public DateTime? AdmissionDate { get; set; }
         public string GuardianName { get; set; }
         public string GuardianPhone { get; set; }
@@ -28,5 +27,11 @@ namespace SchoolManagement.Models.db
         public string Comment { get; set; }
         public byte[] Attachment { get; set; }
         public bool? Status { get; set; }
+        public string FatherName { get; set; }
+        public string GfatherName { get; set; }
+        public string Tazkira { get; set; }
+        public string RoleNumber { get; set; }
+        public string BloodGroup { get; set; }
+        public string Shift { get; set; }
     }
 }

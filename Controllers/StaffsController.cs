@@ -14,7 +14,7 @@ namespace SchoolManagement.Controllers
     public class StaffsController : BaseController
     {
         //private readonly School_dbContext _context;
-
+        
         //public StaffsController(School_dbContext context)
         //{
         //    _context = context;
@@ -23,7 +23,7 @@ namespace SchoolManagement.Controllers
         // GET: Staffs
         public async Task<IActionResult> Index()
         {
-            return View(await db.TableStaffs.ToListAsync());
+            return View(await db.staff.ToListAsync());
         }
 
         // GET: Staffs/Details/5
@@ -34,7 +34,7 @@ namespace SchoolManagement.Controllers
                 return NotFound();
             }
 
-            var tableStaff = await db.TableStaffs
+            var tableStaff = await db.staff
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tableStaff == null)
             {
@@ -57,7 +57,6 @@ namespace SchoolManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserName,Email,Password,Created,Modefied,Creator,Status")] TableStaff tableStaff, IFormFile Image)
         {
-            dynamic showMessageString = string.Empty;
             if (ModelState.IsValid)
             {
                 tableStaff.Id = Guid.NewGuid();
@@ -123,7 +122,7 @@ namespace SchoolManagement.Controllers
                 return NotFound();
             }
 
-            var tableStaff = await db.TableStaffs.FindAsync(id);
+            var tableStaff = await db.staff.FindAsync(id);
             if (tableStaff == null)
             {
                 return NotFound();
@@ -174,7 +173,7 @@ namespace SchoolManagement.Controllers
                 return NotFound();
             }
 
-            var tableStaff = await db.TableStaffs
+            var tableStaff = await db.staff
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tableStaff == null)
             {
@@ -189,15 +188,15 @@ namespace SchoolManagement.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var tableStaff = await db.TableStaffs.FindAsync(id);
-            db.TableStaffs.Remove(tableStaff);
+            var tableStaff = await db.staff.FindAsync(id);
+            db.staff.Remove(tableStaff);
             await db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TableStaffExists(Guid id)
         {
-            return db.TableStaffs.Any(e => e.Id == id);
+            return db.staff.Any(e => e.Id == id);
         }
     }
 }

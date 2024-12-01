@@ -20,7 +20,7 @@ namespace SchoolManagement.Models.db
         public DateTime? HireDate { get; set; }
         public decimal? Salary { get; set; }
         public string SubjectTaught { get; set; }
-        public Guid? DepartmentId { get; set; }
+        public string Department { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string ModifiedBy { get; set; }
@@ -28,5 +28,9 @@ namespace SchoolManagement.Models.db
         public string Comment { get; set; }
         public byte[] Attachment { get; set; }
         public bool? Status { get; set; }
+        public int? Number { get; set; }
+        public string RoleNumber { get; set; }
+        public string Position { get; set; }
+        public string Tazkira { get; set; }
     }
 }

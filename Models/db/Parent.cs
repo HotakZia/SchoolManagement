@@ -25,5 +25,6 @@ namespace SchoolManagement.Models.db
         public string Comment { get; set; }
         public byte[] Attachment { get; set; }
         public bool? Status { get; set; }
+        public int? Number { get; set; }
     }
 }

@@ -1,0 +1,214 @@
+﻿
+
+@model SchoolManagement.Models.db.Schedule
+
+
+
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-sm-12">
+                <div class="page-sub-header">
+                    <h3 class="page-title">Create Schedules</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="students.html">Student</a></li>
+                        <li class="breadcrumb-item active">Add Students</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card comman-shadow">
+                <div class="card-body">
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"
+                          data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+
+
+                        @Html.AntiForgeryToken()
+
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title student-info">Register New Schedual<span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                            </div>
+
+                            @*<div class="col-12 col-sm-4">
+            <div class="form-group local-forms">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        </div>*@
+
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="ClassId" class="control-label"></label>
+
+                                    @Html.DropDownList("ClassId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })
+
+                                    <span asp-validation-for="ClassId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="SubjectId" class="control-label"></label>
+
+                                    @Html.DropDownList("SubjectId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })
+
+                                    <span asp-validation-for="SubjectId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="Year" class="control-label"></label>
+                                    <select class="form-control select" id="Year" name="Year">
+                                        @for (int i = 2000; i < DateTime.Now.Year + 2; i++)
+                                        {
+                                            <option value="@i">@i</option>
+                                        }
+
+                                    </select>
+                                    <span asp-validation-for="Year" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="Shift" class="control-label"></label>
+                                    <select class="form-control select" name="Shift" id="Shift">
+                                        <option selected disabled> Shift</option>
+                                        <option value="Morning">Morning</option>
+                                        <option value="Afternoon">afternoon</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+
+
+                                    </select>
+                                    <span asp-validation-for="Shift" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="HourOfDay" class="control-label"></label>
+                                    <select class="form-control select" name="HourOfDay" id="HourOfDay">
+                                        <option selected disabled> Hour Of Shift</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+
+
+                                    </select>
+                                    <span asp-validation-for="HourOfDay" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="DayOfWeek" class="control-label"></label>
+                                    <select class="form-control select" name="DayOfWeek" id="DayOfWeek">
+                                        <option selected disabled> Day of week</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                    </select>
+                                    <span asp-validation-for="DayOfWeek" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="StartTime" class="control-label"></label>
+                                    <input asp-for="StartTime" type="time" class="form-control" />
+                                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="EndTime" class="control-label"></label>
+                                    <input asp-for="EndTime" type="time" class="form-control" />
+                                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="Comment" class="control-label"></label>
+                                    <input asp-for="Comment" class="form-control" />
+                                    <span asp-validation-for="Comment" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="student-submit">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+         if (data.status == "true") {
+
+                 swal("Saved!",  data.message, "success");
+
+             $("#Name").val("");
+             $("#Comment").val("");
+              $("#Amount").val("");
+           @*document.location.href = "@Url.Action("Index","tbl_Transiction")",true;*@
+         }
+         else if (data.status=="duplicate") {
+              swal("Dupplicate Record!",  data.message, "warning");
+         }
+        else {
+        swal("False!", data.message, "error");
+        }
+
+
+        //$('#listContainer').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+    </script>
+}

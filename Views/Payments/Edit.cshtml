@@ -1,0 +1,117 @@
+﻿@model SchoolManagement.Models.db.Payment
+
+
+
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-sm-12">
+                <div class="page-sub-header">
+                    <h3 class="page-title">Edit @Model.Name</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="students.html">Student</a></li>
+                        <li class="breadcrumb-item active">Add Students</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card comman-shadow">
+                <div class="card-body">
+                    <form asp-action="Edit" method="post" data-ajax-success="OnSuccess"
+                          data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="CreatedBy" />
+                        <input type="hidden" asp-for="CreatedDate" />
+
+                        @Html.AntiForgeryToken()
+
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title student-info">Register New Payments<span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label>Payment Name <span class="login-danger">*</span></label>
+                                    <input class="form-control" type="text" name="Name" value="@Model.Name" maxlength="50" id="Name" placeholder="Enter  Name">
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms calendar-icon">
+                                    <label>Amount  <span class="login-danger">*</span></label>
+                                    <input class="form-control datetimepicker" name="Amount" value="@Model.Amount" type="text" id="Amount" placeholder="Enther Comment">
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms calendar-icon">
+                                    <label>Comment  <span class="login-danger">*</span></label>
+                                    <input class="form-control datetimepicker" name="Comment" type="text" value="@Model.Comment" id="Comment" placeholder="Enther Comment">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="student-submit">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+         if (data.status == "true") {
+
+                 swal("Saved!",  data.message, "success");
+
+             $("#Name").val("");
+             $("#Comment").val("");
+              $("#Amount").val("");
+           @*document.location.href = "@Url.Action("Index","tbl_Transiction")",true;*@
+         }
+         else if (data.status=="duplicate") {
+              swal("Dupplicate Record!",  data.message, "warning");
+         }
+        else {
+        swal("False!", data.message, "error");
+        }
+
+
+        //$('#listContainer').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+    </script>
+}

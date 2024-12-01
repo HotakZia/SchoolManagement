@@ -48,6 +48,7 @@ namespace SchoolManagement
         public void ConfigureServices(IServiceCollection services)
         {
 
+            services.AddMvc().AddViewOptions(options => { options.HtmlHelperOptions.ClientValidationEnabled = true; }); //unobot jquery
             services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;

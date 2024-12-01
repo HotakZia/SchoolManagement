@@ -18,20 +18,23 @@ namespace SchoolManagement.Models.db
         }
 
         public virtual DbSet<Attendance> Attendances { get; set; }
-        public virtual DbSet<Department> Departments { get; set; }
+        public virtual DbSet<Class> Classes { get; set; }
         public virtual DbSet<Fee> Fees { get; set; }
         public virtual DbSet<Inventory> Inventories { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
         public virtual DbSet<Parent> Parents { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Student> Students { get; set; }
+        public virtual DbSet<StudentPayment> StudentPayments { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<TableCompany> TableCompanies { get; set; }
         public virtual DbSet<TableRole> TableRoles { get; set; }
-        public virtual DbSet<TableStaff> TableStaffs { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<staff> staff { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -69,23 +72,33 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.StudentId).HasColumnName("StudentID");
             });
 
-            modelBuilder.Entity<Department>(entity =>
+            modelBuilder.Entity<Class>(entity =>
             {
-                entity.ToTable("Department");
+                entity.ToTable("Class");
 
-                entity.Property(e => e.DepartmentId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("DepartmentID");
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.DepartmentName).HasMaxLength(250);
+                entity.Property(e => e.Grad).HasMaxLength(50);
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(250);
+
+                entity.Property(e => e.Number).HasMaxLength(50);
+
+                entity.Property(e => e.Room).HasMaxLength(50);
+
+                entity.Property(e => e.Shift).HasMaxLength(50);
+
+                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
+
+                entity.Property(e => e.Year).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Fee>(entity =>
@@ -94,7 +107,7 @@ namespace SchoolManagement.Models.db
                     .ValueGeneratedNever()
                     .HasColumnName("FeeID");
 
-                entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Amount).HasColumnType("decimal(10, 1)");
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
@@ -202,6 +215,46 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.StudentId).HasColumnName("StudentID");
             });
 
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.ToTable("Payment");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Amount).HasColumnType("decimal(10, 1)");
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(250);
+
+                entity.Property(e => e.Type).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<Schedule>(entity =>
+            {
+                entity.ToTable("Schedule");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Name).HasMaxLength(250);
+
+                entity.Property(e => e.Shift).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Student>(entity =>
             {
                 entity.ToTable("Student");
@@ -212,21 +265,29 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.AdmissionDate).HasColumnType("datetime");
 
+                entity.Property(e => e.BloodGroup).HasMaxLength(50);
+
                 entity.Property(e => e.City).HasMaxLength(250);
 
                 entity.Property(e => e.ClassId).HasColumnName("ClassID");
+
+                entity.Property(e => e.Contact).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.DateOfBirth).HasColumnType("datetime");
+                entity.Property(e => e.DateOfBirth).HasColumnType("date");
 
-                entity.Property(e => e.Email).HasMaxLength(250);
+                entity.Property(e => e.FatherName).HasMaxLength(250);
 
                 entity.Property(e => e.FirstName).HasMaxLength(250);
 
                 entity.Property(e => e.Gender).HasMaxLength(250);
+
+                entity.Property(e => e.GfatherName)
+                    .HasMaxLength(250)
+                    .HasColumnName("GFatherName");
 
                 entity.Property(e => e.GuardianName).HasMaxLength(250);
 
@@ -238,34 +299,45 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Phone).HasMaxLength(250);
-
                 entity.Property(e => e.Province).HasMaxLength(250);
 
+                entity.Property(e => e.RoleNumber).HasMaxLength(50);
+
+                entity.Property(e => e.Shift).HasMaxLength(50);
+
                 entity.Property(e => e.Street).HasMaxLength(250);
+
+                entity.Property(e => e.Tazkira).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<StudentPayment>(entity =>
+            {
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Subject>(entity =>
             {
                 entity.ToTable("Subject");
 
-                entity.Property(e => e.SubjectId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("SubjectID");
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.SubjectName).HasMaxLength(250);
-
-                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
             });
 
             modelBuilder.Entity<TableCompany>(entity =>
@@ -320,23 +392,6 @@ namespace SchoolManagement.Models.db
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<TableStaff>(entity =>
-            {
-                entity.ToTable("Table_Staff");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
-                entity.Property(e => e.Created).HasColumnType("date");
-
-                entity.Property(e => e.Email).HasMaxLength(250);
-
-                entity.Property(e => e.Modefied).HasColumnType("date");
-
-                entity.Property(e => e.Password).HasMaxLength(250);
-
-                entity.Property(e => e.UserName).HasMaxLength(250);
-            });
-
             modelBuilder.Entity<TblUser>(entity =>
             {
                 entity.ToTable("Tbl_User");
@@ -354,9 +409,7 @@ namespace SchoolManagement.Models.db
             {
                 entity.ToTable("Teacher");
 
-                entity.Property(e => e.TeacherId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("TeacherID");
+                entity.Property(e => e.TeacherId).ValueGeneratedNever();
 
                 entity.Property(e => e.City).HasMaxLength(250);
 
@@ -366,7 +419,7 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.DateOfBirth).HasColumnType("datetime");
 
-                entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
+                entity.Property(e => e.Department).HasMaxLength(50);
 
                 entity.Property(e => e.Email).HasMaxLength(250);
 
@@ -384,13 +437,19 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.Phone).HasMaxLength(250);
 
+                entity.Property(e => e.Position).HasMaxLength(50);
+
                 entity.Property(e => e.Province).HasMaxLength(250);
 
-                entity.Property(e => e.Salary).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.RoleNumber).HasMaxLength(50);
+
+                entity.Property(e => e.Salary).HasColumnType("decimal(10, 1)");
 
                 entity.Property(e => e.Street).HasMaxLength(250);
 
                 entity.Property(e => e.SubjectTaught).HasMaxLength(250);
+
+                entity.Property(e => e.Tazkira).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Transaction>(entity =>
@@ -399,11 +458,19 @@ namespace SchoolManagement.Models.db
                     .ValueGeneratedNever()
                     .HasColumnName("TransactionID");
 
-                entity.Property(e => e.Amount).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.Amount).HasColumnType("decimal(10, 1)");
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.PaidBy).HasMaxLength(250);
 
                 entity.Property(e => e.TransactionDate).HasColumnType("datetime");
 
@@ -427,6 +494,23 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.Role).HasMaxLength(50);
 
                 entity.Property(e => e.Username).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<staff>(entity =>
+            {
+                entity.ToTable("Staff");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Created).HasColumnType("date");
+
+                entity.Property(e => e.Email).HasMaxLength(250);
+
+                entity.Property(e => e.Modefied).HasColumnType("date");
+
+                entity.Property(e => e.Password).HasMaxLength(250);
+
+                entity.Property(e => e.UserName).HasMaxLength(250);
             });
 
             OnModelCreatingPartial(modelBuilder);
