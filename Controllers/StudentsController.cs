@@ -66,14 +66,20 @@ namespace SchoolManagement.Controllers
              })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
             return PartialView("_index",list);
         }
-        [HttpPost]
-        public async Task<IActionResult> getStudentByName(string term)
+        public async Task<IActionResult> pass(Guid? Id)
         {
-      
-            var list = await (from student in db.Students
+            ViewBag.Id = new SelectList(db.Classes.ToList(), "Id", "Name");
+            ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
+          
+            IList<Models.Entities.Student> list = new List<Models.Entities.Student>();
+            if (Id == null)
+            {
+                return View(list);
+            }
+            list = await (from student in db.Students
                           join class_ in db.Classes on student.ClassId equals class_.Id
 
-                          where student.FirstName.StartsWith(term)||student.LastName.StartsWith(term)
+                          where student.ClassId == Id
 
                           select new Models.Entities.Student
                           {
@@ -102,10 +108,33 @@ namespace SchoolManagement.Controllers
                               ModifiedBy = student.ModifiedBy,
                               ModifiedDate = student.ModifiedDate,
                               Province = student.Province,
+                              CreatedDate=student.CreatedDate,
+                              Number=db.Exams.Where(x=>x.ClassId==class_.Id&&x.StudentId==student.StudentId&&x.Status==true).Count()
+
+                          })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
+     
+            return PartialView("_pass", list);
+        }
+        [HttpPost]
+        public async Task<IActionResult> getStudentByName(string term)
+        {
+      
+            var list = await (from student in db.Students
+                        
+
+                          where student.FirstName.StartsWith(term)||student.LastName.StartsWith(term)
+
+                          select new Models.Entities.Student
+                          {
+                             
+                              StudentId = student.StudentId,
+                              
+                              FirstName = student.FirstName+" "+student.LastName +" /"+student.RoleNumber
+                            
 
 
                           })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
-            return PartialView("_index", list);
+            return Json(list);
         }
         [HttpPost]
         public JsonResult Get_Supplier(string term)
@@ -169,11 +198,13 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Shift,Tazkira,FatherName, GFatherName,Contact,RoleNumber,StudentId,FirstName,LastName,DateOfBirth,Gender,Street,City,Province,Email,Phone,AdmissionDate,GuardianName,GuardianPhone,ClassId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,BloodGroup")] Student student,List<Guid> Payment, IFormFile Image)
+        public async Task<IActionResult> Create([Bind("Shift,Tazkira,FatherName, GfatherName,Contact,RoleNumber,StudentId,FirstName,LastName,DateOfBirth,Gender,Street,City,Province,Email,Phone,AdmissionDate,GuardianName,GuardianPhone,ClassId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,BloodGroup")] Student student,List<Guid> Payment, IFormFile Image)
         {
 
             try
             {
+                ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name",selectedValue:student.StudentId);
+                ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name",selectedValue:student.ClassId);
                 if (ModelState.IsValid)
                 {
                     var checkduplicate = db.Students.Where(x => x.RoleNumber == student.RoleNumber || (x.FirstName == student.FirstName &&
@@ -210,7 +241,7 @@ namespace SchoolManagement.Controllers
                                 showMessageString = new
                                 {
                                     status = "false",
-                                    message = " ads image must be a JPEG, PNG or SVG format."
+                                    message = "Profile photo must be a JPEG, PNG or SVG format."
                                 };
                                 return Json(showMessageString);
                             }
@@ -272,9 +303,16 @@ namespace SchoolManagement.Controllers
                     tableRole.Id = Guid.NewGuid();
                     tableRole.RoleType = "Read-Only";
                     tableRole.UserRole = "Student";
+                    tableRole.UserId = student.StudentId;
+                    db.TableRoles.Add(tableRole);
+
+                     tableRole = new TableRole();
+                    tableRole.Id = Guid.NewGuid();
+                    tableRole.RoleType = "Authorize-Only";
+                    tableRole.UserRole = "Authorize";
                     tableRole.UserId = tblUser.Id;
                     db.TableRoles.Add(tableRole);
-                    
+
                     await db.SaveChangesAsync();
                     showMessageString = new
                     {
@@ -315,6 +353,8 @@ namespace SchoolManagement.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name");
+            ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
             return View(student);
         }
 
@@ -323,13 +363,154 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Shift,RoleNumber,StudentId,FirstName,LastName,DateOfBirth,Gender,Street,City,Province,Email,Phone,AdmissionDate,GuardianName,GuardianPhone,ClassId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status")] Student student)
+        public async Task<IActionResult> Edit(Guid id, [Bind("BloodGroup,Tazkira,Shift,RoleNumber,StudentId,FirstName,FatherName,GfatherName,LastName,DateOfBirth,Gender,Street,City,Province,Contact,AdmissionDate,GuardianName,GuardianPhone,ClassId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status")] Student student, List<Guid> Payment, IFormFile Image)
         {
             if (id != student.StudentId)
             {
                 return NotFound();
             }
+            try
+            {
+                ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name", selectedValue: student.StudentId);
+                ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name", selectedValue: student.ClassId);
+                if (ModelState.IsValid)
+                {
+                    var checkduplicate = db.Students.Where(x => x.RoleNumber == student.RoleNumber 
+                    &&x.FirstName == student.FirstName &&
+                      x.LastName == x.LastName &&
+                      x.FatherName == x.FatherName && 
+                      x.GfatherName == student.GfatherName&&
+                      x.StudentId!=student.StudentId).AsNoTracking().FirstOrDefault();
+                    if (checkduplicate != null)
+                    {
+                        showMessageString = new
+                        {
+                            status = "dupplicate",
+                            message = student.FirstName + " " + student.LastName + " is dupplicate."
 
+                        };
+                        return Json(showMessageString);
+                    }
+                    if (Image != null)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+
+                            Image.CopyToAsync(memoryStream);
+                            Byte[] fileBytes = memoryStream.ToArray();
+                            int maxFileSizeInBytes = 1 * 1024 * 1024 / 1; // 10MB (adjust as needed)
+                            if (
+                       Image.ContentType.ToLower() != "image/jpg" &&
+                       Image.ContentType.ToLower() != "image/jpeg" &&
+                       Image.ContentType.ToLower() != "image/pjpeg" &&
+                       Image.ContentType.ToLower() != "image/gif" &&
+                       Image.ContentType.ToLower() != "image/x-png" &&
+                       Image.ContentType.ToLower() != "image/png" &&
+                       Image.ContentType.ToLower() != "image/svg"
+                   )
+                            {
+
+                                showMessageString = new
+                                {
+                                    status = "false",
+                                    message = "Profile photo must be a JPEG, PNG or SVG format."
+                                };
+                                return Json(showMessageString);
+                            }
+                            if (Image.Length > maxFileSizeInBytes)
+                            {
+
+                                showMessageString = new
+                                {
+                                    status = "false",
+                                    message = " Profile photo max size must be 1024 KB."
+                                };
+                                return Json(showMessageString);
+                            }
+                            else
+                            {
+                                student.Attachment = fileBytes;
+
+                            }
+                        }
+                    }
+                    
+                    student.ModifiedDate = DateTime.Now;
+                    
+                    db.Update(student);
+
+                    ////////////////////////////////
+                    ///Create payments for 
+                    ///
+                    var payments = db.StudentPayments.Where(x => x.StudentId == student.StudentId).ToList();
+                    if (payments.Count>=1)
+                    {
+                        foreach (var item in payments)
+                        {
+                            db.Remove(item);
+                        }
+                     
+                    }
+                    if (Payment != null && Payment.Count != 0)
+                    {
+                        var pay = new StudentPayment();
+                        foreach (var item in Payment)
+                        {
+                            pay = new StudentPayment();
+                            pay.PaymentId = item;
+                            pay.StudentId = id;
+                            pay.Id = Guid.NewGuid();
+                            pay.CreatedDate = DateTime.Now;
+                            pay.Status = true;
+
+
+                            db.StudentPayments.Add(pay);
+                        }
+                    }
+
+
+                    ////////////
+                    /// Create user account for new student
+
+                    var tblUser = db.TblUsers.Where(x => x.UserId == id).FirstOrDefault();
+                    if (tblUser!=null)
+                    {
+                        Models.Hashing hashing = new Models.Hashing();
+                        tblUser.Name = student.FirstName + student.LastName;
+                        tblUser.Email = student.FirstName + student.LastName;
+                        tblUser.CanLogin = true;
+                        db.Update(tblUser);
+                    }
+
+
+               
+                    // Refresh the original values with the database values
+                    await db.SaveChangesAsync();
+                    showMessageString = new
+                    {
+                        status = "true",
+                        message = student.FirstName + " " + student.LastName + " has been Updated."
+
+                    };
+                    return Json(showMessageString);
+                    return RedirectToAction(nameof(Index));
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.ToString()
+
+                };
+                return Json(showMessageString);
+            }
+            return View(student);
+            ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name", selectedValue: student.StudentId);
+            ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name", selectedValue: student.ClassId);
             if (ModelState.IsValid)
             {
                 try

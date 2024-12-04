@@ -33,5 +33,7 @@ namespace SchoolManagement.Models.Entities
         public string Tazkira { get; set; }
         public string RoleNumber { get; set; }
         public string BloodGroup { get; set; }
+        public int Number { get; set; }
+        public  IList<Models.Entities.Payment> studentFeesPayments { get; set; }
     }
 }

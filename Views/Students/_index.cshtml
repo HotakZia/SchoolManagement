@@ -5,7 +5,6 @@
         Layout = "~/Views/Shared/_Layout.cshtml";
     }*@
 
-<link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
 
 <div class="table-responsive">
     <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
@@ -18,7 +17,9 @@
                 </th>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Email</th>
+                <th>Class</th>
+                <th>Responsible</th>
+                <th>Contact</th>
                 <th>Status</th>
 
                 <th class="text-end">Action</th>
@@ -28,52 +29,58 @@
             @foreach (var item in Model)
             {
                 string Imge = "";
+           
+            <tr>
+                <input type="hidden"  name="StudentId" value="@item.StudentId" />
+                
+                <input type="text" name="name" value="@ViewBag.ClassId" />
+           
+           
+                <td>
+                    <div class="form-check check-tables">
+                        <input class="form-check-input" type="checkbox" value="something">
+                    </div>
+                </td>
+                <td>@item.RoleNumber</td>
 
-                <tr>
+                @if (item.Attachment != null)
+                {
+                    Imge = Convert.ToBase64String(item.Attachment);
+            <td>
+
+                <img src="@string.Format("data:image/jpeg;base64,{0}",Imge)"  class="img-fluid avatar-lg rounded" />
+                @item.FirstName @item.LastName
+            </td>
+                }
+                else
+                {
                     <td>
-                        <div class="form-check check-tables">
-                            <input class="form-check-input" type="checkbox" value="something">
-                        </div>
+                        <a href="teacher-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-02.jpg" alt="User Image"></a>
+                        <a href="teacher-details.html">Aaliyah</a>
+                        @item.FirstName @item.LastName
                     </td>
-                    <td>1</td>
+                }
 
-                    @if (item.Attachment != null)
-                    {
-                        Imge = Convert.ToBase64String(item.Attachment);
-                        <td>
+                <td>@item.ClassName</td>
+                <td>@item.GfatherName / @item.GuardianPhone</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contact)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
 
-                            <img src="@string.Format("data:image/jpeg;base64,{0}",Imge)" height="100" width="100" />
-                            @item.FirstName @item.LastName
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            <a href="teacher-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-02.jpg" alt="User Image"></a>
-                            <a href="teacher-details.html">Aaliyah</a>
-                            @item.FirstName @item.LastName
-                        </td>
-                    }
-
-
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FatherName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-
-                    <td class="text-end">
-                        <div class="actions">
-                            <a asp-action="Details" asp-route-id="@item.StudentId" class="btn btn-sm bg-success-light me-2">
-                                <i class="feather-eye"></i>
-                            </a>
-                            <a asp-action="Edit" asp-route-id="@item.StudentId" class="btn btn-sm bg-danger-light">
-                                <i class="feather-edit"></i>
-                            </a>
-                        </div>
-                    </td>
-                </tr>
+                <td class="text-end">
+                    <div class="actions">
+                        <a asp-action="Details" asp-route-id="@item.StudentId" class="btn btn-sm bg-success-light me-2">
+                            <i class="feather-eye"></i>
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@item.StudentId" class="btn btn-sm bg-danger-light">
+                            <i class="feather-edit"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
             }
 
 
@@ -82,84 +89,3 @@
 </div>
 
 
-@*<script src="~/js/jQeury.js"></script>
-
-    <script src="~/template/assets/js/jquery-ui.min.js"></script>*@
-<link href="~/template/assets/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
-
-<script src="~/template/assets/jquery-ui/jquery-ui.min.js"></script>
-
-<!-- Datatables JS -->
-
-<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
-
-
-@section Scripts {
-
-
-    <script>
-        $('#searchTXT').autocomplete({
-            minlength: 3,
-            source: function (request, response) {
-                alert();
-                var SearchText = document.getElementById('searchTXT').value;
-                $('#searchTXT').removeClass('notfound')
-                $('#searchTXT').addClass('loading');
-                $.ajax({
-                    type: "POST",
-                    async: true,
-                    url: "/Student/getStudentByName",
-                    //data: "{term:'" + SearchText + "'}",
-                    data: { "term": SearchText },
-                    //contentType: "application/json;characterset=utf-8",
-
-                    success: function (data) {
-                        $('#searchTXT').removeClass('loading');
-                        if (data.length == 0) {
-                            $('#searchTXT').removeClass('loading');
-                            $('#searchTXT').addClass('notfound');
-                        }
-                        $('#studentsList').html(data);
-                        //$("#trueTerm").val(SearchText);
-                        //$("#falseTerm").val(SearchText);
-                        //response($.map(data, function (item) {
-                        //    return { label: item.Name, value: item.Id };
-                        //}))
-
-                    },
-
-                    error: function (result) {
-                        debugger
-
-                        console.log(result);
-                    }
-                });
-            }
-            ,
-
-            //select: function (event, ui) {
-            //    $('#user').val(ui.item.label);
-            //    $('#CompanyId').val(ui.item.value);
-
-            //    $('#user').removeClass('loading notfound');
-
-            //    return false;
-            //}
-        })
-    </script>
-
-    <script>
-
-        function OnBegin() {
-            $('.page-loader').show();
-
-        }
-        function OnSuccess(data) {
-
-        }
-        function OnComplete() {
-            $('.page-loader').hide();
-
-        }
-    </script>
-}

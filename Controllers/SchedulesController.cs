@@ -25,7 +25,7 @@ namespace SchoolManagement.Controllers
                               join class_ in db.Classes on Schedule.ClassId equals class_.Id
                               join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
                               join teacher in db.Teachers on Subject.TeacherId equals teacher.TeacherId
-                              where Schedule.Status==true &&Schedule.Year==DateTime.Now.Year
+                              where Schedule.Status==true/* &&Schedule.Year==DateTime.Now.Year*/
 
                               select new Models.Entities.Schedual
                               {
@@ -111,16 +111,17 @@ namespace SchoolManagement.Controllers
                 {
                     var checkDuplicate = db.Schedules.Where(x => x.HourOfDay == schedule.HourOfDay &&
                       x.DayOfWeek == schedule.DayOfWeek &&
-                      schedule.SubjectId == schedule.SubjectId &&
-                      schedule.ClassId == schedule.ClassId).FirstOrDefault();
+                      x.SubjectId == schedule.SubjectId &&
+                      x.ClassId == schedule.ClassId).FirstOrDefault();
                     if (checkDuplicate!=null)
                     {
                         showMessageString = new
                         {
-                            status = "false",
+                            status = "duplicate",
                             message = "Dupplicate Schedual."
 
                         };
+                        return Json(showMessageString);
                     }
                     schedule.Id = Guid.NewGuid();
                     schedule.Status = true;

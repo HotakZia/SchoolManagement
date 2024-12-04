@@ -19,6 +19,27 @@ namespace SchoolManagement.Controllers
         //}
 
         // GET: Classes
+        [HttpPost]
+        public async Task<IActionResult> getClassByName(string term)
+        {
+
+            var list = await (from class_ in db.Classes
+
+
+                              where class_.Name.StartsWith(term)
+
+                              select new Models.Entities.Class_
+                              {
+
+                                  Id = class_.Id,
+
+                                  Name=class_.Name +" / "+class_.Shift+" / "+class_.Year+"/ "+ class_.Grad
+
+
+
+                              })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
+            return Json(list);
+        }
         public async Task<IActionResult> Index()
         {
             return View(await db.Classes.ToListAsync());

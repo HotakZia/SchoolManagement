@@ -1,0 +1,259 @@
+﻿@model IEnumerable<SchoolManagement.Models.Entities.Student>
+<!-- Datatables CSS -->
+<div id="aa"></div>
+
+<link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Students</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Students</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+    <form asp-action="pass" method="get" data-ajax="true" data-ajax-update="#studentsList"
+          data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure">
+        <!-- Form fields go here -->
+
+        <div class="student-group-form">
+            <div class="row">
+                <div class="col-lg-5 col-md-6">
+                    <div class="form-group">
+                        <input type="text" id="txtClassA" name="txtClassA" class="form-control" placeholder="Search class A ...">
+                        <input type="hidden" id="classAId" name="classAIA" />
+
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6">
+                    <div class="form-group">
+                        <input type="text" id="txtClassB" name="txtClassB" class="form-control" placeholder="Search class B ...">
+                        <input type="hidden" id="classBId" name="classBId" />
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="search-student-btn">
+                        <button type="btn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table">
+                <form asp-action="changeStudent" method="get" data-ajax="true" data-ajax-update="#studentsList"
+                      data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure">
+                    <div class="card-body">
+
+                        <!-- Page Header -->
+                        <div class="page-header">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <h3 class="page-title">Studnets</h3>
+                                </div>
+                                <div class="col-auto text-end float-end ms-auto download-grp">
+                                    <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
+
+                                    <a href="#" class="btn btn-success me-2"><i class="fas fa-chain"></i>Change Class</a>
+
+
+
+                                    <a asp-controller="Students" asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Page Header -->
+                        <div class="row" id="studentsList"> @Html.Partial("_index", Model)</div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/jQeury.js"></script>
+<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
+
+
+
+
+<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
+
+
+<script>
+    $('#txtClassA').autocomplete({
+
+        minlength: 3,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtClassA').val();
+            //alert(SearchText);
+            $('#txtClassA').removeClass('notfound');
+            $('#txtClassA').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Classes/getClassByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtClassA').removeClass('loading');
+                        $('#txtClassA').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtClassA').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtClassA').val(ui.item.label);
+
+            $('#ClassAId').val(ui.item.value);
+            $('#txtClassA').removeClass('notfound');
+            $('#txtClassA').addClass('checked');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+
+                url: "/Students/pass",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "Id": ui.item.value },
+                //contentType: "application/json;characterset=utf-8",
+                dataType: "html",
+                success: function (data) {
+                    
+                    //$("#_pass").html(data);
+                    document.getElementById('_index').innerHTML = data;
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+            return false;
+
+        },
+
+
+
+    });
+</script>
+<script>
+    $('#txtClassB').autocomplete({
+
+        minlength: 3,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtClassB').val();
+            //alert(SearchText);
+            $('#txtClassB').removeClass('notfound');
+            $('#txtClassB').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Classes/getClassByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    alert(data);
+        $('#_pass').html(data); // Update the content of the element with the received data
+
+},
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtClassB').val(ui.item.label);
+
+            $('#ClassBId').val(ui.item.value);
+            $('#txtClassB').removeClass('notfound');
+            $('#txtClassB').addClass('checked');
+
+            return false;
+
+        },
+
+
+
+    });
+</script>
+@section Scripts {
+
+
+
+
+    <script>
+
+        function OnBegin() {
+            $('.page-loader').show();
+
+        }
+        function OnSuccess(data) {
+            $('#studentsList').html(data);
+        }
+        function OnComplete() {
+            $('.page-loader').hide();
+
+        }
+    </script>
+}
