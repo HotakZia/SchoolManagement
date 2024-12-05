@@ -22,5 +22,6 @@ namespace SchoolManagement.Models.db
         public int? Number { get; set; }
         public DateTime? Date { get; set; }
         public string PaidBy { get; set; }
+        public int? Year { get; set; }
     }
 }

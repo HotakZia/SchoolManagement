@@ -40,9 +40,49 @@ namespace SchoolManagement.Controllers
                               })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
             return Json(list);
         }
-        public async Task<IActionResult> Index()
+        public ActionResult Index(Guid? Id)
         {
-            return View(await db.Classes.ToListAsync());
+         
+            IList<Models.Entities.Class_> list = new List<Models.Entities.Class_>();
+            //if (Id == null)
+            //{
+            //    return View(list);
+            //}
+           
+            list = (from class_ in db.Classes
+                   join teacher in db.Teachers on class_.TeacherId equals teacher.TeacherId
+                   
+                    //where id.ClassId == Id
+
+                    select new Models.Entities.Class_
+                    {
+                      Id=class_.Id,
+                        TeacherId = class_.TeacherId,
+                        Room = class_.Room,
+                        Name = class_.Name,
+                        Comment = class_.Comment,
+                        CreatedBy = class_.CreatedBy,
+                        CreatedDate = class_.CreatedDate,
+                        Grad = class_.Grad,
+                        ModifiedBy = class_.ModifiedBy,
+                        ModifiedDate = class_.ModifiedDate,
+                        Number = class_.Number,
+                        Attachment = class_.Attachment,
+                        Shift = class_.Shift,
+                        Status = class_.Status,
+                        //Year = class_.Year,
+                        TeacherName=teacher.FirstName+" "+teacher.LastName +" "+teacher.RoleNumber,
+                        SchedualList = (from Schedule in db.Schedules
+                                               join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
+                                               where Schedule.ClassId==class_.Id
+                                               select new Models.Entities.Subjetc
+                                               {
+                                                   SubjectName = Subject.SubjectName+"/ "+Subject.Grade+"-"+Subject.Year,
+                                                  SubjectId = Subject.Id
+                                               }).ToList()
+                       
+                    }).ToList();
+            return View (list);
         }
 
         // GET: Classes/Details/5

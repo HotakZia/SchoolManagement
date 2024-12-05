@@ -18,5 +18,7 @@ namespace SchoolManagement.Models.db
         public int? Number { get; set; }
         public Guid? StudentId { get; set; }
         public Guid? PaymentId { get; set; }
+        public string Name { get; set; }
+        public int? Year { get; set; }
     }
 }

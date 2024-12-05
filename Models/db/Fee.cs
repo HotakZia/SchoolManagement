@@ -21,6 +21,7 @@ namespace SchoolManagement.Models.db
         public byte[] Attachment { get; set; }
         public bool? Status { get; set; }
         public int? Number { get; set; }
-        public string Name { get; set; }
+        public Guid? ClassId { get; set; }
+        public int? Year { get; set; }
     }
 }

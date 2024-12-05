@@ -22,5 +22,7 @@ namespace SchoolManagement.Models.Entities
         public string Year { get; set; }
         public string Number { get; set; }
         public string Room { get; set; }
+        public List<Models.Entities.Subjetc> SchedualList { get; set; }
+        public string TeacherName { get; set; }
     }
 }

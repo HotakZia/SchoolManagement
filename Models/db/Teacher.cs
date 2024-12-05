@@ -32,5 +32,6 @@ namespace SchoolManagement.Models.db
         public string RoleNumber { get; set; }
         public string Position { get; set; }
         public string Tazkira { get; set; }
+        public int? Year { get; set; }
     }
 }

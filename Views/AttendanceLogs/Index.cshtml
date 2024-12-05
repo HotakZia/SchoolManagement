@@ -1,6 +1,5 @@
-﻿@model IEnumerable<SchoolManagement.Models.Entities.Class_>
-
-
+﻿@model IEnumerable<SchoolManagement.Models.Entities.Attendance>
+<!-- Datatables CSS -->
 
 
 <link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
@@ -34,8 +33,22 @@
 
                     </div>
                 </div>
-          
-        
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-group">
+                        <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Search student by name ...">
+                        <input type="hidden" id="StudentId" name="StudentId" />
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="form-group">
+                        <input type="date" class="form-control" name="fromDate">
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <div class="form-group">
+                        <input type="date" class="form-control" name="toDate">
+                    </div>
+                </div>
                 <div class="col-lg-2">
                     <div class="search-student-btn">
                         <button type="btn" class="btn btn-primary">Search</button>
@@ -80,7 +93,72 @@
 
 
 <script>
-   
+    $('#txtName').autocomplete({
+
+        minlength: 3,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtName').val();
+            //alert(SearchText);
+            $('#txtName').removeClass('notfound');
+            $('#txtName').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Students/getStudentByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                                           $('#txtName').removeClass('loading');
+                    $('#txtName').addClass('notfound');
+
+
+                    }
+                    else {
+                           $('#txtName').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.FirstName, value: item.StudentId };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+               $('#txtName').val(ui.item.label);
+
+                $('#StudentId').val(ui.item.value);
+                $('#txtName').removeClass('notfound');
+              $('#txtName').addClass('checked');
+
+            return false;
+
+        },
+
+
+
+    });
          $('#txtClass').autocomplete({
 
         minlength: 3,
@@ -139,7 +217,7 @@
             $('#ClassId').val(ui.item.value);
             $('#txtClass').removeClass('notfound');
             $('#txtClass').addClass('checked');
-
+          
 
             return false;
 
@@ -168,4 +246,3 @@
         }
     </script>
 }
-

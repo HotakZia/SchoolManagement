@@ -18,5 +18,6 @@ namespace SchoolManagement.Models.db
         public int? Number { get; set; }
         public string Name { get; set; }
         public string Type { get; set; }
+        public int? Year { get; set; }
     }
 }

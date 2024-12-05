@@ -33,5 +33,6 @@ namespace SchoolManagement.Models.db
         public string RoleNumber { get; set; }
         public string BloodGroup { get; set; }
         public string Shift { get; set; }
+        public int? Year { get; set; }
     }
 }

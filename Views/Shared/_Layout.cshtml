@@ -352,8 +352,8 @@
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Students</span> <span class="menu-arrow"></span></a>
                             <ul>
                                 <li><a asp-action="index" asp-controller="students">Student List</a></li>
-
                                 <li><a asp-action="create" asp-controller="students">Student Add</a></li>
+                                <li><a asp-action="Index" asp-controller="AttendanceLogs">Student Attandance</a></li>
 
                             </ul>
                         </li>
@@ -387,6 +387,7 @@
                             <ul>
                                 <li><a asp-action="index" asp-controller="Subjects">Subject List</a></li>
                                 <li><a asp-action="create" asp-controller="Subjects">Subject Add</a></li>
+                                <li><a asp-action="Assign" asp-controller="Subjects">Assign</a></li>
                             </ul>
                         </li>
                         <li class="submenu">
@@ -432,7 +433,10 @@
                             </ul>
                         </li>
                         <li>
-                            <a asp-controller="Holidays"  asp-action="Create"><i class="fas fa-holly-berry"></i> <span>Holiday</span></a>
+                            <a asp-controller="AttendanceLogs" asp-action="Index"><i class="fas fa-fingerprint"></i> <span>Attendance</span></a>
+                        </li>
+                        <li>
+                            <a asp-controller="Holidays" asp-action="Create"><i class="fas fa-holly-berry"></i> <span>Holiday</span></a>
                         </li>
                         <li>
                             <a asp-controller="Fees" asp-action="Create"><i class="fas fa-comment-dollar"></i> <span>Fees</span></a>
@@ -447,7 +451,7 @@
                             <a href="time-table.html"><i class="fas fa-table"></i> <span>Time Table</span></a>
                         </li>
                         <li>
-                            <a  asp-action="Create" asp-controller="Books"><i class="fas fa-book"></i> <span>Library</span></a>
+                            <a asp-action="Create" asp-controller="Books"><i class="fas fa-book"></i> <span>Library</span></a>
                         </li>
                         <li class="submenu">
                             <a href="#">

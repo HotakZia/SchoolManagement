@@ -1,0 +1,289 @@
+﻿@model SchoolManagement.Models.db.BookAssignee
+
+
+
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col-sm-12">
+                <div class="page-sub-header">
+                    <h3 class="page-title">Add Books</h3>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="students.html">Student</a></li>
+                        <li class="breadcrumb-item active">Add Students</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card comman-shadow">
+                <div class="card-body">
+                    <form asp-action="Assign" method="post" data-ajax-success="OnSuccess"
+                          data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+
+
+                        @Html.AntiForgeryToken()
+
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title student-info">Register New Book<span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="BookId" class="control-label">Search Book<span class="login-danger">*</span></label>
+                                    <input asp-for="BookId" type="hidden" id="BookId" class="form-control" />
+                                    <input type="text" required id="txtBook" name="txtBook" class="form-control" />
+
+                                    <span asp-validation-for="BookId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="RelationId" class="control-label">Student / Teacher Name <span class="login-danger">*</span></label>
+                                    <input asp-for="RelationId"  type="hidden" id="RelationId" class="form-control" />
+                                    <input type="text" required id="txtName" name="txtName" class="form-control" />
+
+                                    <span asp-validation-for="RelationId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="StartDate" class="control-label">Start Date<span class="login-danger">*</span></label>
+                                    <input asp-for="StartDate" class="form-control" />
+                                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms ">
+                                    <label asp-for="EndDate" class="control-label">End Date<span class="login-danger">*</span></label>
+                                    <input asp-for="EndDate" class="form-control" />
+                                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+
+                                    <label asp-for="Comment" class="control-label">Comment<span class="login-danger">*</span></label>
+                                    <input asp-for="Comment" class="form-control" />
+                                    <span asp-validation-for="Comment" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group students-up-files">
+                                    <label>Upload Student Photo (150px X 150px)</label>
+                                    <div class="uplod">
+                                        <label class="file-upload image-upbtn mb-0">
+                                            Choose File <input type="file" name="Image">
+                                            <span asp-validation-for="Attachment" class="text-danger"></span>
+                                        </label>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="student-submit">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
+
+
+<script>
+    $('#txtName').autocomplete({
+
+        minlength: 3,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtName').val();
+            //alert(SearchText);
+            $('#txtName').removeClass('notfound');
+            $('#txtName').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Students/getStudentByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtName').removeClass('loading');
+                        $('#txtName').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtName').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.FirstName, value: item.StudentId };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtName').val(ui.item.label);
+
+            $('#RelationId').val(ui.item.value);
+            $('#txtName').removeClass('notfound');
+            $('#txtName').addClass('checked');
+          
+
+            return false;
+
+        },
+
+
+
+    });
+     $('#txtBook').autocomplete({
+
+        minlength: 3,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtBook').val();
+            //alert(SearchText);
+            $('#txtBook').removeClass('notfound');
+            $('#txtBook').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Books/getBookByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtBook').removeClass('loading');
+                        $('#txtBook').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtBook').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.BookName, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtBook').val(ui.item.label);
+
+            $('#BookId').val(ui.item.value);
+            $('#txtBook').removeClass('notfound');
+            $('#txtBook').addClass('checked');
+          
+
+            return false;
+
+        },
+
+
+
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+         if (data.status == "true") {
+
+                 swal("Saved!",  data.message, "success");
+
+             $("#Name").val("");
+             $("#Comment").val("");
+
+           @*document.location.href = "@Url.Action("Index","tbl_Transiction")",true;*@
+         }
+         else if (data.status=="duplicate") {
+              swal("Dupplicate Record!",  data.message, "warning");
+         }
+        else {
+        swal("False!", data.message, "error");
+        }
+
+
+        //$('#listContainer').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+    </script>
+}

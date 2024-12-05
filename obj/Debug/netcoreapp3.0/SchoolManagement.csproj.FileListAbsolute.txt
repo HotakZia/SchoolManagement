@@ -469,7 +469,6 @@ D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcore
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Teachers\Details.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Teachers\Edit.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Teachers\Index.cshtml.g.cs
-D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.csprojAssemblyReference.cache
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Students\_index.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Schedules\Create.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Schedules\Delete.cshtml.g.cs
@@ -512,3 +511,13 @@ D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcore
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Fees\_index.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Fees\_feesInfo.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Blogs\_index.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Books\_index.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Books\Assign.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\AttendanceLogs\Create.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\AttendanceLogs\Delete.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\AttendanceLogs\Details.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\AttendanceLogs\Edit.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\AttendanceLogs\Index.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.csprojAssemblyReference.cache
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\AttendanceLogs\_index.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Classes\_index.cshtml.g.cs
