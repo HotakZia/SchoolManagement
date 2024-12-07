@@ -1,0 +1,180 @@
+﻿@model IEnumerable<SchoolManagement.Models.db.Transaction>
+<!-- Datatables CSS -->
+
+
+<link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Students</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Students</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+    <form asp-action="Index" method="get" data-ajax="true" data-ajax-update="#studentsList"
+          data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure">
+        <!-- Form fields go here -->
+
+        <div class="student-group-form">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-group">
+                        @*@Html.DropDownList("Id", null, "-- Please Select --", htmlAttributes: new { @class = "form-control select" })*@
+
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="form-group">
+                        <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Search by Name ...">
+                        <input type="hidden" id="StudentId" name="StudentId" />
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search by Phone ...">
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="search-student-btn">
+                        <button type="btn" class="btn btn-primary">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table">
+                <div class="card-body">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Transection</h3>
+                            </div>
+                            <div class="col-auto text-end float-end ms-auto download-grp">
+                                <a href="teachers.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
+                                <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
+                                <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
+                                <a href="add-teacher.html" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+                    <div class="row" id="studentsList"> @Html.Partial("_index", Model)</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
+
+
+
+
+
+<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
+
+
+<script>
+    $('#txtName').autocomplete({
+
+        minlength: 3,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtName').val();
+            //alert(SearchText);
+            $('#txtName').removeClass('notfound');
+            $('#txtName').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Students/getStudentByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtName').removeClass('loading');
+                        $('#txtName').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtName').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.FirstName, value: item.StudentId };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtName').val(ui.item.label);
+
+            $('#StudentId').val(ui.item.value);
+            $('#txtName').removeClass('notfound');
+            $('#txtName').addClass('checked');
+
+            return false;
+
+        },
+
+
+
+    });
+</script>
+@section Scripts {
+
+
+
+
+    <script>
+
+        function OnBegin() {
+            $('.page-loader').show();
+
+        }
+        function OnSuccess(data) {
+            $('#studentsList').html(data);
+        }
+        function OnComplete() {
+            $('.page-loader').hide();
+
+        }
+    </script>
+}

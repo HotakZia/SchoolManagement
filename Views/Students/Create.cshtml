@@ -141,7 +141,10 @@
                                 <div class="form-group local-forms">
                                     <label>Select Class <span class="login-danger">*</span></label>
 
-                                    @Html.DropDownList("ClassId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })
+                                    <input class="form-control"  id="txtClass" type="text" placeholder="Enter Class Name">
+
+                                    <input class="form-control" asp-for="ClassId" type="hidden">
+
 
                                     <span asp-validation-for="ClassId" class="text-danger"></span>
 
@@ -234,7 +237,82 @@
 <hr />
 
 
+<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
+<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
 
+
+<script>
+ 
+    $('#txtClass').autocomplete({
+
+        minlength: 3,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtClass').val();
+            //alert(SearchText);
+            $('#txtClass').removeClass('notfound');
+            $('#txtClass').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Classes/getClassByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtClass').removeClass('loading');
+                        $('#txtClass').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtClass').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtClass').val(ui.item.label);
+
+            $('#ClassId').val(ui.item.value);
+            $('#txtClass').removeClass('notfound');
+            $('#txtClass').addClass('checked');
+
+
+            return false;
+
+        },
+
+
+
+    });
+</script>
 
 
 @section Scripts {

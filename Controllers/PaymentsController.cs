@@ -19,6 +19,7 @@ namespace SchoolManagement.Controllers
         //}
 
         // GET: Payments
+        [Route("allpayments")]
         public async Task<IActionResult> Index()
         {
             return View(await db.Payments.ToListAsync());

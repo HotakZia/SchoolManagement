@@ -1,73 +1,105 @@
 ﻿@model SchoolManagement.Models.db.Payment
+<!-- Favicon -->
+<link rel="shortcut icon" href="~/template/assets/img/favicon.png">
 
-@{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<h1>Details</h1>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="~/template/assets/css/bootstrap.min.css">
 
-<div>
-    <h4>Payment</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Comment)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Comment)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Attachment)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Attachment)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Type)
-        </dd>
-    </dl>
+<!-- Feathericon CSS -->
+<link rel="stylesheet" href="~/template/assets/plugins/feather/feather.css">
+
+<!-- Pe7 CSS -->
+<link rel="stylesheet" href="~/template/assets/plugins/icons/flags/flags.css">
+
+<!-- Fontawesome CSS -->
+<link rel="stylesheet" href="~/template/assets/plugins/fontawesome/css/fontawesome.min.css">
+<link rel="stylesheet" href="~/template/assets/plugins/fontawesome/css/all.min.css">
+
+<!-- Datetimepicker CSS -->
+<link rel="stylesheet" href="~/template/assets/css/bootstrap-datetimepicker.min.css">
+
+<!-- Full Calander CSS -->
+<link rel="stylesheet" href="~/template/assets/plugins/fullcalendar/fullcalendar.min.css">
+
+<!-- Main CSS -->
+<link rel="stylesheet" href="~/template/assets/css/style.css">
+
+<div class="content container-fluid">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Events</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Events</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col"></div>
+            <div class="col-auto text-end float-end ms-auto">
+                <a href="add-events.html" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- /Page Header -->
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div class="modal fade none-border" id="my_event">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Event</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body"></div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-success save-event submit-btn">Create event</button>
+                    <button type="button" class="btn btn-danger delete-event submit-btn" data-dismiss="modal">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Add Event Modal -->
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<script src="~/template/assets/js/jquery-3.7.1.min.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+
+<!-- Bootstrap Core JS -->
+<script src="~/template/assets/js/bootstrap.bundle.min.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+
+<!-- Feather Icon JS -->
+<script src="~/template/assets/js/feather.min.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+
+<!-- Slimscroll JS -->
+<script src="~/template/assets/plugins/slimscroll/jquery.slimscroll.min.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+
+<!-- Datetimepicker JS -->
+<script src="~/template/assets/js/moment.min.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+<script src="~/template/assets/js/bootstrap-datetimepicker.min.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+
+<!-- Full Calendar JS -->
+<script src="~/template/assets/js/jquery-ui.min.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+<script src="~/template/assets/plugins/fullcalendar/fullcalendar.min.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+<script src="~/template/assets/plugins/fullcalendar/jquery.fullcalendar.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+
+<!-- Custom JS -->
+<script src="~/template/assets/js/script.js" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>
+
+<script src="../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="4a8945fc6a46cf33ffa8f52d-|49" defer></script>
+<script src="~/template//~/template/assets/" type="4a8945fc6a46cf33ffa8f52d-text/javascript"></script>

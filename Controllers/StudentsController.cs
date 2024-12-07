@@ -189,7 +189,7 @@ namespace SchoolManagement.Controllers
         public IActionResult Create()
         {
             ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name");
-            ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
+            //ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
             return View();
         }
 

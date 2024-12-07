@@ -7,11 +7,10 @@ namespace SchoolManagement.Models.db
 {
     public partial class Inventory
     {
-        public Guid InventoryId { get; set; }
+        public Guid Id { get; set; }
         public string ItemName { get; set; }
         public int? Quantity { get; set; }
         public decimal? UnitPrice { get; set; }
-        public decimal? TotalPrice { get; set; }
         public string Category { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
@@ -22,5 +21,6 @@ namespace SchoolManagement.Models.db
         public bool? Status { get; set; }
         public int? Number { get; set; }
         public int? Year { get; set; }
+        public string Condition { get; set; }
     }
 }

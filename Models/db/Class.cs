@@ -19,7 +19,7 @@ namespace SchoolManagement.Models.db
         public byte[] Attachment { get; set; }
         public bool? Status { get; set; }
         public string Shift { get; set; }
-        public string Year { get; set; }
+        public int? Year { get; set; }
         public string Number { get; set; }
         public string Room { get; set; }
     }

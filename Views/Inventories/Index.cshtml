@@ -1,0 +1,126 @@
+﻿@model IEnumerable<SchoolManagement.Models.db.Inventory>
+<!-- Datatables CSS -->
+
+
+<link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
+
+<div class="content container-fluid">
+
+
+    <div class="student-group-form">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search by ID ...">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search by Name ...">
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search by Phone ...">
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="search-student-btn">
+                    <button type="btn" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table">
+                <div class="card-body">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Events</h3>
+                            </div>
+                            <div class="col-auto text-end float-end ms-auto download-grp">
+                                <a href="teachers.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
+                                <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
+                                <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
+                                <a href="add-teacher.html" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+
+                    <div class="table-responsive">
+                        <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                            <thead class="student-thread">
+                                <tr>
+                                    <th>
+                                        <div class="form-check check-tables">
+                                            <input class="form-check-input" type="checkbox" value="something">
+                                        </div>
+                                    </th>
+
+                                    <th>Item Name</th>
+                                    <th>Item Category</th>
+                                    <th>Quantity</th>
+                                    <th>Condition</th>
+                                    <th>Year</th>
+                                    <th>Comment</th>
+
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+
+
+                                <tr>
+                                    <td>
+                                        <div class="form-check check-tables">
+                                            <input class="form-check-input" type="checkbox" value="something">
+                                        </div>
+                                    </td>
+                                    <td>@item.ItemName</td>
+                                    <td>@item.Category</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Condition</td>
+                                    <td>@item.CreatedDate.Value.Year</td>
+                                    <td>@item.Comment</td>
+
+
+                                    <td class="text-end">
+                                        <div class="actions">
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm bg-success-light me-2">
+                                                <i class="feather-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm bg-danger-light">
+                                                <i class="feather-edit"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Datatables JS -->
+
+<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
+
+

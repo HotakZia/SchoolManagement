@@ -169,9 +169,17 @@ namespace SchoolManagement.Controllers
                         
 
                     }
-                   
-                   
 
+                    var transection = new Transaction();
+                    transection.Id = Guid.NewGuid();
+                    transection.CreatedDate = DateTime.Now;
+                    transection.Amount = fee.Amount;
+                    transection.Comment ="Fees"+ fee.Number.ToString();
+                    transection.PaidBy ="Fees"+ fee.Number.ToString();
+                    transection.Type = "Credit";
+                    transection.Year = fee.Year;
+                    transection.Attachment = fee.Attachment;
+                    db.Transactions.Add(transection);
                 
                     await db.SaveChangesAsync();
                     //return RedirectToAction(nameof(Index));
