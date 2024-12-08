@@ -1,16 +1,13 @@
 ﻿@model IEnumerable<SchoolManagement.Models.db.Payment>
+<link href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" rel="stylesheet" />
 
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-
-<!-- Datatables CSS -->
-
-
-<link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
-
+<style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+</style>
 <div class="content container-fluid">
 
     <!-- Page Header -->
@@ -67,15 +64,14 @@
                             <div class="col-auto text-end float-end ms-auto download-grp">
                                 <a href="teachers.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
                                 <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
-                                <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
+                                <a asp-action="ExportToExcel" asp-controller="Payments" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
                                 <a href="add-teacher.html" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                             </div>
                         </div>
                     </div>
                     <!-- /Page Header -->
-
                     <div class="table-responsive">
-                        <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                        <table id="example" class="dataTables_wrapper table border-0 star-student table-hover table-center mb-0 datatable table-striped">
                             <thead class="student-thread">
                                 <tr>
                                     <th>
@@ -83,7 +79,7 @@
                                             <input class="form-check-input" type="checkbox" value="something">
                                         </div>
                                     </th>
-                                
+
                                     <th>Name</th>
                                     <th>Amount</th>
                                     <th>Comment</th>
@@ -97,47 +93,45 @@
                                 {
                                     string Imge = "";
 
-                                <tr>
-                                    <td>
-                                        <div class="form-check check-tables">
-                                            <input class="form-check-input" type="checkbox" value="something">
-                                        </div>
-                                    </td>
+                                    <tr>
+                                        <td>
+                                            <div class="form-check check-tables">
+                                                <input class="form-check-input" type="checkbox" value="something">
+                                            </div>
+                                        </td>
 
-                                    <td>
-
-                                        @Html.DisplayFor(modelItem => item.Name)
-                                    </td>
-
-                                    <td>
-
-                                        @Html.DisplayFor(modelItem => item.Amount)
-                                    </td>
+                                        <td>@item.Name</td>
+                                        <td>@item.Amount</td>
+                                        <td>@item.Comment</td>
+                                        <td>@item.Status</td>
 
 
-
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Comment)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Status)
-                                    </td>
-
-                                    <td class="text-end">
-                                        <div class="actions">
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm bg-success-light me-2">
-                                                <i class="feather-eye"></i>
-                                            </a>
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm bg-danger-light">
-                                                <i class="feather-edit"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
+                                        <td class="text-end">
+                                            <div class="actions">
+                                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm bg-success-light me-2">
+                                                    <i class="feather-eye"></i>
+                                                </a>
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm bg-danger-light">
+                                                    <i class="feather-edit"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 }
 
 
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Amount</th>
+                                    <th>Comment</th>
+                                    <th>Status</th>
+
+
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -149,8 +143,33 @@
 
 
 
-<!-- Datatables JS -->
-
-<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
 
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+
+<script src=""></script>
+<script>
+    new DataTable('#example', {
+        initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    let column = this;
+                    let title = column.footer().textContent;
+
+                    // Create input element
+                    let input = document.createElement('input');
+                    input.placeholder = title;
+                    column.footer().replaceChildren(input);
+
+                    // Event listener for user input
+                    input.addEventListener('keyup', () => {
+                        if (column.search() !== this.value) {
+                            column.search(input.value).draw();
+                        }
+                    });
+                });
+        }
+    });
+</script>

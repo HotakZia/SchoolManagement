@@ -416,8 +416,6 @@ D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcore
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcoreapp3.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\staticwebassets\SchoolManagement.StaticWebAssets.Manifest.cache
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\staticwebassets\SchoolManagement.StaticWebAssets.xml
-D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.MvcApplicationPartsAssemblyInfo.cs
-D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.MvcApplicationPartsAssemblyInfo.cache
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.RazorAssemblyInfo.cache
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.RazorAssemblyInfo.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.AssemblyInfoInputs.cache
@@ -552,3 +550,13 @@ D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcore
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\TblUsers\Details.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\TblUsers\Edit.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\TblUsers\Index.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcoreapp3.0\ClosedXML.dll
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcoreapp3.0\ClosedXML.Parser.dll
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcoreapp3.0\DocumentFormat.OpenXml.dll
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcoreapp3.0\DocumentFormat.OpenXml.Framework.dll
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcoreapp3.0\ExcelNumberFormat.dll
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcoreapp3.0\RBush.dll
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcoreapp3.0\SixLabors.Fonts.dll
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\bin\Debug\netcoreapp3.0\System.IO.Packaging.dll
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.MvcApplicationPartsAssemblyInfo.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\SchoolManagement.MvcApplicationPartsAssemblyInfo.cache
