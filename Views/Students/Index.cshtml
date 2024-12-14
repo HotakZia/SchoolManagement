@@ -1,8 +1,9 @@
 ﻿@model IEnumerable<SchoolManagement.Models.Entities.Student>
 <!-- Datatables CSS -->
+<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
 
-
-<link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
 
 <div class="content container-fluid">
 
@@ -63,10 +64,10 @@
                                 <h3 class="page-title">Studnets</h3>
                             </div>
                             <div class="col-auto text-end float-end ms-auto download-grp">
-                                <a href="teachers.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
-                                <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
+                                @*<a asp-action="Index" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>*@
+                                <a asp-action="GridListView" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
                                 <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
-                                <a href="add-teacher.html" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                             </div>
                         </div>
                     </div>
@@ -79,15 +80,49 @@
     </div>
 </div>
 
-<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
+<div class="modal fade bd-example-modal-lg" id="AModel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="AModelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="printDiv()"><i class="fa fa-print"></i> Print</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
-
-
-<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+@*<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>*@
 <script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
+
+
+
+
+@*<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>*@
+
+
+<script>
+    $(document).ready(function () {
+        $('#studentTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copyHtml5',
+                'excelHtml5',
+                'csvHtml5',
+                'pdfHtml5'
+            ]
+        });
+    });
+</script>
 
 
 <script>
@@ -170,7 +205,7 @@
 
         }
         function OnSuccess(data) {
-            $('#studentsList').html(data);
+            $('#AModelBody').html(data);
         }
         function OnComplete() {
             $('.page-loader').hide();
@@ -178,3 +213,117 @@
         }
     </script>
 }
+
+
+<script>
+
+    function LoadFiles(Id) {
+
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/LoadFile", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
+    function DeleteFile(Id) {
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/DeleteFiles", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        $('.page-loader').hide();
+    }
+    function LoadPerants(Id) {
+
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/LpadPerants", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
+    function DeletePerants(Id) {
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/DeletePerants", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        $('.page-loader').hide();
+    }
+</script>

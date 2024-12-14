@@ -17,6 +17,74 @@ namespace SchoolManagement.Controllers
         //{
         //    _context = context;
         //}
+        //[HttpPost]
+
+            public async Task<IActionResult> ReciptInvoice(Guid? Id)
+            {
+                if (Id == null)
+            {
+               
+            }
+            var fees = (from fee in db.Fees
+
+
+                        join student in db.Students on fee.StudentId equals student.StudentId
+                        join class_ in db.Classes on student.ClassId equals class_.Id
+                        where fee.Id == Id
+
+                        select new Models.Entities.Fees
+                        {
+
+                            FeeType = fee.FeeType,
+                            ClassId = fee.ClassId,
+                            CreatedDate = fee.CreatedDate,
+                            Date = fee.Date,
+                            Id = fee.Id,
+                            StudentId = fee.StudentId,
+                            Amount = fee.Amount,
+                            StudentName = student.FirstName + " " + student.LastName,
+                            Status = fee.Status,
+                            Comment = fee.Comment,
+                            CreatedBy = fee.CreatedBy,
+                            Attachment = fee.Attachment,
+                            ModifiedBy = fee.ModifiedBy,
+                            Number = fee.Number,
+                            PaymentId = fee.PaymentId,
+                            Year = fee.Year,
+                            ModifiedDate = fee.ModifiedDate,
+                            ClassName=class_.Name,
+                            FatherName=student.FatherName,
+                            GrandFatherName=student.GfatherName,
+                            RollId=student.RoleNumber
+                            
+
+                        }).FirstOrDefault();
+            if (fees!=null)
+            {
+                ViewBag.list = (from sp in db.StudentPayments
+
+                            join payment in db.Payments on sp.PaymentId equals payment.Id
+
+
+                            where sp.StudentId == fees.Id
+
+                            select new Models.db.Payment
+                            {
+
+                                Id = payment.Id,
+                                Name = payment.Name,
+                                Amount = payment.Amount,
+
+
+                            })/*.OrderByDescending(x => x.CreatedDate)*/.ToList();
+            }
+
+            ViewBag.systemInfo = db.TableCompanies.FirstOrDefault();
+
+
+
+            return PartialView("_ReciptInvoice", fees);
+        }
 
         [HttpPost]
         public async Task<IActionResult> getStudentPayments(Guid Id)
@@ -60,7 +128,7 @@ namespace SchoolManagement.Controllers
 
                           select new Models.Entities.Student
                           {
-                              ClassId = student.ClassId,
+                              ClassId = fees.Id,
                               StudentId = student.StudentId,
                               Tazkira = student.Tazkira,
                               RoleNumber = student.RoleNumber,
@@ -186,8 +254,8 @@ namespace SchoolManagement.Controllers
                     showMessageString = new
                     {
                         status = "true",
-                        message =  "payments have been added."
-
+                        message =  "payments have been added.",
+                        Id=fee.Id,
                     };
                     return Json(showMessageString);
                 }

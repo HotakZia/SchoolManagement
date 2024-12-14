@@ -26,7 +26,7 @@
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess" class="needs-validation" 
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
 
 
@@ -43,8 +43,9 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Name" class="control-label">Book Name<span class="login-danger">*</span></label>
-                                    <input asp-for="Name" class="form-control" />
+                                    <input asp-for="Name" class="form-control "  maxlength="3"/>
                                     <span asp-validation-for="Name" class="text-danger"></span>
+                                    <div class="invalid-feedback">Please enter a valid email address.</div>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
@@ -88,8 +89,10 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous" asp-append-version="true"></script>
 
-
+<script src="~/template/assets/js/form-validation.js"></script>
+<script src="~/template/assets/js/jquery.maskedinput.min.js"></script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
@@ -107,7 +110,7 @@
 
              $("#Name").val("");
              $("#Comment").val("");
-        
+
            @*document.location.href = "@Url.Action("Index","tbl_Transiction")",true;*@
          }
          else if (data.status=="duplicate") {

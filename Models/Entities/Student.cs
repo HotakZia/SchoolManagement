@@ -7,6 +7,7 @@ namespace SchoolManagement.Models.Entities
 {
     public class Student
     {
+        public string Shift { get; set; }
         public string ClassName { get; set; }
         public Guid StudentId { get; set; }
         public string FirstName { get; set; }

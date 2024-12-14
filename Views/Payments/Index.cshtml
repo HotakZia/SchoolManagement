@@ -88,6 +88,17 @@
                                     <th class="text-end">Action</th>
                                 </tr>
                             </thead>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Amount</th>
+                                    <th>Comment</th>
+                                    <th>Status</th>
+
+
+                                </tr>
+                            </tfoot>
                             <tbody>
                                 @foreach (var item in Model)
                                 {
@@ -121,17 +132,7 @@
 
 
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th></th>
-                                    <th>Name</th>
-                                    <th>Amount</th>
-                                    <th>Comment</th>
-                                    <th>Status</th>
 
-
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -148,7 +149,7 @@
 
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
-<script src=""></script>
+
 <script>
     new DataTable('#example', {
         initComplete: function () {

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 using SchoolManagement.Models.db;
 
 namespace SchoolManagement.Controllers
@@ -19,7 +20,245 @@ namespace SchoolManagement.Controllers
         //{
         //    _context = context;
         //}
+        public async Task<IActionResult> LoadFile(Guid? Id)
+        {
+            var list = db.Files.Where(x => x.RelationId == Id).OrderByDescending(x => x.CreatedDate).ToList();
+            ViewBag.RelationId = Id;
+            ViewBag.FileList = list;
+            return PartialView("_File", new Models.db.File());
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddFile(Models.db.File fille, Guid Id, IFormFile Image)
+        {
+            var list = new List<Parent>();
+            try
+            {
+                ViewBag.RelationId = Id;
+                if (Image != null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
 
+                        Image.CopyToAsync(memoryStream);
+                        Byte[] fileBytes = memoryStream.ToArray();
+                        int maxFileSizeInBytes = 1 * 1024 * 1024 / 1; // 10MB (adjust as needed)
+                        if (
+                   Image.ContentType.ToLower() != "image/jpg" &&
+                   Image.ContentType.ToLower() != "image/jpeg" &&
+                   Image.ContentType.ToLower() != "image/pjpeg" &&
+                   Image.ContentType.ToLower() != "image/gif" &&
+                   Image.ContentType.ToLower() != "image/x-png" &&
+                   Image.ContentType.ToLower() != "image/png" &&
+                   Image.ContentType.ToLower() != "image/svg"
+               )
+                        {
+
+                            showMessageString = new
+                            {
+                                status = "false",
+                                message = "Profile photo must be a JPEG, PNG or SVG format."
+                            };
+                            return Json(showMessageString);
+                        }
+                        if (Image.Length > maxFileSizeInBytes)
+                        {
+
+                            showMessageString = new
+                            {
+                                status = "false",
+                                message = " Profile photo max size must be 1024 KB."
+                            };
+                            return Json(showMessageString);
+                        }
+                        else
+                        {
+                            fille.Attachment = fileBytes;
+
+                        }
+                    }
+                }
+
+                fille.Id = Guid.NewGuid();
+                fille.CreatedDate = DateTime.Now;
+                fille.RelationId = Id;
+                db.Files.Add(fille);
+
+                db.SaveChanges();
+                ViewBag.FileList = db.Files.Where(x => x.RelationId == Id).OrderByDescending(x => x.CreatedDate).ToList();
+            }
+            catch (Exception ex)
+            {
+
+
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+
+                };
+                return Json(showMessageString);
+            }
+
+            return PartialView("_File", fille);
+        }
+        public async Task<IActionResult> DeleteFiles(Guid? Id)
+        {
+            try
+            {
+
+                var list = db.Files.Where(x => x.Id == Id).FirstOrDefault();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                Guid? RelationId = list.RelationId;
+                ViewBag.RelationId = RelationId;
+                db.Files.Remove(list);
+                await db.SaveChangesAsync();
+
+                ViewBag.FileList = db.Files.Where(x => x.RelationId == RelationId).OrderByDescending(x => x.CreatedDate).ToList();
+            }
+            catch (Exception ex)
+            {
+
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+
+                };
+            }
+
+            return PartialView("_File", new Models.db.File());
+        }
+ 
+        public async Task<IActionResult> LpadPerants(Guid? Id)
+        {
+            var list = db.Parents.Where(x => x.StudentId == Id).OrderByDescending(x => x.CreatedDate).ToList();
+            ViewBag.StudentId = Id;
+            ViewBag.ParentsList = list;
+            return PartialView("_Parent",new Models.db.Parent());
+        }
+        public async Task<IActionResult> AddPerants(Parent parents,Guid Id)
+        {
+            var list = new List<Parent>();
+            try
+            {
+                ViewBag.StudentId = Id;
+
+                parents.Id = Guid.NewGuid();
+                parents.CreatedDate = DateTime.Now;
+                parents.StudentId = Id;
+                    db.Parents.Add(parents);
+              
+                db.SaveChanges();
+                ViewBag.ParentsList = db.Parents.Where(x => x.StudentId == Id).OrderByDescending(x=>x.CreatedDate).ToList();
+            }
+            catch (Exception ex)
+            {
+
+
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+
+                };
+                return Json(showMessageString);
+            }
+
+            return PartialView("_Parent", parents);
+        }
+        public async Task<IActionResult> DeletePerants(Guid? Id)
+        {
+            try
+            {
+
+                var list = db.Parents.Where(x => x.Id == Id).FirstOrDefault();
+                if (list == null)
+                {
+                    return NotFound();
+                }
+                Guid? StudentId = list.StudentId;
+                ViewBag.StudentId = StudentId;
+                db.Parents.Remove(list);
+                await db.SaveChangesAsync();
+
+                ViewBag.ParentsList = db.Parents.Where(x => x.StudentId == StudentId).OrderByDescending(x => x.CreatedDate).ToList();
+            }
+            catch (Exception ex)
+            {
+
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+
+                };
+            }
+          
+            return PartialView("_Parent", new Models.db.Parent());
+        }
+     
+        // GET: Students
+        public async Task<IActionResult> GridListView(Guid? Id,int? Page)
+        {
+            IPagedList<Models.Entities.Student> list = new PagedList<Models.Entities.Student>(null, 1, 1);
+            //if (Id == null)
+            //{
+            //    return View(list);
+            //}
+ 
+            list = await (from student in db.Students
+                          join class_ in db.Classes on student.ClassId equals class_.Id
+
+                          //where student.ClassId == Id
+
+                          select new Models.Entities.Student
+                          {
+                              Shift=student.Shift,
+                             
+                              CreatedDate=student.CreatedDate,
+                              ClassId = student.ClassId,
+                              StudentId = student.StudentId,
+                              Tazkira = student.Tazkira,
+                              RoleNumber = student.RoleNumber,
+                              FirstName = student.FirstName,
+                              LastName = student.LastName,
+                              FatherName = student.FatherName,
+                              ClassName = class_.Name,
+                              DateOfBirth = student.DateOfBirth,
+                              Attachment = student.Attachment,
+                              Contact = student.Contact,
+                              Status = student.Status,
+                              BloodGroup = student.BloodGroup,
+                              City = student.City,
+                              AdmissionDate = student.AdmissionDate,
+                              Street = student.Street,
+                              Comment = student.Comment,
+                              CreatedBy = student.CreatedBy,
+                              Gender = student.Gender,
+                              GfatherName = student.GfatherName,
+                              GuardianName = student.GuardianName,
+                              GuardianPhone = student.GuardianPhone,
+                              ModifiedBy = student.ModifiedBy,
+                              ModifiedDate = student.ModifiedDate,
+                              Province = student.Province,
+
+
+                          }).AsNoTracking().ToPagedListAsync(Page ?? 1, 1);
+            bool isAjaxRequest = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+            if (!isAjaxRequest)
+            {
+
+                return View(list);
+            }
+            else
+            {
+                return PartialView("_GridList",list);
+            }
+            
+        }
         // GET: Students
         public async Task<IActionResult> Index(Guid?Id)
         {
@@ -189,7 +428,8 @@ namespace SchoolManagement.Controllers
         public IActionResult Create()
         {
             ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name");
-            //ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
+
+
             return View();
         }
 
@@ -198,7 +438,7 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Shift,Tazkira,FatherName, GfatherName,Contact,RoleNumber,StudentId,FirstName,LastName,DateOfBirth,Gender,Street,City,Province,Email,Phone,AdmissionDate,GuardianName,GuardianPhone,ClassId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,BloodGroup")] Student student,List<Guid> Payment, IFormFile Image)
+        public async Task<IActionResult> Create([Bind("Shift,Tazkira,FatherName, GfatherName,Contact,RoleNumber,StudentId,FirstName,LastName,DateOfBirth,Gender,Street,City,Province,Email,Phone,AdmissionDate,GuardianName,GuardianPhone,ClassId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,BloodGroup")] Student student,List<Guid> Payment,List<Models.db.Parent> Parent, IFormFile Image)
         {
 
             try

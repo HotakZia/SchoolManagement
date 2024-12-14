@@ -1,13 +1,6 @@
 ﻿@model IEnumerable<SchoolManagement.Models.db.Teacher>
 
 
-
-
-<!-- Datatables CSS -->
-
-
-<link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
-
 <div class="content container-fluid">
 
     <!-- Page Header -->
@@ -115,7 +108,7 @@
                                             <td>
                                                 <a href="teacher-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-02.jpg" alt="User Image"></a>
                                                 <a href="teacher-details.html">Aaliyah</a>
-                                            @item.FirstName @item.LastName
+                                                @item.FirstName @item.LastName
                                             </td>
                                         }
 
@@ -135,6 +128,10 @@
                                                 <a asp-action="Edit" asp-route-id="@item.TeacherId" class="btn btn-sm bg-danger-light">
                                                     <i class="feather-edit"></i>
                                                 </a>
+
+                                                <a onclick='LoadFiles("@item.TeacherId")' class="btn btn-sm bg-danger-light">
+                                                    <i class="fa fa-certificate"></i>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -152,8 +149,94 @@
 
 
 
+<script>
 
-<!-- Datatables JS -->
+    function LoadFiles(Id) {
 
-<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
+        $('.page-loader').show();
 
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/LoadFile", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
+    function DeleteFile(Id) {
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/DeleteFiles", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        $('.page-loader').hide();
+    }
+
+</script>
+@section Scripts {
+
+
+
+
+    <script>
+
+        function OnBegin() {
+            $('.page-loader').show();
+
+        }
+        function OnSuccess(data) {
+            $('#AModelBody').html(data);
+               swal("Saved!",  data.message, "success");
+        }
+        function OnComplete() {
+            $('.page-loader').hide();
+
+        }
+    </script>
+}
+<div class="modal fade bd-example-modal-lg" id="AModel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="AModelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="printDiv()"><i class="fa fa-print"></i> Print</button>
+            </div>
+        </div>
+    </div>
+</div>

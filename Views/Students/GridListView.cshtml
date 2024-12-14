@@ -1,0 +1,99 @@
+﻿@model IPagedList<SchoolManagement.Models.Entities.Student>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Common;
+@{ string Imge = "";}
+<div class="content container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table comman-shadow">
+                <div class="card-body pb-0">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Students</h3>
+                            </div>
+                            <div class="col-auto text-end float-end ms-auto download-grp">
+                                <a asp-action="Index" class="btn btn-outline-gray me-2"><i class="feather-list"></i></a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+                    <div id="listData">
+                        @Html.Partial("_GridList", Model)
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+
+<script>
+
+    $(document).ready(function () { });
+
+    // A $( document ).ready() block.
+
+    $('#txtSearch').click(function () {
+        // Your code to handle the click event
+        $("#txtSearch").val('');
+    });
+    function sOnBegin() {
+        $('.page-loader').show();
+    }
+    function sOnSuccess(data) {
+        //$('#listData').html(data); // Replace the list with the updated content
+          $('.page-loader').hide();
+
+    }
+    function sOnComplete() {
+
+        $('.page-loader').hide();
+    }
+
+
+
+
+
+    function tSearch() {
+
+
+        //$('.page-loader').show();
+
+
+
+        $.ajax({
+            url: '/Home/SearchTour', // Replace 'ControllerName' with the actual name of your MVC controller
+            type: 'GET',
+
+            data: {
+                term: searchText,
+                location: location,
+
+            },
+            dataType: 'html',
+            contentType: "application/json",
+            success: function (data) {
+
+                $('#listContainer').html(data); // Replace the list with the updated content
+                $('.load-bar').addClass('hidden');
+
+
+            },
+            error: function (xhr, status, error) {
+                alert(error);
+            }
+        });
+    }
+
+</script>

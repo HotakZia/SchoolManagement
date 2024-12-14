@@ -216,7 +216,8 @@ namespace SchoolManagement.Controllers
         [Route("allpayments")]
         public async Task<IActionResult> Index()
         {
-            return View(await db.Payments.ToListAsync());
+            var list = await db.Payments.ToListAsync();
+            return View(list);
         }
 
         // GET: Payments/Details/5
@@ -274,7 +275,8 @@ namespace SchoolManagement.Controllers
                     showMessageString = new
                     {
                         status = "true",
-                        message = "New payment has been saved."
+                        message = "New payment has been saved.",
+                        Id=payment.Id,
                     };
                     return Json(showMessageString);
                     return RedirectToAction(nameof(Index));

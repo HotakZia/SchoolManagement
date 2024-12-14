@@ -93,6 +93,10 @@
             "PagedList": {
               "target": "Package",
               "version": "[1.17.0, )"
+            },
+            "X.PagedList.Mvc.Core": {
+              "target": "Package",
+              "version": "[8.0.7, )"
             }
           },
           "imports": [

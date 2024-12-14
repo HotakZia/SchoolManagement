@@ -76,80 +76,80 @@ $(document).ready(function() {
 	chart.render();
 	}
 
-	// Bar chart
+	//// Bar chart
 	
-	if ($('#bar').length > 0) {
-	var optionsBar = {
-		chart: {
-			type: 'bar',
-			height: 350,
-			width: '100%',
-			stacked: false,
-			toolbar: {
-				show: false
-			},
-		},
-		dataLabels: {
-			enabled: false
-		},
-		plotOptions: {
-			bar: {
-				columnWidth: '55%',
-				endingShape: 'rounded'  
-			},
-		},
-		stroke: {
-			show: true,
-			width: 2,
-			colors: ['transparent']
-		},
-		series: [{
-			name: "Boys",
-			color: '#70C4CF',
-			data: [420, 532, 516, 575, 519, 517, 454, 392, 262, 383, 446, 551],
-		}, {
-			name: "Girls",
-			color: '#3D5EE1',
-			data: [336, 612, 344, 647, 345, 563, 256, 344, 323, 300, 455, 456],
-		}],
-		labels: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
-		xaxis: {
-			labels: {
-				show: false
-			},
-			axisBorder: {
-				show: false
-			},
-			axisTicks: {
-				show: false
-			},
-		},
-		yaxis: {
-			axisBorder: {
-				show: false
-			},
-			axisTicks: {
-				show: false
-			},
-			labels: {
-				style: {
-					colors: '#777'
-				}
-			}
-		},
-		title: {
-			text: '',
-			align: 'left',
-			style: {
-				fontSize: '18px'
-			}
-		}
+	//if ($('#bar').length > 0) {
+	//var optionsBar = {
+	//	chart: {
+	//		type: 'bar',
+	//		height: 350,
+	//		width: '100%',
+	//		stacked: false,
+	//		toolbar: {
+	//			show: false
+	//		},
+	//	},
+	//	dataLabels: {
+	//		enabled: false
+	//	},
+	//	plotOptions: {
+	//		bar: {
+	//			columnWidth: '55%',
+	//			endingShape: 'rounded'  
+	//		},
+	//	},
+	//	stroke: {
+	//		show: true,
+	//		width: 2,
+	//		colors: ['transparent']
+	//	},
+	//	series: [{
+	//		name: "Boys",
+	//		color: '#70C4CF',
+	//		data: [420, 532, 516, 575, 519, 517, 454, 392, 262, 383, 446, 551],
+	//	}, {
+	//		name: "Girls",
+	//		color: '#3D5EE1',
+	//		data: [336, 612, 344, 647, 345, 563, 256, 344, 323, 300, 455, 456],
+	//	}],
+	//	labels: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
+	//	xaxis: {
+	//		labels: {
+	//			show: false
+	//		},
+	//		axisBorder: {
+	//			show: false
+	//		},
+	//		axisTicks: {
+	//			show: false
+	//		},
+	//	},
+	//	yaxis: {
+	//		axisBorder: {
+	//			show: false
+	//		},
+	//		axisTicks: {
+	//			show: false
+	//		},
+	//		labels: {
+	//			style: {
+	//				colors: '#777'
+	//			}
+	//		}
+	//	},
+	//	title: {
+	//		text: '',
+	//		align: 'left',
+	//		style: {
+	//			fontSize: '18px'
+	//		}
+	//	}
 
-	}
+	//}
   
-	var chartBar = new ApexCharts(document.querySelector('#bar'), optionsBar);
-	chartBar.render();
-	}
+	//var chartBar = new ApexCharts(document.querySelector('#bar'), optionsBar);
+	//chartBar.render();
+	//}
 	
 	// Simple Line
 	

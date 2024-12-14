@@ -340,20 +340,16 @@
                     <ul>
                         <li class="menu-title">
                             <span>Main Menu</span>
-                            <h2>
-                                @(ViewContext.RouteData.Values["action"].ToString())
 
-
-
-
-                            </h2>
                         </li>
-                        <li class="submenu active">
+                        <li class="submenu @(ViewContext.RouteData.Values["controller"].ToString().Equals("Home") ? "active" : "")">
+
                             <a href="#"><i class="feather-grid"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
+
                             <ul>
-                                <li><a href="index.html" class="active">Admin Dashboard</a></li>
-                                <li><a href="teacher-dashboard.html">Teacher Dashboard</a></li>
-                                <li><a href="student-dashboard.html">Student Dashboard</a></li>
+                                <li class="submenu"><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Home") && ViewContext.RouteData.Values["action"].ToString().Equals("Index") ? "class=active" : "") asp-action="Index">Admin Dashboard</a></li>
+                                <li><a asp-action="Teacher">Teacher Dashboard</a></li>
+                                <li><a asp-action="Student">Student Dashboard</a></li>
                             </ul>
                         </li>
                         <li class="submenu">
@@ -374,15 +370,19 @@
 
                             </ul>
                         </li>
-                        <li class="submenu">
-                            <a href="#" @(ViewContext.RouteData.Values["action"].ToString().Equals("Index") ? "class=active" : "")><i class="fas fa-receipt"></i> <span> Payment</span> <span class="menu-arrow"></span></a>
+
+
+                        <li class="submenu @(ViewContext.RouteData.Values["controller"].ToString().Equals("Payments") ? "active" : "")">
+                            <a href="#">
+                                <i class="fas fa-receipt"></i> <span> Payment</span> <span class="menu-arrow"></span>
+                            </a>
 
                             <ul>
 
-                                <li> <a href='@Url.Action("Index","Payments", new { })' @(ViewContext.RouteData.Values["action"].ToString().Equals("Index") ? "class=active" : "")>Payments List</a></li>
+                                <li> <a href='@Url.Action("Index","Payments", new { })' @(ViewContext.RouteData.Values["controller"].ToString().Equals("Payments") && ViewContext.RouteData.Values["action"].ToString().Equals("Index") ? "class=active" : "")>Payments List</a></li>
 
                                 @*<li><a asp-action="index" asp-controller="payments" @(ViewContext.RouteData.Values["action"].ToString().Equals("Copmany") ? "class=active" : "" ) />Payment List</a></li>*@
-                                <li><a asp-action="create" asp-controller="payments">Payment Add</a></li>
+                                <li><a href='@Url.Action("create","Payments", new { })' @(ViewContext.RouteData.Values["controller"].ToString().Equals("Payments") && ViewContext.RouteData.Values["action"].ToString().Equals("Create") ? "class=active" : "")>Payment Add</a></li>
 
                             </ul>
                         </li>
@@ -455,11 +455,11 @@
                             </ul>
                         </li>
                         <li class="submenu">
-                            <a href="#"><i class="fa fa-fingerprint"></i> <span> Attendance</span> <span class="menu-arrow"></span></a>
+                            <a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Events") ? "class=active" : "") href="#"><i class="fa fa-fingerprint"></i> <span> Attendance</span> <span class="menu-arrow"></span></a>
 
                             <ul>
-                                <li><a asp-action="List" asp-controller="AttendanceLogs">Events List</a></li>
-                                <li><a asp-action="Create" asp-controller="AttendanceLogs">Create Event</a></li>
+                                <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Events") && ViewContext.RouteData.Values["action"].ToString().Equals("index") ? "class=active" : "") asp-action="List" asp-controller="AttendanceLogs">Events List</a></li>
+                                <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Events") && ViewContext.RouteData.Values["action"].ToString().Equals("Create") ? "class=active" : "") asp-action="Create" asp-controller="AttendanceLogs">Create Event</a></li>
 
                             </ul>
                         </li>
@@ -569,8 +569,7 @@
     </div>
     <!-- /Main Wrapper -->
     <!-- jQuery -->
-    @*<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous" asp-append-version="true"></script>*@
-    @*<script src="~/js/jQeury.js"></script>*@
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous" asp-append-version="true"></script>
     <script src="~/template/assets/js/jquery-3.7.1.min.js" type="c437656adcf261e14fc51405-text/javascript"></script>
 
     <!-- Bootstrap Core JS -->
@@ -590,7 +589,6 @@
     <script src="~/template/assets/js/script.js" type="c437656adcf261e14fc51405-text/javascript"></script>
     <script src="~/template/assets/sweetalert/js/sweetalert.min.js"></script>
     <script src="~/js/Unobtrusive Ajax.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
 

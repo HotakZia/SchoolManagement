@@ -1,0 +1,87 @@
+﻿@model IPagedList<SchoolManagement.Models.Entities.Student>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+@using X.PagedList.Mvc.Core.Common;
+@{ string Imge = ""; Layout = null;}
+
+
+<div class="student-pro-list">
+    <div class="row">
+        @foreach (var item in Model)
+        {<div class="col-xl-3 col-lg-4 col-md-6 d-flex">
+                <div class="card">
+                    <div class="card-body">
+
+
+                        @if (item.Attachment != null)
+                        {
+                            Imge = Convert.ToBase64String(item.Attachment);
+
+
+                            <div class="student-box flex-fill">
+                                <div class="student-img">
+                                    <a href="student-details.html">
+                                        <img class="img-fluid" alt="Students Info" height="100" width="100" src="@string.Format("data:image/jpeg;base64,{0}",Imge)">
+                                    </a>
+                                </div>
+                                <div class="student-content pb-0">
+                                    <h5><a href="student-details.html"> @item.FirstName @item.LastName</a></h5>
+                                    <h6>@item.ClassName</h6>
+                                </div>
+                            </div>
+
+
+                        }
+                        else
+                        {
+                            <div class="student-box flex-fill">
+                                <div class="student-img">
+                                    <a href="student-details.html">
+                                        <img class="img-fluid" alt="Students Info" src="assets/img/profiles/avatar-03.jpg">
+                                    </a>
+                                </div>
+                                <div class="student-content pb-0">
+                                    <h5><a href="student-details.html"> @item.FirstName @item.LastName</a></h5>
+                                    <h6>@item.ClassName</h6>
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+</div>
+@if (Model != null && Model.Count > 0)
+{
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @Html.PagedListPager(Model, page => Url.Action("GridListView", new { page = page}),
+                PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new PagedListRenderOptions
+                {
+                    LiElementClasses = new[] { "page-item" },
+                    PageClasses = new[] { "page-link" },
+                    UlElementClasses = new[] { "pagination" },
+                    MaximumPageNumbersToDisplay = 5,
+                    ContainerDivClasses = new[] { "pagination-container" }
+                }, new AjaxOptions()
+                {
+                    OnSuccess = "sOnSuccess",
+                    OnBegin = "sOnBegin",
+                    OnComplete = "sOnComplete",
+                    //OnFailure="OnFailure",
+                    HttpMethod = "GET",
+                    UpdateTargetId = "listData"
+
+                }
+
+                )
+
+            )
+        </ul>
+    </nav>
+}
+

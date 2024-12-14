@@ -103,13 +103,14 @@ namespace SchoolManagement
             else
             {
 
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/httpError");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            //app.UseStatusCodePagesWithRedirects("/httpError?code={0}");
-
+            //http errors
+            app.UseStatusCodePagesWithRedirects("/httpError?code={0}");
+            // Configure custom page for unauthorized access
+            //app.UseStatusCodePagesWithRedirects("/Unauthorized");
 
 
             app.UseHttpsRedirection();
