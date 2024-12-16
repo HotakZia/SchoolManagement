@@ -76,7 +76,7 @@ namespace SchoolManagement.Controllers
        //[Route("login")]
         public async Task<IActionResult> LoginAsync(string returnUrl)
         {
-            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Index", "Home");
             ViewBag.ReturnUrl = returnUrl;
             ViewBag.pTitle = "Welcome Back: Log in for Access to Exclusive Content";
 
@@ -116,7 +116,7 @@ namespace SchoolManagement.Controllers
                     tbl_Company.Description = "nil";
                     tbl_Company.Email = "info@hadaf.af";
                     tbl_Company.FacebookName = "nil";
-                    tbl_Company.PhoneNumber = "93700339966";
+                    tbl_Company.PhoneNumber = "93700";
                     tbl_Company.TwitterName = "nil";
                     tbl_Company.Website = "nil";
                     tbl_Company.Type = "administrator";
@@ -129,15 +129,17 @@ namespace SchoolManagement.Controllers
 
                     Models.db.TblUser tbl_User = new TblUser();
                     tbl_User.Id = Guid.Empty;
+                    tbl_User.UserId = Guid.Empty;
                     tbl_User.Name = "Administrator";
                     Hashing hashing = new Hashing();
-                    tbl_User.Password = hashing.Encrypt("MyPasswordIs!123");
+                    tbl_User.Password = hashing.Encrypt("admin");
                     tbl_User.CanLogin = true;
                     //tbl_User.Posation = "Administrator";
                     //tbl_User.Phone = "0700 339966";
                     //tbl_User.CreateTime = DateTime.Now;
                     //tbl_User.CompanyId = tbl_Company.Id;
-                    tbl_User.Email = "info@hadaf.af";
+                    tbl_User.Email = "school@hadaf.af";
+                    tbl_User.Role = "Admin";
                     db.TblUsers.Add(tbl_User);
 
                     TableRole tbl_Role = new TableRole();
@@ -222,7 +224,7 @@ namespace SchoolManagement.Controllers
             }
             var user = db.TblUsers.Where(x => x.Email == model.EmailId).FirstOrDefault();/* new Users().GetUsers().Where(u => u.UserName == userModel.UserName).SingleOrDefault();*/
 
-            var s = db.TblUsers.FirstOrDefault();
+            //var s = db.TblUsers.FirstOrDefault();
 
             if (user != null)
             {
@@ -239,11 +241,20 @@ namespace SchoolManagement.Controllers
                     ModelState.AddModelError("", "Account is block.");
                     return PartialView("_LoginPartial", model);
                 }
+                string base64Image = "";
+                if (user.Image!=null)
+                {
+                     base64Image = Convert.ToBase64String(user.Image);
+                }
+               
                 var userClaims = new List<Claim>()
                 {
                     new Claim("UserName",user.Name),
                     new Claim("userId", user.Id.ToString()),
                      new Claim("Email", user.Email),
+                     //new Claim("Image", base64Image),
+                     new Claim("profil",user.Image.ToString()),
+                new Claim("Role", user.Role),
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Email, user.Email),
                     //new Claim(ClaimTypes.DateOfBirt,DateTime.Parse(user.CreateTime).ToString()),
@@ -253,7 +264,7 @@ namespace SchoolManagement.Controllers
                 var userRoles = db.TableRoles.Where(x => x.UserId == user.Id).Select(x => x.UserRole).ToList();
 
                 // Add role claims to userClaims
-                userClaims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+                //userClaims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
                 userClaims.AddRange(userRoles.Select(role => new Claim("Roles", role)));
                 var userIdentity = new ClaimsIdentity(userClaims, "User Identity");
 
@@ -263,10 +274,11 @@ namespace SchoolManagement.Controllers
                 showMessageString = new
                 {
                     status = "true",
-                    message = "success"
+                    message = "success",
+                    role=user.Role,
                 };
 
-                //return Json("true");
+                return Json(showMessageString);
                 return RedirectToAction("Index","Home");
             }
             else

@@ -11,10 +11,10 @@ using System.Web;
 
 namespace SchoolManagement.Controllers
 {
-
+    
     public class BaseController : Controller
     {
-        
+      
         public dynamic showMessageString = string.Empty;
         #region Localization
         public IActionResult ChangeLanguage(string culture)

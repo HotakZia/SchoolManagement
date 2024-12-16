@@ -11,6 +11,8 @@ using SchoolManagement.Models;
 
 namespace SchoolManagement.Controllers
 {
+    [Authorize(Roles = ("Authorize"))]
+
     public class HomeController : BaseController
     {
         //private readonly ILogger<HomeController> _logger;
@@ -19,25 +21,25 @@ namespace SchoolManagement.Controllers
         //{
         //    _logger = logger;
         //}
-        //[Route("dashboard")]
+        [Route("teacher")]
 
-        //[Authorize(Roles = ("Authorize"))]
+        [Authorize(Roles = ("Teacher"))]
         public IActionResult Teacher()
         {
             return View();
 
         }
-        //[Route("dashboard")]
+        [Route("student")]
 
-        //[Authorize(Roles = ("Authorize"))]
+        [Authorize(Roles = ("Student"))]
         public IActionResult Student()
         {
             return View();
         }
-            //[Route("dashboard")]
+        [Route("dashboard")]
 
-            //[Authorize(Roles = ("Authorize"))]
-            public IActionResult Index()
+        [Authorize(Roles = ("admin"))]
+        public IActionResult Index()
         {
             ViewBag.Student = db.Students.Where(x => x.Status == true).Count();
             ViewBag.Class = db.Classes.Where(x => x.Status == true).Count();

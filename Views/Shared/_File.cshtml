@@ -28,11 +28,8 @@
                                 <div class="col-lg-2">
                                     <div class="form-group local-forms">
                                         <label asp-for="Type" class="control-label">Type Of<span class="login-danger"></span></label>
-                                        <select class="form-control" asp-for="Type">
-                                            <option>Certificat</option>
-                                            <option>Diploma</option>
-                                            <option>Tazkira</option>
-                                        </select>
+                                        <select asp-for="Type" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.DocumentType>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="District" class="form-control select2" required></select>
+
 
                                         <span asp-validation-for="Type" class="text-danger"></span>
                                     </div>

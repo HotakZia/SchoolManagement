@@ -91,6 +91,8 @@
     </div>
     <!-- /Main Wrapper -->
     <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous" asp-append-version="true"></script>
+
     <script src="~/template/assets/js/jquery-3.7.1.min.js" type="edc00698f51a1d9b3409b134-text/javascript"></script>
 
     <!-- Bootstrap Core JS -->
@@ -103,6 +105,10 @@
     <script src="~/template/assets/js/script.js" type="edc00698f51a1d9b3409b134-text/javascript"></script>
 
     <script src="../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="edc00698f51a1d9b3409b134-|49" defer></script>
+
+    <script src="~/template/assets/sweetalert/js/sweetalert.min.js"></script>
+    <script src="~/js/Unobtrusive Ajax.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 
 <!-- Mirrored from preschool.dreamstechnologies.com/template/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 10:39:19 GMT -->
@@ -110,12 +116,9 @@
 
 
 <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- jQuery Unobtrusive Validation -->
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.unobtrusive-ajax/3.2.6/jquery.unobtrusive-ajax.min.js"></script>
+
+
 <script>
     function lOnBegin() {
         $("#_btnText").text("checking credentials...");
@@ -124,13 +127,21 @@
         $("#_btnLoader").show();
     }
     function LoginPass(data) {
-        alert();
+      
 
-        if (data == "true") {
+        if (data.status == "true") {
                  //$("#_btnText").text("redirecting to dashboard...");
               @*document.location.href = "@Url.Action("cPanel","BasePanal")",true;*@
-
-            window.location.href = '@Url.Action("Index", "Home")';
+            if (data.role=="Admin") {
+                  window.location.href = '@Url.Action("Index", "Home")';
+            }
+            else if (data.role=="Teacher") {
+                  window.location.href = '@Url.Action("Teacher", "Home")';
+            }
+            else if (data.role=="Student") {
+                  window.location.href = '@Url.Action("Student", "Home")';
+            }
+          
         }
         else {
 

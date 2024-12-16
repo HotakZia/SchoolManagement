@@ -55,7 +55,7 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Tazkira,TeacherId,FirstName,LastName,DateOfBirth,Gender,Street,City,Province,Email,Phone,HireDate,Salary,SubjectTaught,Department,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number,RoleNumber,Position")] Teacher teacher, string userName, string password, IFormFile Image)
+        public async Task<IActionResult> Create([Bind("Tazkira,TeacherId,FirstName,LastName,DateOfBirth,Gender,Street,City,Province,Email,Phone,HireDate,Salary,SubjectTaught,Department,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number,RoleNumber,Position")] Teacher teacher, IFormFile Image)
         {
             try
             {
@@ -120,19 +120,20 @@ namespace SchoolManagement.Controllers
                     teacher.CreatedDate = DateTime.Now;
                     teacher.Status = true;
                     db.Add(teacher);
-                    if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(userName))
-                    {
+                
                         Models.Hashing hashing = new Models.Hashing();
                         var tbluser = new TblUser();
 
                         tbluser.Email = teacher.Email;
                         tbluser.Name = teacher.FirstName + " " + teacher.LastName;
-                        tbluser.Password = hashing.Encrypt(password);
-                        tbluser.UserId = teacher.TeacherId;
+                    tbluser.Password = hashing.Encrypt("123@" + teacher.LastName);
+                    tbluser.UserId = teacher.TeacherId;
                         tbluser.CanLogin = true;
+                        tbluser.Role = "Teacher";
                         tbluser.Id = Guid.NewGuid();
-                        db.TblUsers.Add(tbluser);
-                    }
+                    tbluser.Image = teacher.Attachment;
+                    db.TblUsers.Add(tbluser);
+                    
                     await db.SaveChangesAsync();
                     showMessageString = new
                     {
@@ -191,8 +192,36 @@ namespace SchoolManagement.Controllers
             {
                 try
                 {
+                    var checkDuplicate = db.Teachers.Where(x =>x.TeacherId != teacher.TeacherId&&
+                    (x.Tazkira == teacher.Tazkira ||x.Email==teacher.Email )).FirstOrDefault();
+
+                    if (checkDuplicate!=null)
+                    {
+                        showMessageString = new
+                        {
+                            status = "true",
+                            message = "Dupplicate record."
+
+                        };
+                        return Json(showMessageString);
+                    }
+                    var hashing = new Models.Hashing();
+                    teacher.ModifiedDate = DateTime.Now;
+
+                    var user = db.TblUsers.Where(x => x.UserId == teacher.TeacherId).FirstOrDefault();
+                    user.Name = teacher.FirstName + " " + teacher.LastName;
+                    user.Email = teacher.Email;
+                    user.Role = "Teacher";
+                    user.Image = teacher.Attachment;
                     db.Update(teacher);
                     await db.SaveChangesAsync();
+                    showMessageString = new
+                    {
+                        status = "true",
+                        message = "record has been updated."
+
+                    };
+                    return Json(showMessageString);
                 }
                 catch (DbUpdateConcurrencyException)
                 {

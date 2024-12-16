@@ -1,12 +1,10 @@
 ﻿@model SchoolManagement.Models.db.Student
-@{
 
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+
+
 
 
 <div class="content container-fluid">
-
     <!-- Page Header -->
     <div class="page-header">
         <div class="row align-items-center">
@@ -28,81 +26,110 @@
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Edit" method="post" data-ajax-success="OnSuccess"
+                    <form asp-action="Edit" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" asp-for="StudentId" />
                         <input type="hidden" asp-for="CreatedBy" />
                         <input type="hidden" asp-for="CreatedDate" />
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Attachment" />
                         <div class="row">
                             <div class="col-12">
                                 <h5 class="form-title student-info">Basic Information <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+
+                                <p class="card-text">
+                                    For custom Bootstrap form validation messages, you’ll need to add the <code>novalidate</code> boolean attribute to your form. For server side validation
+                                    <a href="https://getbootstrap.com/docs/5.1/forms/overview/" target="_blank">read full documentation</a>.
+                                </p>
+                                <hr />
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>First Name <span class="login-danger">*</span></label>
-                                    <input class="form-control" asp-for="FirstName" type="text" name="FirstName" id="FirstName" placeholder="Enter First Name">
-                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    <input class="form-control" type="text" asp-for="FirstName" required id="FirstName" placeholder="Enter First Name">
+                                    <div class="invalid-feedback">
+                                        first name is required.
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Last Name <span class="login-danger">*</span></label>
-                                    <input class="form-control" asp-for="LastName" type="text" name="LastName" id="LastName" placeholder="Enter First Name">
-                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                    <input class="form-control" type="text" asp-for="LastName" id="LastName" required placeholder="Enter First Name">
+                                    <div class="invalid-feedback">
+                                        last name is required.
+                                    </div>
+                                    <span asp-validation-for="@Model.LastName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Father Name <span class="login-danger">*</span></label>
-                                    <input class="form-control" asp-for="FatherName" type="text" name="FatherName" id="FatherName" placeholder="Enter Father Name">
-                                    <span asp-validation-for="FatherName" class="text-danger"></span>
+                                    <input class="form-control" type="text" asp-for="FatherName" id="FatherName" required placeholder="Enter Father Name">
+                                    <div class="invalid-feedback">
+                                        father name is required.
+                                    </div>
+                                    <span asp-validation-for="@Model.FatherName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Grand Father Name <span class="login-danger">*</span></label>
-                                    <input class="form-control" asp-for="GfatherName" type="text" name="GfatherName" id="GfatherName" placeholder="Enter Grand Father Name">
-                                    <span asp-validation-for="GfatherName" class="text-danger"></span>
+                                    <input class="form-control" type="text" asp-for="GfatherName" id="GfatherName" required placeholder="Enter Grand Father Name">
+                                    <div class="invalid-feedback">
+                                        grand father name is required.
+                                    </div>
+                                    <span asp-validation-for="@Model.GfatherName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Select Blood Group <span class="login-danger">*</span></label>
-                                    <select class="form-control select" asp-for="BloodGroup" id="BloodGroup" name="BloodGroup">
+                                    @*<select asp-for="BloodGroup" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.BloodGroup>()" id="BloodGroup" class="form-control select2" required></select>*@
+                                    <select asp-for="BloodGroup" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.BloodGroup>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="BloodGroup" class="form-control select2" required></select>
 
-                                        <option>B+</option>
-                                        <option>A+</option>
-                                        <option>O+</option>
-                                    </select>
-                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                    <div class="invalid-feedback">
+                                        Please choose a bood group.
+                                    </div>
+                                    <span asp-validation-for="@Model.BloodGroup" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Select Gender <span class="login-danger">*</span></label>
-                                    <select class="form-control select" asp-for="Gender" name="Gender" id="Gender">
-                                        <option>Male</option>
-                                        <option>Female</option>
-                                        <option>Others</option>
-                                    </select>
-                                    <span asp-validation-for="Gender" class="text-danger"></span>
+                                    @*<select asp-for="Gender" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Gender>()" id="Gender" class="form-control select2" required></select>*@
+                                    <select asp-for="Gender" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Gender>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="Gender" class="form-control select2" required></select>
+                                    <div class="invalid-feedback">
+                                        Please choose a gender.
+                                    </div>
+                                    <span asp-validation-for="@Model.Gender" class="text-danger"></span>
                                 </div>
                             </div>
 
 
                             <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms calendar-icon">
+                                <div class="form-group local-forms @*calendar-icon*@">
                                     <label>Date Of Birth  <span class="login-danger">*</span></label>
-                                    <input class="form-control datetimepicker" asp-for="DateOfBirth" name="DateOfBirth" id="DateOfBirth" type="date" placeholder="DD-MM-YYYY">
-                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                    @*class="form-control datetimepicker"*@
+                                    <input asp-for="DateOfBirth" class="form-control" required id="DateOfBirth" type="date" placeholder="DD-MM-YYYY">
+                                    <div class="invalid-feedback">
+                                        Please select date of birth.
+                                    </div>
+                                    <span asp-validation-for="@Model.DateOfBirth" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-8">
                                 <div class="form-group local-forms">
                                     <label>Tazkira Number<span class="login-danger">*</span></label>
-                                    <input class="form-control" type="text" asp-for="Tazkira" name="Tazkira" id="Tazkira" placeholder="Enter Tazkira Number">
-                                    <span asp-validation-for="Tazkira" class="text-danger"></span>
+                                    <input class="form-control" type="text" required asp-for="Tazkira" maxlength="20" id="Tazkira" placeholder="Enter Tazkira Number">
+                                    <div class="invalid-feedback">
+                                        Tazkira number is required choose a first name.
+                                    </div>
+                                    <span asp-validation-for="@Model.Tazkira" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -113,34 +140,34 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Roll <span class="login-danger">*</span></label>
-                                    <input class="form-control" type="text" asp-for="RoleNumber" id="RoleNumber" name="RoleNumber" placeholder="Enter Roll Number">
-                                    <span asp-validation-for="RoleNumber" class="text-danger"></span>
+                                    <input class="form-control" type="text" asp-for="RoleNumber" required name="RoleNumber" placeholder="Enter Roll Number">
+                                    <div class="invalid-feedback">
+                                        Id number is required.
+                                    </div>
+                                    <span asp-validation-for="@Model.RoleNumber" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Admission Date <span class="login-danger">*</span></label>
-                                    <input class="form-control" name="AdmissionDate" asp-for="AdmissionDate" id="AdmissionDate" type="date" placeholder="Enter Admission Date">
-                                    <span asp-validation-for="AdmissionDate" class="text-danger"></span>
+                                    <input class="form-control" asp-for="AdmissionDate" required id="AdmissionDate" type="date" placeholder="Enter Admission Date">
+                                    <div class="invalid-feedback">
+                                        Please choose a admission date.
+                                    </div>
+                                    <span asp-validation-for="@Model.AdmissionDate" class="text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
-                                    <label asp-for="Shift" class="control-label">Select Shift <span class="login-danger">*</span></label>
-                                    <select class="form-control select" asp-for="Shift" name="Shift" id="Shift">
-                                        <option selected disabled> Shift</option>
-                                        <option value="Morning">Morning</option>
-                                        <option value="Afternoon">afternoon</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
+                                    <label asp-for="@Model.Shift" class="control-label">Select Shift <span class="login-danger">*</span></label>
+                                    @*<select asp-for="Shift" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Shift>()" id="Shift" class="form-control select2" required></select>*@
 
-
-                                    </select>
-                                    <span asp-validation-for="Shift" class="text-danger"></span>
+                                    <select asp-for="Shift" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Shift>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="Shift" class="form-control select2" required></select>
+                                    <div class="invalid-feedback">
+                                        Please choose a shift.
+                                    </div>
+                                    <span asp-validation-for="@Model.Shift" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -148,9 +175,14 @@
                                 <div class="form-group local-forms">
                                     <label>Select Class <span class="login-danger">*</span></label>
 
-                                    @Html.DropDownList("ClassId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })
+                                    <input class="form-control" id="txtClass" type="text" value="@ViewBag._class.Name" placeholder="Enter Class Name" style="border-style:dotted">
 
-                                    <span asp-validation-for="ClassId" class="text-danger"></span>
+                                    <input class="form-control" required asp-for="@Model.ClassId" value="@ViewBag._class.Id" id="ClassId" type="hidden">
+                                    <div class="invalid-feedback">
+                                        Select assignee class.
+                                    </div>
+
+                                    <span asp-validation-for="@Model.ClassId" class="text-danger"></span>
 
                                 </div>
                             </div>
@@ -159,7 +191,9 @@
                                     <label>Payment <span class="login-danger">*</span></label>
 
                                     @Html.DropDownList("Payment", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --", multiple = "true", Name = "Payment", Id = "Payment" })
-                                    @*<span asp-validation-for="pay" class="text-danger"></span>*@
+                                    <div class="invalid-feedback">
+                                        Please choose a payment.
+                                    </div>                                    @*<span asp-validation-for="Students.pay" class="text-danger"></span>*@
                                 </div>
                             </div>
                             <div class="col-12">
@@ -169,15 +203,21 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Guardian Name <span class="login-danger">*</span></label>
-                                    <input class="form-control" asp-for="GuardianName" name="GuardianName" id="GuardianName" type="text" placeholder="Enter Guardian Name">
-                                    <span asp-validation-for="GuardianName" class="text-danger"></span>
+                                    <input class="form-control" asp-for="GuardianName" id="GuardianName" type="text" required placeholder="Enter Guardian Name">
+                                    <div class="invalid-feedback">
+                                        Guardian name is required.
+                                    </div>
+                                    <span asp-validation-for="@Model.GuardianName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Guardian Phone <span class="login-danger">*</span></label>
-                                    <input class="form-control" asp-for="GuardianPhone" name="GuardianPhone" id="GuardianPhone" type="text" placeholder="Enter Guardian Phone">
-                                    <span asp-validation-for="GuardianPhone" class="text-danger"></span>
+                                    <input class="form-control" asp-for="GuardianPhone" id="GuardianPhone" type="text" placeholder="Enter Guardian Phone" required>
+                                    <div class="invalid-feedback">
+                                        Guardian phone number is required..
+                                    </div>
+                                    <span asp-validation-for="@Model.GuardianPhone" class="text-danger"></span>
                                 </div>
                             </div>
 
@@ -186,8 +226,11 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Contact <span class="login-danger">*</span></label>
-                                    <input class="form-control" type="text" asp-for="Contact" name="Contact" id="Contact" placeholder="Enter Contact Info">
-                                    <span asp-validation-for="Contact" class="text-danger"></span>
+                                    <input class="form-control" type="text" asp-for="Contact" id="Contact" required placeholder="Enter Contact Info">
+                                    <div class="invalid-feedback">
+                                        Student contact is required.
+                                    </div>
+                                    <span asp-validation-for="@Model.Contact" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -196,61 +239,101 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Province </label>
-                                    <select class="form-control select" asp-for="Province" name="Province" id="Shift">
+                                    @*<select asp-for="Province" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Province>()" id="Province" class="form-control select2" required></select>*@
 
-                                        <option value="Kandahar">Kandahar</option>
-                                        <option value="Kabul">Kabul</option>
+                                    <select asp-for="Province" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Province>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="Province" class="form-control select2" required></select>
 
-                                    </select>
-
-                                    <span asp-validation-for="Province" class="text-danger"></span>
+                                    <div class="invalid-feedback">
+                                        Please choose a province.
+                                    </div>
+                                    <span asp-validation-for="@Model.Province" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>City </label>
-                                    <input class="form-control" asp-for="City" type="text" name="City" placeholder="Enter City Name">
-                                    <span asp-validation-for="City" class="text-danger"></span>
+
+                                    <select asp-for="City" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.District>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="District" class="form-control select2" required></select>
+
+                                    @*<select asp-for="City" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.District>()" id="City" class="form-control select2" required></select>*@
+                                    <div class="invalid-feedback">
+                                        Please choose a city.
+                                    </div>
+                                    <span asp-validation-for="@Model.City" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Street </label>
-                                    <input class="form-control" asp-for="Street" type="text" name="Street" placeholder="Enter Street Name">
-                                    <span asp-validation-for="Street" class="text-danger"></span>
+                                    <input class="form-control" type="text" asp-for="Street" placeholder="Enter Street Name" required>
+                                    <div class="invalid-feedback">
+                                        Please choose a street.
+                                    </div>
+                                    <span asp-validation-for="@Model.Street" class="text-danger"></span>
                                 </div>
                             </div>
 
-                            <div class="col-12">
-                                <h5 class="form-title student-info">Other Information</h5>
-                                <hr />
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms">
-                                    <label>Comment </label>
-                                    <input class="form-control" asp-for="Comment" type="text" name="Comment" placeholder="Enter Comment">
-                                    <span asp-validation-for="Comment" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms">
-                                    <div class="form-group">
-                                        <label asp-for="Status" class="control-label"></label>
-                                        <input asp-for="Status" class="form-control" />
-                                        <span asp-validation-for="Status" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group students-up-files">
-                                    <label>Upload Student Photo (150px X 150px)</label>
-                                    <div class="uplod">
-                                        <label class="file-upload image-upbtn mb-0">
-                                            Choose File <input type="file" name="Image">
-                                            <span asp-validation-for="Attachment" class="text-danger"></span>
+
+                            @*<div class="col-12 col-sm-4">
+                                    <div class="form-group students-up-files">
+                                        <label>
+                                            Upload Student Photo (150px X 150px)
+                                            <div class="invalid-feedback">
+                                                Please upload profile photo.
+                                            </div>
                                         </label>
 
+                                        <div class="uplod">
+                                            <label class="file-upload image-upbtn mb-0">
+                                                Choose File <input type="file" name="Image">
+
+                                                <span asp-validation-for="@Model.Attachment" class="text-danger"></span>
+                                            </label>
+
+                                        </div>
                                     </div>
+                                </div>*@
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label>Status </label>
+
+
+                                    <select class="form-control" asp-for="Status" required>
+                                        <option value="True">Active</option>
+                                        <option value="False">Not Active</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Please choose a Status.
+                                    </div>
+                                    <span asp-validation-for="@Model.Street" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="profile-user-box">
+                                    <div class="profile-user-img">
+
+                                        @if (Model.Attachment != null)
+                                        {
+                                            string Image = "";
+                                            Image = Convert.ToBase64String(Model.Attachment);
+
+                                            <img src="@string.Format("data:image/jpeg;base64,{0}", Image)" id="uploadedImage" height="150" width="150" />
+
+                                        }
+
+
+
+                                        <div class="form-group students-up-files profile-edit-icon mb-0">
+                                            <div class="uplod d-flex">
+                                                <label class="file-upload profile-upbtn mb-0">
+                                                    <i class="feather-edit-3"></i>
+                                                    <input type="file" name="Image" id="uploadInput" accept="image/*"  onchange="displayImage(event)">
+
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="col-12">
@@ -265,10 +348,99 @@
         </div>
     </div>
 </div>
+
 <hr />
 
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous" asp-append-version="true"></script>
 
 
+<script src="../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="8fd9cd6760df466b51b89013-|49" defer></script>
+<script src="~/template/assets/js/form-validation.js" type="8fd9cd6760df466b51b89013-text/javascript"></script>
+
+<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
+
+
+
+
+@*<script>
+            var rowNumber = 0;
+
+            $("#addRowBtn").click(function() {
+                $("#itemsContainer").append(`<input type="text" name="items[@rowNumber]" placeholder="Item ${rowNumber + 1}" /><br />`);
+                rowNumber++;
+            });
+    </script>*@
+<script>
+
+    $('#txtClass').autocomplete({
+
+        minlength: 1,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtClass').val();
+            //alert(SearchText);
+            $('#txtClass').removeClass('notfound');
+            $('#txtClass').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Classes/getClassByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtClass').removeClass('loading');
+                        $('#txtClass').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtClass').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtClass').val(ui.item.label);
+
+            $('#ClassId').val(ui.item.value);
+            $('#txtClass').removeClass('notfound');
+            $('#txtClass').addClass('checked');
+            alert(ui.item.value);
+
+            return false;
+
+        },
+
+
+
+    });
+</script>
 
 
 @section Scripts {
@@ -286,9 +458,18 @@
 
                  swal("Saved!",  data.message, "success");
 
-             $("#FirstName").val("");
-              $("#Comment").val("");
-           @*document.location.href = "@Url.Action("Index","tbl_Transiction")",true;*@
+             //document.location.href = "@Url.Action("Details","Students")" + data.Id, true;
+
+
+
+             // Assume you have a variable 'id' containing the ID value
+var id = 123; // Example ID value
+
+             // Construct the URL with the ID
+             var url = '/Students/Details/' + data.Id; // Replace 'controller' and 'action' with your actual controller and action names
+
+// Redirect to the new URL
+window.location.href = url;
          }
          else if (data.status=="duplicate") {
               swal("Dupplicate Record!",  data.message, "warning");
@@ -308,3 +489,22 @@
     }
     </script>
 }
+
+
+
+
+<script>
+    function displayImage(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById('uploadedImage').src = e.target.result;
+        }
+
+        reader.readAsDataURL(file);
+    }
+</script>
+
+
+

@@ -1,20 +1,27 @@
-﻿@model SchoolManagement.Models.db.Student
+﻿@model SchoolManagement.Models.Entities.Student
+@{ string Imge = ""; string file = ""; }
+
+
+
+
+
+
 
 <div class="content container-fluid">
 
-    <div class="page-header">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="page-sub-header">
-                    <h3 class="page-title">Student Details</h3>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="students.html">Student</a></li>
-                        <li class="breadcrumb-item active">Student Details</li>
-                    </ul>
+    @*<div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-sub-header">
+                        <h3 class="page-title">Student Details</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="students.html">Student</a></li>
+                            <li class="breadcrumb-item active">Student Details</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div>*@
 
     <div class="card">
         <div class="card-body">
@@ -25,48 +32,64 @@
                     </div>
                     <div class="student-profile-head">
                         @*<div class="profile-bg-img">
-                            <img src="~/template/assets/img/profile-bg.jpg" alt="Profile">
-                        </div>*@
+                                <img src="~/template/assets/img/profile-bg.jpg" alt="Profile">
+                            </div>*@
                         <div class="row">
                             <div class="col-lg-4 col-md-4">
                                 <div class="profile-user-box">
                                     <div class="profile-user-img">
-                                        <img src="~/template/assets/img/profile-user.jpg" alt="Profile">
-                                     
-                                        <div class="form-group students-up-files profile-edit-icon mb-0">
+                                        @*<img src="~/template/assets/img/profile-user.jpg" alt="Profile">*@
+
+
+
+                                        @if (Model.Attachment != null)
+                                        {
+                                            Imge = Convert.ToBase64String(Model.Attachment);
+
+                                            @*<img src="@string.Format("data:image/jpeg;base64,{0}", Imge)" class="img-fluid avatar-lg rounded" />*@
+                                            <img src="@string.Format("data:image/jpeg;base64,{0}", Imge)" height="150" width="100" />
+
+                                        }
+                                        @*<div class="form-group students-up-files profile-edit-icon mb-0">
                                             <div class="uplod d-flex">
                                                 <label class="file-upload profile-upbtn mb-0">
                                                     <i class="feather-edit-3"></i><input type="file">
                                                 </label>
                                             </div>
-                                        </div>
+                                        </div>*@
                                     </div>
                                     <div class="names-profiles">
                                         <h4>@Model.FirstName @Model.LastName</h4>
-                                        <h5>@Model.ClassId</h5>
+                                        <h5>@Model.RoleNumber</h5>
+                                        <h5>@Model.ClassName</h5>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-4 d-flex align-items-center">
+                            <div class="col-lg-6 col-md-6 d-flex align-items-center">
                                 <div class="follow-group">
+
                                     <div class="students-follows">
-                                        <h5>Followers</h5>
-                                        <h4>2850</h4>
+                                        <h5>@Model.Gender</h5>
+
                                     </div>
                                     <div class="students-follows">
-                                        <h5>Followers</h5>
-                                        <h4>2850</h4>
+                                        <h5>@Model.BloodGroup</h5>
+
                                     </div>
                                     <div class="students-follows">
-                                        <h5>Followers</h5>
-                                        <h4>2850</h4>
+                                        <h5>@Model.AdmissionDate</h5>
+
+                                    </div>
+                                    <div class="students-follows">
+                                        <h5>@Model.CreatedDate</h5>
+
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-4 d-flex align-items-center">
+                            <div class="col-lg-2 col-md-2 d-flex align-items-center">
                                 <div class="follow-btn-group">
-                                    <button type="submit" class="btn btn-info follow-btns">Follow</button>
-                                    <button type="submit" class="btn btn-info message-btns">Message</button>
+                                    <a asp-action="Edit" asp-route-id="@Model.StudentId" class="btn btn-info follow-btns">Edit</a>
+
                                 </div>
                             </div>
                         </div>
@@ -86,8 +109,8 @@
                                         <i class="feather-user"></i>
                                     </div>
                                     <div class="views-personal">
-                                        <h4>Name</h4>
-                                        <h5>Bruce Willis</h5>
+                                        <h4>Father &and; G Father</h4>
+                                        <h5>@Model.FatherName son of @Model.GfatherName</h5>
                                     </div>
                                 </div>
                                 <div class="personal-activity">
@@ -95,8 +118,8 @@
                                         <img src="~/template/assets/img/icons/buliding-icon.svg" alt="">
                                     </div>
                                     <div class="views-personal">
-                                        <h4>Department </h4>
-                                        <h5>Computer Science</h5>
+                                        <h4>Class </h4>
+                                        <h5>@Model.ClassName</h5>
                                     </div>
                                 </div>
                                 <div class="personal-activity">
@@ -104,8 +127,8 @@
                                         <i class="feather-phone-call"></i>
                                     </div>
                                     <div class="views-personal">
-                                        <h4>Mobile</h4>
-                                        <h5>+91 89657 48512</h5>
+                                        <h4>Contact</h4>
+                                        <h5>@Model.Contact</h5>
                                     </div>
                                 </div>
                                 <div class="personal-activity">
@@ -113,8 +136,8 @@
                                         <i class="feather-mail"></i>
                                     </div>
                                     <div class="views-personal">
-                                        <h4>Email</h4>
-                                        <h5><a href="https://preschool.dreamstechnologies.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cca8ada5bfb58caba1ada5a0e2afa3a1">[email&#160;protected]</a></h5>
+                                        <h4>Guardian</h4>
+                                        <h5>@Model.GuardianName / @Model.GuardianPhone</h5>
                                     </div>
                                 </div>
                                 <div class="personal-activity">
@@ -123,7 +146,7 @@
                                     </div>
                                     <div class="views-personal">
                                         <h4>Gender</h4>
-                                        <h5>Male</h5>
+                                        <h5>@Model.Gender</h5>
                                     </div>
                                 </div>
                                 <div class="personal-activity">
@@ -132,7 +155,7 @@
                                     </div>
                                     <div class="views-personal">
                                         <h4>Date of Birth</h4>
-                                        <h5>22 Apr 1995</h5>
+                                        <h5>@Model.DateOfBirth</h5>
                                     </div>
                                 </div>
                                 <div class="personal-activity">
@@ -140,8 +163,8 @@
                                         <i class="feather-italic"></i>
                                     </div>
                                     <div class="views-personal">
-                                        <h4>Language</h4>
-                                        <h5>English, French, Bangla</h5>
+                                        <h4>Id Card</h4>
+                                        <h5>@Model.Tazkira</h5>
                                     </div>
                                 </div>
                                 <div class="personal-activity mb-0">
@@ -150,7 +173,7 @@
                                     </div>
                                     <div class="views-personal">
                                         <h4>Address</h4>
-                                        <h5>480, Estern Avenue, New York</h5>
+                                        <h5>@Model.Street, @Model.City, @Model.Province</h5>
                                     </div>
                                 </div>
                             </div>
@@ -160,12 +183,12 @@
                         <div class="card mb-0">
                             <div class="card-body">
                                 <div class="heading-detail">
-                                    <h4>Skills:</h4>
+                                    <h4>Enrollments:</h4>
                                 </div>
                                 <div class="skill-blk">
-                                    @if (ViewBag.Payments != null)
+                                    @if (ViewBag.payments != null)
                                     {
-                                        foreach (var item in ViewBag.Payments)
+                                        foreach (var item in ViewBag.payments)
                                         {
                                             <div class="skill-statistics">
                                                 <div class="skills-head">
@@ -178,33 +201,7 @@
                                             </div>
                                         }
                                     }
-                                    <div class="skill-statistics">
-                                        <div class="skills-head">
-                                            <h5>Photoshop</h5>
-                                            <p>90%</p>
-                                        </div>
-                                        <div class="progress mb-0">
-                                            <div class="progress-bar bg-photoshop" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="skill-statistics">
-                                        <div class="skills-head">
-                                            <h5>Code editor</h5>
-                                            <p>75%</p>
-                                        </div>
-                                        <div class="progress mb-0">
-                                            <div class="progress-bar bg-editor" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="skill-statistics mb-0">
-                                        <div class="skills-head">
-                                            <h5>Illustrator</h5>
-                                            <p>95%</p>
-                                        </div>
-                                        <div class="progress mb-0">
-                                            <div class="progress-bar bg-illustrator" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -214,33 +211,74 @@
                     <div class="student-personals-grp">
                         <div class="card mb-0">
                             <div class="card-body">
-                                <div class="heading-detail">
-                                    <h4>About Me</h4>
-                                </div>
+                                <p>Comment: @Model.Comment</p>
                                 <div class="hello-park">
-                                    <h5>Hello I am Daisy Parks</h5>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur officia deserunt mollit anim id est laborum.</p>
-                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam  inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. </p>
+                                    <h5>@Model.FirstName @Model.LastName Relatives</h5>
+                                    <hr />
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Full Name</th>
+                                                <th>Relationship</th>
+                                                <th>Contact</th>
+                                                <th>Ocupation</th>
+                                                <th>Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in ViewBag.parents)
+                                            {
+
+
+                                                <tr>
+                                                    <td>@item.FullName</td>
+                                                    <td>@item.Relationship</td>
+                                                    <td>@item.Contact</td>
+                                                    <td>@item.Occupation</td>
+                                                    <td>@item.Address</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <br />
+                                    <h5>@Model.FirstName @Model.LastName Documents</h5>
+                                    <hr />
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Comment</th>
+                                                <th>File</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in ViewBag.files)
+                                            {
+
+
+                                                <tr>
+                                                    <td>@item.Name</td>
+                                                    <td>@item.Type</td>
+                                                    <td>@item.Comment</td>
+                                                    <td>
+
+                                                        @if (item.Attachment != null)
+                                                        {
+                                                            file = Convert.ToBase64String(item.Attachment);
+
+                                                            <a>
+                                                                <img src="@string.Format("data:image/jpeg;base64,{0}", file)" class="img-fluid avatar-lg rounded thumbnail" onclick="openFullscreen(this)" />
+                                                            </a>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <div class="hello-park">
-                                    <h5>Education</h5>
-                                    <div class="educate-year">
-                                        <h6>2008 - 2009</h6>
-                                        <p>Secondary Schooling at xyz school of secondary education, Mumbai.</p>
-                                    </div>
-                                    <div class="educate-year">
-                                        <h6>2011 - 2012</h6>
-                                        <p>Higher Secondary Schooling at xyz school of higher secondary education, Mumbai.</p>
-                                    </div>
-                                    <div class="educate-year">
-                                        <h6>2012 - 2015</h6>
-                                        <p>Bachelor of Science at Abc College of Art and Science, Chennai.</p>
-                                    </div>
-                                    <div class="educate-year">
-                                        <h6>2015 - 2017</h6>
-                                        <p class="mb-0">Master of Science at Cdm College of Engineering and Technology, Pune.</p>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -265,32 +303,32 @@
         newWin.document.open();
 
         newWin.document.write(`<html>
-           <head>
-                <meta charset="utf-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <head>
+                        <meta charset="utf-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-                <title>
+                                <title>
 
 
-                   بیل چاپ
-                </title>
-
-
-
+                                    بیل چاپ
+                            </title>
 
 
 
 
-  @@Styles.Render("~/Content/plugins/overlayScrollbars/css/OverlayScrollbars.min.css")
-  @@Styles.Render("~/Content/plugins/fontawesome-free/css/all.css")
-  @@Styles.Render("~/Content/dist/css/adminlte.min.css")
-  @@Styles.Render("~/Content/bootstrap.min.css")
 
 
 
-            </head>
-<body onload="window.print()">` + divToPrint.innerHTML + ' </body></html>');
+                                @@Styles.Render("~/Content/plugins/overlayScrollbars/css/OverlayScrollbars.min.css")
+                                @@Styles.Render("~/Content/plugins/fontawesome-free/css/all.css")
+                                @@Styles.Render("~/Content/dist/css/adminlte.min.css")
+                                @@Styles.Render("~/Content/bootstrap.min.css")
+
+
+
+                        </head>
+                            <body onload="window.print()">` + divToPrint.innerHTML + ' </body></html>');
 
         newWin.document.close();
 
@@ -305,3 +343,36 @@
 
 
 </script>
+
+<div id="fullscreenModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.9); text-align: center; z-index: 9999;">
+    <img id="fullscreenImage" style="max-width: 90%; max-height: 90vh; margin: auto; display: block;">
+</div>
+
+<script>
+    function openFullscreen(img) {
+        var modal = document.getElementById('fullscreenModal');
+        var fullscreenImg = document.getElementById('fullscreenImage');
+
+        // Show the modal
+        modal.style.display = "flex";
+
+        // Set the source of the full-screen image
+        fullscreenImg.src = img.src;
+
+        // Disable scrolling when modal is active
+        document.body.style.overflow = "hidden";
+    }
+
+    // Close the modal when clicking anywhere on the screen
+    document.getElementById('fullscreenModal').addEventListener('click', function () {
+        var modal = document.getElementById('fullscreenModal');
+
+        // Hide the modal
+        modal.style.display = "none";
+
+        // Enable scrolling again after closing the modal
+        document.body.style.overflow = "auto";
+    });
+</script>
+
+

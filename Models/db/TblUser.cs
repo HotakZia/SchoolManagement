@@ -17,5 +17,6 @@ namespace SchoolManagement.Models.db
         public Guid? Creator { get; set; }
         public DateTime? LastLogin { get; set; }
         public DateTime? CreatedDate { get; set; }
+        public byte[] Image { get; set; }
     }
 }

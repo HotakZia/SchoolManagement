@@ -118,6 +118,25 @@ namespace SchoolManagement.Models
             Year2025,
             // Add more years as needed
         }
+        public enum FamilyRelationship
+        {
+            Father,
+            Mother,
+            Guardian,
+            Sibling,
+            Grandparent,
+            Other
+        }
+        public enum DocumentType
+        {
+            BirthCertificate,
+            Passport,
+            IDCard,
+            ReportCard,
+            MedicalRecords,
+            RecommendationLetter,
+            Other
+        }
 
     }
 }

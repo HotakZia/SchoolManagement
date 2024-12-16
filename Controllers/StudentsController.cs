@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using X.PagedList;
 using SchoolManagement.Models.db;
+using System.Text;
 
 namespace SchoolManagement.Controllers
 {
@@ -400,28 +401,63 @@ namespace SchoolManagement.Controllers
                 return NotFound();
             }
 
-            var student = await db.Students
-                .FirstOrDefaultAsync(m => m.StudentId == id);
-            if (student == null)
+            //var student = await db.Students
+            //    .FirstOrDefaultAsync(m => m.StudentId == id);
+            var data = await (from student in db.Students
+                          join class_ in db.Classes on student.ClassId equals class_.Id
+
+                          where student.StudentId == id
+
+                          select new Models.Entities.Student
+                          {
+                              ClassId = student.ClassId,
+                              StudentId = student.StudentId,
+                              Tazkira = student.Tazkira,
+                              RoleNumber = student.RoleNumber,
+                              FirstName = student.FirstName,
+                              LastName = student.LastName,
+                              FatherName = student.FatherName,
+                              ClassName = class_.Name,
+                              DateOfBirth = student.DateOfBirth,
+                              Attachment = student.Attachment,
+                              Contact = student.Contact,
+                              Status = student.Status,
+                              BloodGroup = student.BloodGroup,
+                              City = student.City,
+                              AdmissionDate = student.AdmissionDate,
+                              Street = student.Street,
+                              Comment = student.Comment,
+                              CreatedBy = student.CreatedBy,
+                              Gender = student.Gender,
+                              GfatherName = student.GfatherName,
+                              GuardianName = student.GuardianName,
+                              GuardianPhone = student.GuardianPhone,
+                              ModifiedBy = student.ModifiedBy,
+                              ModifiedDate = student.ModifiedDate,
+                              Province = student.Province,
+                              CreatedDate = student.CreatedDate,
+                              Number = db.Exams.Where(x => x.ClassId == class_.Id && x.StudentId == student.StudentId && x.Status == true).Count()
+
+                          }).FirstOrDefaultAsync();
+            if (data == null)
             {
                 return NotFound();
             }
-            ViewBag.Payments =(from Payment in db.Payments
-                                           join sPay in db.StudentPayments on Payment.Id equals sPay.PaymentId
+            ViewBag.payments =(from sPayment in db.StudentPayments
+                                           join Pay in db.Payments on sPayment.PaymentId equals Pay.Id
 
-                                           //where post.Name.ToLower().Contains(term)
+                                           where sPayment.StudentId==id
 
                                            select new Models.Entities.Payment
                                            {
-                                             Id=sPay.Id,
-                                             PaymentName=Payment.Name,
-                                             Amount=Payment.Amount,
-                                             CreatedDate=Payment.CreatedDate
-                                            
-
+                                             Id=sPayment.Id,
+                                             PaymentName=Pay.Name,
+                                             Amount=Pay.Amount,
+                                             CreatedDate=Pay.CreatedDate
                                            }).OrderByDescending(x => x.CreatedDate).ToList();
-
-            return View(student);
+            ViewBag.parents = db.Parents.Where(x => x.StudentId == id).ToList();
+            ViewBag.files = db.Files.Where(x => x.RelationId == id).ToList();
+            return View(data);
         }
 
         // GET: Students/Create
@@ -444,11 +480,9 @@ namespace SchoolManagement.Controllers
             try
             {
                 ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name",selectedValue:student.StudentId);
-                ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name",selectedValue:student.ClassId);
                 if (ModelState.IsValid)
                 {
-                    var checkduplicate = db.Students.Where(x => x.RoleNumber == student.RoleNumber || (x.FirstName == student.FirstName &&
-                      x.LastName == x.LastName && x.FatherName == x.FatherName && x.GfatherName == student.GfatherName)).FirstOrDefault();
+                    var checkduplicate = db.Students.Where(x => x.RoleNumber == student.RoleNumber &&x.Tazkira==student.Tazkira).FirstOrDefault();
                     if (checkduplicate != null)
                     {
                         showMessageString = new
@@ -531,10 +565,13 @@ namespace SchoolManagement.Controllers
                     TblUser tblUser = new TblUser();
                         Models.Hashing hashing = new Models.Hashing();
                         tblUser.Id = Guid.NewGuid();
-                        tblUser.Name = student.FirstName + student.LastName;
-                        tblUser.Email = student.FirstName + student.LastName;
+                        tblUser.Name = student.FirstName + " " + student.LastName;
+                    tblUser.Email = student.RoleNumber;
                         tblUser.Password = hashing.Encrypt("123@" + student.LastName);
                         tblUser.CanLogin = true;
+                    tblUser.UserId = student.StudentId;
+                    tblUser.Role = "Student";
+                    tblUser.Image = student.Attachment;
                         db.TblUsers.Add(tblUser);
 
                     ////////////////////////
@@ -593,8 +630,8 @@ namespace SchoolManagement.Controllers
             {
                 return NotFound();
             }
+            ViewBag._class = db.Classes.Where(x => x.Id == student.ClassId).FirstOrDefault();
             ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name");
-            ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
             return View(student);
         }
 
@@ -612,14 +649,9 @@ namespace SchoolManagement.Controllers
             try
             {
                 ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name", selectedValue: student.StudentId);
-                ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name", selectedValue: student.ClassId);
                 if (ModelState.IsValid)
                 {
-                    var checkduplicate = db.Students.Where(x => x.RoleNumber == student.RoleNumber 
-                    &&x.FirstName == student.FirstName &&
-                      x.LastName == x.LastName &&
-                      x.FatherName == x.FatherName && 
-                      x.GfatherName == student.GfatherName&&
+                    var checkduplicate = db.Students.Where(x => x.RoleNumber == student.RoleNumber&&x.Tazkira==student.Tazkira&&
                       x.StudentId!=student.StudentId).AsNoTracking().FirstOrDefault();
                     if (checkduplicate != null)
                     {
@@ -682,17 +714,18 @@ namespace SchoolManagement.Controllers
                     ////////////////////////////////
                     ///Create payments for 
                     ///
-                    var payments = db.StudentPayments.Where(x => x.StudentId == student.StudentId).ToList();
-                    if (payments.Count>=1)
-                    {
-                        foreach (var item in payments)
-                        {
-                            db.Remove(item);
-                        }
-                     
-                    }
+               
                     if (Payment != null && Payment.Count != 0)
                     {
+                        var payments = db.StudentPayments.Where(x => x.StudentId == student.StudentId).ToList();
+                        if (payments.Count >= 1)
+                        {
+                            foreach (var item in payments)
+                            {
+                                db.Remove(item);
+                            }
+
+                        }
                         var pay = new StudentPayment();
                         foreach (var item in Payment)
                         {
@@ -716,9 +749,10 @@ namespace SchoolManagement.Controllers
                     if (tblUser!=null)
                     {
                         Models.Hashing hashing = new Models.Hashing();
-                        tblUser.Name = student.FirstName + student.LastName;
-                        tblUser.Email = student.FirstName + student.LastName;
-                        tblUser.CanLogin = true;
+                        tblUser.Name = student.FirstName + " " + student.LastName;
+                        tblUser.Email = student.RoleNumber;
+                        tblUser.Role = "Student";
+                        tblUser.Image = student.Attachment;
                         db.Update(tblUser);
                     }
 
@@ -729,11 +763,12 @@ namespace SchoolManagement.Controllers
                     showMessageString = new
                     {
                         status = "true",
-                        message = student.FirstName + " " + student.LastName + " has been Updated."
+                        message = student.FirstName + " " + student.LastName + " has been Updated.",
+                        Id=student.StudentId
 
                     };
                     return Json(showMessageString);
-                    return RedirectToAction(nameof(Index));
+                    //return RedirectToAction(nameof(Index));
                 }
 
             }
@@ -748,30 +783,21 @@ namespace SchoolManagement.Controllers
                 };
                 return Json(showMessageString);
             }
-            return View(student);
-            ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name", selectedValue: student.StudentId);
-            ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name", selectedValue: student.ClassId);
-            if (ModelState.IsValid)
+            StringBuilder errors = new StringBuilder();
+
+            foreach (var modelError in ModelState.Values.SelectMany(v => v.Errors))
             {
-                try
-                {
-                    db.Update(student);
-                    await db.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StudentExists(student.StudentId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                errors.Append(modelError.ErrorMessage).Append(" ");
             }
-            return View(student);
+            showMessageString = new
+            {
+                status = "false",
+                message = errors,
+
+        };
+            return Json(showMessageString);
+     
+            
         }
 
         // GET: Students/Delete/5

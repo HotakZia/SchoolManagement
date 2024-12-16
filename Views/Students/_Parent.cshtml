@@ -27,12 +27,9 @@
                                 <div class="col-lg-2">
                                     <div class="form-group local-forms">
                                         <label asp-for="Relationship" class="control-label">Relationship<span class="login-danger"></span></label>
-                                        <select class="form-control" asp-for="Relationship" required>
-                                            <option>Father</option>
-                                            <option>Mother</option>
-                                                      <option>Uncle</option>
-                                        </select>
-                                       
+                                  
+                                        <select asp-for="Relationship" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.FamilyRelationship>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="District" class="form-control select2" required></select>
+
                                         <span asp-validation-for="Relationship" class="text-danger"></span>
                                     </div>
                                 </div>
