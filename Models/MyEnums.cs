@@ -137,6 +137,49 @@ namespace SchoolManagement.Models
             RecommendationLetter,
             Other
         }
+        public enum Position
+        {
+            Principal,
+            Teacher,
+            Librarian,
+            Counselor,
+            Administrator
+        }
+        public enum SubjectTaught
+        {
+            Mathematics,
+            Science,
+            English,
+            History,
+            Geography,
+            ComputerScience,
+            PhysicalEducation,
+            Art,
+            Music
+        }
+        public enum Department
+        {
+            Administration,
+            Mathematics,
+            Science,
+            LanguageArts,
+            SocialStudies,
+            FineArts,
+            PhysicalEducation,
+            Technology,
+            Counseling
+        }
+        public enum UserLoginRule
+        {
+            Admin,
+            Teacher,
+            Student,
+            Standard, // Standard login without any additional rules
+            TwoFactorAuthentication, // User must authenticate using two-factor authentication
+            PasswordResetRequired, // User must reset their password on next login
+            AccountLocked, // User account is locked and cannot login
+            AccountDisabled // User account is disabled and cannot login
+        }
 
     }
 }

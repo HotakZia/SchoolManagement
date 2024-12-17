@@ -51,12 +51,12 @@
 
                                         }
                                         @*<div class="form-group students-up-files profile-edit-icon mb-0">
-                                            <div class="uplod d-flex">
-                                                <label class="file-upload profile-upbtn mb-0">
-                                                    <i class="feather-edit-3"></i><input type="file">
-                                                </label>
-                                            </div>
-                                        </div>*@
+                                                <div class="uplod d-flex">
+                                                    <label class="file-upload profile-upbtn mb-0">
+                                                        <i class="feather-edit-3"></i><input type="file">
+                                                    </label>
+                                                </div>
+                                            </div>*@
                                     </div>
                                     <div class="names-profiles">
                                         <h4>@Model.FirstName @Model.LastName</h4>
@@ -279,6 +279,18 @@
                                     </table>
                                 </div>
 
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="student-personals-grp">
+                        <div class="card mb-0">
+                            <div class="card-body" id="userPasswordReset">
+                                @Html.Partial("_PasswordReset", new ResetPasswordModel())
                             </div>
                         </div>
                     </div>
@@ -287,6 +299,7 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous" asp-append-version="true"></script>
 
 
 <script>
@@ -343,6 +356,28 @@
 
 
 </script>
+<script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+
+        //swal("Saved!",  data.message, "success");
+
+
+
+        $('#userPasswordReset').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+</script>
+
 
 <div id="fullscreenModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.9); text-align: center; z-index: 9999;">
     <img id="fullscreenImage" style="max-width: 90%; max-height: 90vh; margin: auto; display: block;">

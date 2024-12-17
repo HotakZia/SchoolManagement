@@ -569,3 +569,5 @@ D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcore
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Home\Teacher.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Home\Student.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Shared\_File.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Account\Profile.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Shared\_PasswordReset.cshtml.g.cs

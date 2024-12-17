@@ -457,6 +457,7 @@ namespace SchoolManagement.Controllers
                                            }).OrderByDescending(x => x.CreatedDate).ToList();
             ViewBag.parents = db.Parents.Where(x => x.StudentId == id).ToList();
             ViewBag.files = db.Files.Where(x => x.RelationId == id).ToList();
+            ViewBag.userId = id;
             return View(data);
         }
 
@@ -580,7 +581,7 @@ namespace SchoolManagement.Controllers
                     tableRole.Id = Guid.NewGuid();
                     tableRole.RoleType = "Read-Only";
                     tableRole.UserRole = "Student";
-                    tableRole.UserId = student.StudentId;
+                    tableRole.UserId = tblUser.Id;
                     db.TableRoles.Add(tableRole);
 
                      tableRole = new TableRole();

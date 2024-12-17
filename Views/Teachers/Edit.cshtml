@@ -1,145 +1,291 @@
 ﻿@model SchoolManagement.Models.db.Teacher
 
-@{
-    ViewData["Title"] = "Edit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<h1>Edit</h1>
 
-<h4>Teacher</h4>
-<hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="TeacherId" />
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+    <div class="col-sm-12">
+
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Edit" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
+                      data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" asp-for="TeacherId" />
+                    <input type="hidden" asp-for="CreatedBy" />
+                    <input type="hidden" asp-for="CreatedDate" />
+                    <input type="hidden" asp-for="Attachment" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h5 class="form-title"><span>Basic Details</span></h5>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="FirstName" class="control-label"></label>
+                                <input asp-for="FirstName" class="form-control"  required/>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="LastName" class="control-label"></label>
+                                <input asp-for="LastName" class="form-control" required/>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="DateOfBirth" class="control-label"></label>
+                                <input asp-for="DateOfBirth" type="date" class="form-control"required />
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label>Gender </label>
+
+                                <select required asp-for="Gender" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Gender>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="District" class="form-control select2" required></select>
+
+                                <div class="invalid-feedback">
+                                    Please choose a Gender.
+                                </div>
+                                <span asp-validation-for="@Model.Gender" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="Tazkira" class="control-label"></label>
+                                <input asp-for="Tazkira" class="form-control" required/>
+                                <span asp-validation-for="Tazkira" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="Comment" class="control-label"></label>
+                                <input asp-for="Comment" class="form-control" required/>
+                                <span asp-validation-for="Comment" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <h5 class="form-title"><span>Address Details</span></h5>
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label>Province </label>
+
+                                <select required asp-for="Province" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Province>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="Province" class="form-control select2" required></select>
+
+                                <div class="invalid-feedback">
+                                    Please choose a province.
+                                </div>
+                                <span asp-validation-for="@Model.Province" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label>City </label>
+
+                                <select required asp-for="City" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.District>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="District" class="form-control select2" required></select>
+
+                                <div class="invalid-feedback">
+                                    Please choose a city.
+                                </div>
+                                <span asp-validation-for="@Model.City" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="Street" class="control-label"></label>
+                                <input required asp-for="Street" class="form-control" />
+                                <span asp-validation-for="Street" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <h5 class="form-title"><span>Contact Details</span></h5>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="Email" class="control-label"></label>
+                                <input required asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="Phone" class="control-label"></label>
+                                <input required asp-for="Phone" class="form-control" />
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <h5 class="form-title"><span>Hiring Details</span></h5>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="HireDate" class="control-label"></label>
+                                <input required asp-for="HireDate" type="date" class="form-control" />
+                                <span asp-validation-for="HireDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label>Position </label>
+
+                                <select required asp-for="Position" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Position>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="Province" class="form-control select2" required></select>
+
+                                <div class="invalid-feedback">
+                                    Please choose a Position.
+                                </div>
+                                <span asp-validation-for="@Model.Position" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label>Subject Taught </label>
+
+                                <select required asp-for="SubjectTaught" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.SubjectTaught>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="Province" class="form-control select2" required></select>
+
+                                <div class="invalid-feedback">
+                                    Please choose a SubjectT.
+                                </div>
+                                <span asp-validation-for="@Model.SubjectTaught" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label>Department </label>
+
+                                <select required asp-for="Department" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Department>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="Province" class="form-control select2" required></select>
+
+                                <div class="invalid-feedback">
+                                    Please choose a Department.
+                                </div>
+                                <span asp-validation-for="@Model.Department" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="RoleNumber" class="control-label"></label>
+                                <input required asp-for="RoleNumber" class="form-control" />
+                                <span asp-validation-for="RoleNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-sm-4">
+                            <div class="form-group local-forms">
+                                <label asp-for="Salary" class="control-label"></label>
+                                <input required asp-for="Salary" class="form-control" />
+                                <span asp-validation-for="Salary" class="text-danger"></span>
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 col-sm-4">
+                            <div class="profile-user-box">
+                                <div class="profile-user-img">
+
+                                    @if (Model.Attachment != null)
+                                    {
+                                        string Image = "";
+                                        Image = Convert.ToBase64String(Model.Attachment);
+
+                                        <img src="@string.Format("data:image/jpeg;base64,{0}", Image)" id="uploadedImage" height="150" width="150" />
+
+                                    }
+
+
+
+                                    <div class="form-group students-up-files profile-edit-icon mb-0">
+                                        <div class="uplod d-flex">
+                                            <label class="file-upload profile-upbtn mb-0">
+                                                <i class="feather-edit-3"></i>
+                                                <input type="file" name="Image" id="uploadInput" accept="image/*" onchange="displayImage(event)">
+
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="col-12">
+                            <div class="student-submit">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateOfBirth" class="control-label"></label>
-                <input asp-for="DateOfBirth" class="form-control" />
-                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <input asp-for="Gender" class="form-control" />
-                <span asp-validation-for="Gender" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Street" class="control-label"></label>
-                <input asp-for="Street" class="form-control" />
-                <span asp-validation-for="Street" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Province" class="control-label"></label>
-                <input asp-for="Province" class="form-control" />
-                <span asp-validation-for="Province" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HireDate" class="control-label"></label>
-                <input asp-for="HireDate" class="form-control" />
-                <span asp-validation-for="HireDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Salary" class="control-label"></label>
-                <input asp-for="Salary" class="form-control" />
-                <span asp-validation-for="Salary" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SubjectTaught" class="control-label"></label>
-                <input asp-for="SubjectTaught" class="form-control" />
-                <span asp-validation-for="SubjectTaught" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Department" class="control-label"></label>
-                <input asp-for="Department" class="form-control" />
-                <span asp-validation-for="Department" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedBy" class="control-label"></label>
-                <input asp-for="CreatedBy" class="form-control" />
-                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedBy" class="control-label"></label>
-                <input asp-for="ModifiedBy" class="form-control" />
-                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ModifiedDate" class="control-label"></label>
-                <input asp-for="ModifiedDate" class="form-control" />
-                <span asp-validation-for="ModifiedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Comment" class="control-label"></label>
-                <input asp-for="Comment" class="form-control" />
-                <span asp-validation-for="Comment" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Attachment" class="control-label"></label>
-                <input asp-for="Attachment" class="form-control" />
-                <span asp-validation-for="Attachment" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Number" class="control-label"></label>
-                <input asp-for="Number" class="form-control" />
-                <span asp-validation-for="Number" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RoleNumber" class="control-label"></label>
-                <input asp-for="RoleNumber" class="form-control" />
-                <span asp-validation-for="RoleNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Position" class="control-label"></label>
-                <input asp-for="Position" class="form-control" />
-                <span asp-validation-for="Position" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
+
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+         if (data.status == "true") {
+
+             swal("Saved!",  data.message, "success");
+
+             var url = '/Teachers/Details/' + data.Id; 
+window.location.href = url;
+         }
+         else if (data.status=="duplicate") {
+              swal("Dupplicate Record!",  data.message, "warning");
+         }
+        else {
+        swal("False!", data.message, "error");
+        }
+
+
+        //$('#listContainer').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+    </script>
 }
+
+
+<script>
+    function displayImage(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById('uploadedImage').src = e.target.result;
+        }
+
+        reader.readAsDataURL(file);
+    }
+</script>

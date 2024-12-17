@@ -1,157 +1,389 @@
 ﻿@model SchoolManagement.Models.db.Teacher
 
-@{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
 
-<h1>Details</h1>
 
-<div>
-    <h4>Teacher</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Gender)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Gender)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Street)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Street)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Province)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Province)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HireDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.HireDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Salary)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Salary)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SubjectTaught)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SubjectTaught)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Department)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Department)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Comment)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Comment)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Attachment)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Attachment)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Number)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Number)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RoleNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RoleNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Position)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Position)
-        </dd>
-    </dl>
+@{ string Imge = ""; string file = ""; }
+
+
+
+
+
+
+
+<div class="content container-fluid">
+
+    @*<div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-sub-header">
+                        <h3 class="page-title">Student Details</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="students.html">Student</a></li>
+                            <li class="breadcrumb-item active">Student Details</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="about-info">
+                        <h4>Profile <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h4>
+                    </div>
+                    <div class="student-profile-head">
+                        @*<div class="profile-bg-img">
+                                <img src="~/template/assets/img/profile-bg.jpg" alt="Profile">
+                            </div>*@
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4">
+                                <div class="profile-user-box">
+                                    <div class="profile-user-img">
+                                        @*<img src="~/template/assets/img/profile-user.jpg" alt="Profile">*@
+
+
+
+                                        @if (Model.Attachment != null)
+                                        {
+                                            Imge = Convert.ToBase64String(Model.Attachment);
+
+                                            @*<img src="@string.Format("data:image/jpeg;base64,{0}", Imge)" class="img-fluid avatar-lg rounded" />*@
+                                            <img src="@string.Format("data:image/jpeg;base64,{0}", Imge)" height="150" width="100" />
+
+                                        }
+                                        @*<div class="form-group students-up-files profile-edit-icon mb-0">
+                                                <div class="uplod d-flex">
+                                                    <label class="file-upload profile-upbtn mb-0">
+                                                        <i class="feather-edit-3"></i><input type="file">
+                                                    </label>
+                                                </div>
+                                            </div>*@
+                                    </div>
+                                    <div class="names-profiles">
+                                        <h4>@Model.FirstName @Model.LastName</h4>
+                                        <h5>@Model.RoleNumber</h5>
+                                     
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 d-flex align-items-center">
+                                <div class="follow-group">
+
+                                    <div class="students-follows">
+                                        <h5>@Model.Gender</h5>
+
+                                    </div>
+                                    <div class="students-follows">
+                                        <h5>@Model.DateOfBirth</h5>
+
+                                    </div>
+                                    <div class="students-follows">
+                                        <h5>@Model.HireDate</h5>
+
+                                    </div>
+                                    <div class="students-follows">
+                                        <h5>@Model.CreatedDate</h5>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 d-flex align-items-center">
+                                <div class="follow-btn-group">
+                                    <a asp-action="Edit" asp-route-id="@Model.TeacherId" class="btn btn-info follow-btns">Edit</a>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="student-personals-grp">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="heading-detail">
+                                    <h4>Personal Details :</h4>
+                                </div>
+                                <div class="personal-activity">
+                                    <div class="personal-icons">
+                                        <i class="feather-user"></i>
+                                    </div>
+                                    <div class="views-personal">
+                                        <h4>Full Name</h4>
+                                        <h5>@Model.FirstName  @Model.LastName</h5>
+                                    </div>
+                                </div>
+                                <div class="personal-activity">
+                                    <div class="personal-icons">
+                                        <img src="~/template/assets/img/icons/buliding-icon.svg" alt="">
+                                    </div>
+                                    <div class="views-personal">
+                                        <h4>Department </h4>
+                                        <h5>@Model.Department</h5>
+                                    </div>
+                                </div>
+                                <div class="personal-activity">
+                                    <div class="personal-icons">
+                                        <i class="feather-phone-call"></i>
+                                    </div>
+                                    <div class="views-personal">
+                                        <h4>Contact</h4>
+                                        <h5>@Model.Phone /@Model.Email</h5>
+                                    </div>
+                                </div>
+                                <div class="personal-activity">
+                                    <div class="personal-icons">
+                                        <i class="feather-mail"></i>
+                                    </div>
+                                    <div class="views-personal">
+                                        <h4>Salary</h4>
+                                        <h5>@Model.Salary</h5>
+                                    </div>
+                                </div>
+                                <div class="personal-activity">
+                                    <div class="personal-icons">
+                                        <i class="feather-user"></i>
+                                    </div>
+                                    <div class="views-personal">
+                                        <h4>Gender</h4>
+                                        <h5>@Model.Gender</h5>
+                                    </div>
+                                </div>
+                                <div class="personal-activity">
+                                    <div class="personal-icons">
+                                        <i class="feather-calendar"></i>
+                                    </div>
+                                    <div class="views-personal">
+                                        <h4>Date of Birth</h4>
+                                        <h5>@Model.DateOfBirth</h5>
+                                    </div>
+                                </div>
+                                <div class="personal-activity">
+                                    <div class="personal-icons">
+                                        <i class="feather-italic"></i>
+                                    </div>
+                                    <div class="views-personal">
+                                        <h4>Id Card</h4>
+                                        <h5>@Model.Tazkira</h5>
+                                    </div>
+                                </div>
+                                <div class="personal-activity mb-0">
+                                    <div class="personal-icons">
+                                        <i class="feather-map-pin"></i>
+                                    </div>
+                                    <div class="views-personal">
+                                        <h4>Address</h4>
+                                        <h5>@Model.Street, @Model.City, @Model.Province</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="student-personals-grp">
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <div class="heading-detail">
+                                    <h4>Enrollments:</h4>
+                                </div>
+                                <div class="skill-blk">
+                                    @*@if (ViewBag.payments != null)
+                                    {
+                                        foreach (var item in ViewBag.payments)
+                                        {
+                                            <div class="skill-statistics">
+                                                <div class="skills-head">
+                                                    <h5>@item.PaymentName</h5>
+                                                    <p>@item.Amount</p>
+                                                </div>
+                                                <div class="progress mb-0">
+                                                    <div class="progress-bar bg-photoshop" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }*@
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="student-personals-grp">
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <p>Comment: @Model.Comment</p>
+                                <div class="hello-park">
+                               
+                                    <h5>@Model.FirstName @Model.LastName Documents</h5>
+                                    <hr />
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Comment</th>
+                                                <th>File</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in ViewBag.files)
+                                            {
+
+
+                                                <tr>
+                                                    <td>@item.Name</td>
+                                                    <td>@item.Type</td>
+                                                    <td>@item.Comment</td>
+                                                    <td>
+
+                                                        @if (item.Attachment != null)
+                                                        {
+                                                            file = Convert.ToBase64String(item.Attachment);
+
+                                                            <a>
+                                                                <img src="@string.Format("data:image/jpeg;base64,{0}", file)" class="img-fluid avatar-lg rounded thumbnail" onclick="openFullscreen(this)" />
+                                                            </a>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="student-personals-grp">
+                        <div class="card mb-0">
+                            <div class="card-body" id="userPasswordReset">
+                                @Html.Partial("_PasswordReset", new ResetPasswordModel())
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.TeacherId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous" asp-append-version="true"></script>
+
+
+<script>
+
+    function printDiv() {
+
+
+
+
+        var divToPrint = document.getElementById('DivIdToPrint');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write(`<html>
+                    <head>
+                        <meta charset="utf-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+                                <title>
+
+
+                                    بیل چاپ
+                            </title>
+
+
+
+
+
+
+
+                                @@Styles.Render("~/Content/plugins/overlayScrollbars/css/OverlayScrollbars.min.css")
+                                @@Styles.Render("~/Content/plugins/fontawesome-free/css/all.css")
+                                @@Styles.Render("~/Content/dist/css/adminlte.min.css")
+                                @@Styles.Render("~/Content/bootstrap.min.css")
+
+
+
+                        </head>
+                            <body onload="window.print()">` + divToPrint.innerHTML + ' </body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+        $("#Cancel").trigger("click");
+
+
+
+
+
+    }
+
+
+</script>
+<script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+
+        //swal("Saved!",  data.message, "success");
+
+
+
+        $('#userPasswordReset').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+</script>
+
+
+<div id="fullscreenModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.9); text-align: center; z-index: 9999;">
+    <img id="fullscreenImage" style="max-width: 90%; max-height: 90vh; margin: auto; display: block;">
 </div>
+
+<script>
+    function openFullscreen(img) {
+        var modal = document.getElementById('fullscreenModal');
+        var fullscreenImg = document.getElementById('fullscreenImage');
+
+        // Show the modal
+        modal.style.display = "flex";
+
+        // Set the source of the full-screen image
+        fullscreenImg.src = img.src;
+
+        // Disable scrolling when modal is active
+        document.body.style.overflow = "hidden";
+    }
+
+    // Close the modal when clicking anywhere on the screen
+    document.getElementById('fullscreenModal').addEventListener('click', function () {
+        var modal = document.getElementById('fullscreenModal');
+
+        // Hide the modal
+        modal.style.display = "none";
+
+        // Enable scrolling again after closing the modal
+        document.body.style.overflow = "auto";
+    });
+</script>
+
+

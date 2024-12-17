@@ -34,14 +34,19 @@ namespace SchoolManagement.Controllers
                 return NotFound();
             }
 
-            var teacher = await db.Teachers
+            var data = await db.Teachers
                 .FirstOrDefaultAsync(m => m.TeacherId == id);
-            if (teacher == null)
+            if (data == null)
             {
                 return NotFound();
             }
+      
+           
+            ViewBag.files = db.Files.Where(x => x.RelationId == id).ToList();
+            ViewBag.userId = id;
+            return View(data);
 
-            return View(teacher);
+           
         }
 
         // GET: Teachers/Create
@@ -133,7 +138,23 @@ namespace SchoolManagement.Controllers
                         tbluser.Id = Guid.NewGuid();
                     tbluser.Image = teacher.Attachment;
                     db.TblUsers.Add(tbluser);
-                    
+
+                    ////////////////////////
+                    ///Create role for user
+                    TableRole tableRole = new TableRole();
+                    tableRole.Id = Guid.NewGuid();
+                    tableRole.RoleType = "Teacher-Read-Only";
+                    tableRole.UserRole = "Teacher";
+                    tableRole.UserId = tbluser.Id;
+                    db.TableRoles.Add(tableRole);
+
+                    tableRole = new TableRole();
+                    tableRole.Id = Guid.NewGuid();
+                    tableRole.RoleType = "Teacher-Authorize";
+                    tableRole.UserRole = "Authorize";
+                    tableRole.UserId = tbluser.Id;
+                    db.TableRoles.Add(tableRole);
+
                     await db.SaveChangesAsync();
                     showMessageString = new
                     {
@@ -181,7 +202,7 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Tazkira,TeacherId,FirstName,LastName,DateOfBirth,Gender,Street,City,Province,Email,Phone,HireDate,Salary,SubjectTaught,Department,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number,RoleNumber,Position")] Teacher teacher)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Tazkira,TeacherId,FirstName,LastName,DateOfBirth,Gender,Street,City,Province,Email,Phone,HireDate,Salary,SubjectTaught,Department,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number,RoleNumber,Position")] Teacher teacher,IFormFile Image)
         {
             if (id != teacher.TeacherId)
             {
@@ -205,20 +226,70 @@ namespace SchoolManagement.Controllers
                         };
                         return Json(showMessageString);
                     }
+                    if (Image != null)
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+
+                            Image.CopyToAsync(memoryStream);
+                            Byte[] fileBytes = memoryStream.ToArray();
+                            int maxFileSizeInBytes = 1 * 1024 * 1024 / 2; // 10MB (adjust as needed)
+                            if (
+                       Image.ContentType.ToLower() != "image/jpg" &&
+                       Image.ContentType.ToLower() != "image/jpeg" &&
+                       Image.ContentType.ToLower() != "image/pjpeg" &&
+                       Image.ContentType.ToLower() != "image/gif" &&
+                       Image.ContentType.ToLower() != "image/x-png" &&
+                       Image.ContentType.ToLower() != "image/png" &&
+                       Image.ContentType.ToLower() != "image/svg"
+                   )
+                            {
+
+                                showMessageString = new
+                                {
+                                    status = "false",
+                                    message = " ads image must be a JPEG, PNG or SVG format."
+                                };
+                                return Json(showMessageString);
+                            }
+                            if (Image.Length > maxFileSizeInBytes)
+                            {
+
+                                showMessageString = new
+                                {
+                                    status = "false",
+                                    message = " Profile photo max size must be 512 KB."
+                                };
+                                return Json(showMessageString);
+                            }
+                            else
+                            {
+                                teacher.Attachment = fileBytes;
+
+                            }
+                        }
+                    }
                     var hashing = new Models.Hashing();
                     teacher.ModifiedDate = DateTime.Now;
 
                     var user = db.TblUsers.Where(x => x.UserId == teacher.TeacherId).FirstOrDefault();
-                    user.Name = teacher.FirstName + " " + teacher.LastName;
-                    user.Email = teacher.Email;
-                    user.Role = "Teacher";
-                    user.Image = teacher.Attachment;
+                    if (user!= null)
+                    {
+
+
+                        user.Name = teacher.FirstName + " " + teacher.LastName;
+                        user.Email = teacher.Email;
+                        user.Role = "Teacher";
+                        user.Image = teacher.Attachment;
+                        db.Update(user);
+                    }
                     db.Update(teacher);
                     await db.SaveChangesAsync();
                     showMessageString = new
                     {
                         status = "true",
-                        message = "record has been updated."
+                        message = "record has been updated.",
+                        Id=teacher.TeacherId
 
                     };
                     return Json(showMessageString);

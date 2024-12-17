@@ -1,0 +1,333 @@
+﻿
+
+
+@model SchoolManagement.Models.db.TblUser
+@{ string Imge = ""; string file = ""; }
+
+
+
+
+
+
+
+<div class="content container-fluid">
+
+    @*<div class="page-header">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-sub-header">
+                        <h3 class="page-title">Student Details</h3>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="students.html">Student</a></li>
+                            <li class="breadcrumb-item active">Student Details</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="about-info">
+                        <h4>Profile <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h4>
+                    </div>
+                    <div class="student-profile-head">
+                        @*<div class="profile-bg-img">
+                                <img src="~/template/assets/img/profile-bg.jpg" alt="Profile">
+                            </div>*@
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4">
+                                <div class="profile-user-box">
+                                    <div class="profile-user-img">
+                                        @*<img src="~/template/assets/img/profile-user.jpg" alt="Profile">*@
+
+
+
+                                        @if (Model.Image != null)
+                                        {
+                                            Imge = Convert.ToBase64String(Model.Image);
+
+                                            @*<img src="@string.Format("data:image/jpeg;base64,{0}", Imge)" class="img-fluid avatar-lg rounded" />*@
+                                            <img src="@string.Format("data:image/jpeg;base64,{0}", Imge)" height="150" width="100" />
+
+                                        }
+                                        @*<div class="form-group students-up-files profile-edit-icon mb-0">
+                                                <div class="uplod d-flex">
+                                                    <label class="file-upload profile-upbtn mb-0">
+                                                        <i class="feather-edit-3"></i><input type="file">
+                                                    </label>
+                                                </div>
+                                            </div>*@
+                                    </div>
+                                    <div class="names-profiles">
+                                        @if (Model.CanLogin == true)
+                                        {
+
+                                            <h4>@Model.Name     <i class="fa fa-check-circle"></i></h4>
+                                            <h5>@Model.Email</h5>
+                                        }
+                                        else
+                                        {
+                                            <h4>@Model.Name     <i class="fa fa-delete-left"></i></h4>
+                                            <h5>@Model.Email</h5>
+                                        }
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 d-flex align-items-center">
+                                <div class="follow-group">
+
+
+                                    <div class="students-follows">
+                                        <h5>@Model.LastLogin</h5>
+
+                                    </div>
+
+                                    <div class="students-follows">
+                                        <h5>@Model.CreatedDate</h5>
+
+                                    </div>
+                                    <div class="students-follows login-danger">
+                                        <h5 id="_Password">Password</h5>
+
+                                    </div>
+                                </div>
+                            </div>
+                            @*<div class="col-lg-2 col-md-2 d-flex align-items-center">
+                                    <div class="follow-btn-group">
+                                        <a asp-action="Edit" asp-route-id="@Model.StudentId" class="btn btn-info follow-btns">Edit</a>
+
+                                    </div>
+                                </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+
+                    <div class="student-personals-grp">
+                        <div class="card mb-0">
+                            <div class="card-body">
+                                <div class="heading-detail">
+                                    <h4>Assigned Role:</h4>
+                                </div>
+                                <div class="skill-blk">
+                                    @if (ViewBag.Role != null)
+                                    {
+                                        foreach (var dbRole in ViewBag.dbRole)
+                                        {
+                                            foreach (var userRole in ViewBag.Role)
+                                            {
+                                                if (dbRole.Value == userRole.UserRole)
+                                                {
+                                                    <div class="skill-statistics">
+                                                        <div class="skills-head">
+                                                            <h5>@dbRole.UserRole</h5>
+                                                            <input type="checkbox" name="Role" value="@dbRole.Name" checked />
+                                                        </div>
+
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="skill-statistics">
+                                                        <div class="skills-head">
+                                                            <h5>@dbRole.UserRole</h5>
+                                                            <input type="checkbox" name="Role" value="@dbRole.Name" />
+                                                        </div>
+
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                        foreach (var item in ViewBag.Role)
+                                        {
+                                            <div class="skill-statistics">
+                                                <div class="skills-head">
+                                                    <h5>@item.UserRole</h5>
+                                                    <p>@item.RoleType</p>
+                                                </div>
+                                                <div class="progress mb-0">
+                                                    <div class="progress-bar bg-photoshop" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="student-personals-grp">
+                        <div class="card mb-0">
+                            <div class="card-body">
+
+                                <div class="hello-park">
+                                    <h5>@Model.Name  Review</h5>
+                                    <hr />
+                          
+                                        <div class="col-12 col-sm-4">
+                                            <div class="form-group local-forms">
+                                                <label>Select User <span class="login-danger">*</span></label>
+
+                                                <input class="form-control" id="txtClass" type="text" placeholder="Enter User Name" style="border-style:dashed">
+
+
+
+
+                                            </div>
+                                        </div>
+                                   
+                                   
+                                    <div id="userPasswordReset">
+
+
+                                        @Html.Partial("_PasswordReset", new ResetPasswordModel())
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous" asp-append-version="true"></script>
+
+<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
+<script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+
+        //swal("Saved!",  data.message, "success");
+
+
+
+        $('#userPasswordReset').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+</script>
+
+
+<div id="fullscreenModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0,0,0,0.9); text-align: center; z-index: 9999;">
+    <img id="fullscreenImage" style="max-width: 90%; max-height: 90vh; margin: auto; display: block;">
+</div>
+
+
+
+<script>
+
+    $('#txtClass').autocomplete({
+
+        minlength: 1,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtClass').val();
+        
+            $('#txtClass').removeClass('notfound');
+            $('#txtClass').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Account/getUserByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtClass').removeClass('loading');
+                        $('#txtClass').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtClass').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.UserId };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtClass').val(ui.item.label);
+
+            $('#UserId_').val(ui.item.value);
+            $('#txtClass').removeClass('notfound');
+            $('#txtClass').addClass('checked');
+              $('.page-loader').show();
+             $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Account/getUserPassword",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": ui.item.value },
+                //contentType: "application/json;characterset=utf-8",
+
+                 success: function (data) {
+                     $('.page-loader').hide();
+
+                     $("#_Password").text(data.Password);
+                     $("#Password").val(data.Password);
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+            return false;
+
+        },
+
+
+
+    });
+</script>

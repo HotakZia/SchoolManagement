@@ -104,7 +104,7 @@ namespace SchoolManagement.Models
         public string ConfirmPassword { get; set; }
     }
 
-    public class ResetPasswordViewModel
+    public class ResetPasswordModel
     {
         [Required]
         [EmailAddress]

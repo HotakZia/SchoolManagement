@@ -241,7 +241,7 @@ namespace SchoolManagement.Controllers
                     ModelState.AddModelError("", "Account is block.");
                     return PartialView("_LoginPartial", model);
                 }
-                string base64Image = "";
+                string base64Image = "na";
                 if (user.Image!=null)
                 {
                      base64Image = Convert.ToBase64String(user.Image);
@@ -250,10 +250,10 @@ namespace SchoolManagement.Controllers
                 var userClaims = new List<Claim>()
                 {
                     new Claim("UserName",user.Name),
-                    new Claim("userId", user.Id.ToString()),
+                    new Claim("userId", user.UserId.ToString()),
                      new Claim("Email", user.Email),
                      //new Claim("Image", base64Image),
-                     new Claim("profil",user.Image.ToString()),
+                     new Claim("profil",base64Image),
                 new Claim("Role", user.Role),
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Email, user.Email),
@@ -277,7 +277,9 @@ namespace SchoolManagement.Controllers
                     message = "success",
                     role=user.Role,
                 };
-
+                user.LastLogin = DateTime.Now;
+                db.Update(user);
+                db.SaveChanges();
                 return Json(showMessageString);
                 return RedirectToAction("Index","Home");
             }
@@ -297,7 +299,78 @@ namespace SchoolManagement.Controllers
             ViewBag.pTitle = "IT Solutions in Afghanistan | Jobs, Projects, Workers";
             return View();
         }
+        public ActionResult Profile(Guid Id)
+        {
+            var user = db.TblUsers.Where(x => x.UserId == Id).FirstOrDefault();
+            Hashing hashing = new Hashing();
+           user.Password= hashing.Decrypt(user.Password);
+            ViewBag.Role = db.TableRoles.Where(x => x.UserId == Id).ToList();
+            ViewBag.dbRole = Enum.GetValues(typeof(MyEnums.UserLoginRule));
 
+            // Access the enum values as a list
+            List<MyEnums.UserLoginRule> enumList = Enum.GetValues(typeof(MyEnums.UserLoginRule)).Cast<MyEnums.UserLoginRule>().ToList();
+            return View(user);
+        }
+        public ActionResult PasswordReset (ResetPasswordModel model,Guid userId, string OldPassword)
+        {
+            var hashing = new Models.Hashing();
+        
+            if (ModelState.IsValid)
+            {
+                var user = db.TblUsers.Where(x => x.UserId == userId).FirstOrDefault();
+
+                if (OldPassword==hashing.Decrypt(user.Password))
+                {
+                    user.Password = hashing.Encrypt(model.Password);
+                    db.TblUsers.Update(user);
+                    db.SaveChanges();
+                    
+                    ModelState.AddModelError("", "the password has been changed.");
+                    return PartialView("_PasswordReset", model);
+                }
+                else
+                {
+                    ModelState.AddModelError("","Wrong user and passowrd!");
+                    return PartialView("_PasswordReset", model);
+                }
+               
+
+                
+            }
+          
+            return PartialView("_PasswordReset",model);
+        }
+        
+                 [HttpPost]
+        public async Task<IActionResult> getUserByName(string term)
+        {
+
+            var list =  (from user_ in db.TblUsers
+
+
+                              where user_.Name.StartsWith(term)
+
+                              select new Models.db.TblUser
+                              {
+
+                                  UserId = user_.UserId,
+
+                                  Name = user_.Name +" / "+user_.Email,
+
+
+
+                              })/*.OrderByDescending(x => x.CreatedDate)*/.ToList();
+            return Json(list);
+        }
+        [HttpPost]
+        public async Task<IActionResult> getUserPassword(Guid term)
+        {
+
+            var list = db.TblUsers.Where(x => x.UserId == term).FirstOrDefault();
+            Hashing hashing = new Hashing();
+            list.Password = hashing.Decrypt(list.Password);
+            return Json(list);
+        }
         //public async Task<IActionResult> Logout()
         //{
         //    await _signInManager.SignOutAsync();
