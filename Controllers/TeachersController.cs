@@ -129,14 +129,15 @@ namespace SchoolManagement.Controllers
                         Models.Hashing hashing = new Models.Hashing();
                         var tbluser = new TblUser();
 
-                        tbluser.Email = teacher.Email;
+                        tbluser.Email = teacher.RoleNumber;
                         tbluser.Name = teacher.FirstName + " " + teacher.LastName;
                     tbluser.Password = hashing.Encrypt("123@" + teacher.LastName);
                     tbluser.UserId = teacher.TeacherId;
                         tbluser.CanLogin = true;
-                        tbluser.Role = "Teacher";
+                    tbluser.Role = "Teacher";
                         tbluser.Id = Guid.NewGuid();
                     tbluser.Image = teacher.Attachment;
+                    tbluser.CreatedDate = DateTime.Now;
                     db.TblUsers.Add(tbluser);
 
                     ////////////////////////
@@ -278,9 +279,10 @@ namespace SchoolManagement.Controllers
 
 
                         user.Name = teacher.FirstName + " " + teacher.LastName;
-                        user.Email = teacher.Email;
+                        user.Email = teacher.RoleNumber;
                         user.Role = "Teacher";
                         user.Image = teacher.Attachment;
+
                         db.Update(user);
                     }
                     db.Update(teacher);

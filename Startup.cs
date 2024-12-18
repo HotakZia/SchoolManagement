@@ -48,22 +48,39 @@ namespace SchoolManagement
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddAuthentication("CookieAuthentication")
-                             .AddCookie("CookieAuthentication", config =>
-                             {
-                                 config.Cookie.Name = "UserLoginCookie"; // Name of cookie     
-                                 config.LoginPath = "/Account/Login"; // Path for the redirect to user login page    
-                                 config.AccessDeniedPath = "/Account/AccessDenied";
-                                 config.ExpireTimeSpan = TimeSpan.FromHours(24);
-                             });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-          .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-          {
-              // Configure cookie options if needed
-              options.Cookie.Name = "YourCookieName";
-              options.Cookie.HttpOnly = true;
-          });
+            //  services.AddAuthentication("CookieAuthentication")
+            //                   .AddCookie("CookieAuthentication", config =>
+            //                   {
+            //                       config.Cookie.Name = "UserLoginCookie"; // Name of cookie     
+            //                       config.LoginPath = "/Account/Login"; // Path for the redirect to user login page    
+            //                       config.AccessDeniedPath = "/Account/AccessDenied";
+            //                       config.ExpireTimeSpan = TimeSpan.FromHours(24); // Cookie expiration time
+            //                       config.SlidingExpiration = true;// Extend expiration on each request
+            //                   });
+
+            //  services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            //{
+            //    // Configure cookie options if needed
+            //    options.Cookie.Name = "YourCookieName";
+            //    options.Cookie.HttpOnly = true;
+            //});
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+  .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, config =>
+  {
+      config.Cookie.Name = "UserLoginCookie"; // Name of the cookie
+    config.LoginPath = "/Account/Login"; // Path for the redirect to the user login page
+    config.AccessDeniedPath = "/Account/AccessDenied";
+      config.ExpireTimeSpan = TimeSpan.FromHours(24); // Cookie expiration time
+    config.SlidingExpiration = true; // Extend expiration on each request
+});
 
             services.AddAuthorization(config =>
             {

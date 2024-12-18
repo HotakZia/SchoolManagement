@@ -172,6 +172,7 @@ namespace SchoolManagement.Models
         public enum UserLoginRule
         {
             Admin,
+            Authorize,
             Teacher,
             Student,
             Standard, // Standard login without any additional rules

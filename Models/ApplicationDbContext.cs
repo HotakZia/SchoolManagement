@@ -118,6 +118,7 @@ namespace SchoolManagement.Models
         public string Password { get; set; }
         public string Role { get; set; }
         public string DateOfBirth { get; set; }
+        public bool RememberMe { get; set; }
 
         public IEnumerable<Users> GetUsers()
         {

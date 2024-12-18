@@ -10,6 +10,7 @@ namespace SchoolManagement.Models
    
      
         public ChangePasswordViewModel ChangePasswordViewModel { get; set; }
-      
+
+        public Models.db.TblUser TblUser { get; set; }
     }
 }

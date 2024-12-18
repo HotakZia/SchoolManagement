@@ -11,7 +11,7 @@ using SchoolManagement.Models;
 
 namespace SchoolManagement.Controllers
 {
-    [Authorize(Roles = ("Authorize"))]
+
 
     public class HomeController : BaseController
     {
@@ -38,7 +38,7 @@ namespace SchoolManagement.Controllers
         }
         [Route("dashboard")]
 
-        [Authorize(Roles = ("admin"))]
+        [Authorize(Roles = ("Admin"))]
         public IActionResult Index()
         {
             ViewBag.Student = db.Students.Where(x => x.Status == true).Count();

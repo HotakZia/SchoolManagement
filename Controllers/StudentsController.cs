@@ -573,6 +573,7 @@ namespace SchoolManagement.Controllers
                     tblUser.UserId = student.StudentId;
                     tblUser.Role = "Student";
                     tblUser.Image = student.Attachment;
+                    tblUser.CreatedDate = DateTime.Now;
                         db.TblUsers.Add(tblUser);
 
                     ////////////////////////

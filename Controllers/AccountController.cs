@@ -187,6 +187,7 @@ namespace SchoolManagement.Controllers
         {
             
             dynamic showMessageString = string.Empty;
+            ViewBag.loginName = model.EmailId;
             bool connection = false;
             try
             {
@@ -224,7 +225,6 @@ namespace SchoolManagement.Controllers
             }
             var user = db.TblUsers.Where(x => x.Email == model.EmailId).FirstOrDefault();/* new Users().GetUsers().Where(u => u.UserName == userModel.UserName).SingleOrDefault();*/
 
-            //var s = db.TblUsers.FirstOrDefault();
 
             if (user != null)
             {
@@ -233,12 +233,12 @@ namespace SchoolManagement.Controllers
                 string password = decod.Decrypt(user.Password);
                 if (model.Password != decod.Decrypt(user.Password))
                 {
-                    ModelState.AddModelError("", "Invalid username or password.");
+                    ModelState.AddModelError("", "invalid username or password. please try again");
                     return PartialView("_LoginPartial", model);
                 }
                 if (user.CanLogin != true)
                 {
-                    ModelState.AddModelError("", "Account is block.");
+                    ModelState.AddModelError("", "account is disabled contact your administrator.");
                     return PartialView("_LoginPartial", model);
                 }
                 string base64Image = "na";
@@ -280,6 +280,17 @@ namespace SchoolManagement.Controllers
                 user.LastLogin = DateTime.Now;
                 db.Update(user);
                 db.SaveChanges();
+                if (model.RememberMe)
+                {
+                    // Extend the cookie expiration time for "Remember Me" option
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.Now.AddDays(7) // Extend expiration by 7 days
+                    };
+
+                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(userIdentity), authProperties);
+                }
                 return Json(showMessageString);
                 return RedirectToAction("Index","Home");
             }
@@ -301,15 +312,8 @@ namespace SchoolManagement.Controllers
         }
         public ActionResult Profile(Guid Id)
         {
-            var user = db.TblUsers.Where(x => x.UserId == Id).FirstOrDefault();
-            Hashing hashing = new Hashing();
-           user.Password= hashing.Decrypt(user.Password);
-            ViewBag.Role = db.TableRoles.Where(x => x.UserId == Id).ToList();
-            ViewBag.dbRole = Enum.GetValues(typeof(MyEnums.UserLoginRule));
-
-            // Access the enum values as a list
-            List<MyEnums.UserLoginRule> enumList = Enum.GetValues(typeof(MyEnums.UserLoginRule)).Cast<MyEnums.UserLoginRule>().ToList();
-            return View(user);
+    
+            return View();
         }
         public ActionResult PasswordReset (ResetPasswordModel model,Guid userId, string OldPassword)
         {
@@ -340,6 +344,76 @@ namespace SchoolManagement.Controllers
           
             return PartialView("_PasswordReset",model);
         }
+
+        public ActionResult userUpdate(TblUser model, Guid userId, string NewPassword, string ConfirmPassword,string CanLogin_, List<string> Role)
+        {
+            var hashing = new Models.Hashing();
+            ViewBag.Role = db.TableRoles.Where(x => x.UserId == userId).ToList();
+            ViewBag.dbRole = Enum.GetValues(typeof(MyEnums.UserLoginRule)).Cast<MyEnums.UserLoginRule>().ToList();
+            if (ModelState.IsValid)
+            { }
+            if (CanLogin_=="on")
+            {
+                model.CanLogin = true;
+            }
+            else
+            {
+                model.CanLogin = false;
+            }
+                var user = db.TblUsers.Where(x => x.Id == userId).FirstOrDefault();
+
+                if (!string.IsNullOrEmpty(NewPassword))
+                {
+                    if (NewPassword==ConfirmPassword)
+                    {
+                        user.Password = hashing.Encrypt(NewPassword);
+                       
+                        
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "The new password and confirmation password do not match.");
+                    return PartialView("_Profile", user);
+                }
+                }
+
+            user.CanLogin = model.CanLogin;
+            db.TblUsers.Update(user);
+            if (Role.Count>=1)
+                {
+                    var userRole = db.TableRoles.Where(x => x.UserId == userId).ToList();
+                    foreach (var item in userRole)
+                    {
+                        db.TableRoles.Remove(item);
+                    }
+                    var newRole = new TableRole();
+                    foreach (var item in Role)
+                    {
+                        newRole = new TableRole();
+                        newRole.Id = Guid.NewGuid();
+                        newRole.UserId = userId;
+                        newRole.UserRole = item;
+                        newRole.RoleType = item;
+                        db.TableRoles.Add(newRole);
+                    }
+                }
+              
+                    db.SaveChanges();
+
+            ViewBag.Role = db.TableRoles.Where(x => x.UserId == userId).ToList();
+            ViewBag.dbRole = Enum.GetValues(typeof(MyEnums.UserLoginRule)).Cast<MyEnums.UserLoginRule>().ToList();
+            user.Password = hashing.Decrypt(user.Password);
+            ModelState.AddModelError("", "the user has been updated.");
+                    return PartialView("_Profile", user);
+           
+
+
+
+            
+
+            return PartialView("_PasswordReset", model);
+        }
+
         
                  [HttpPost]
         public async Task<IActionResult> getUserByName(string term)
@@ -353,9 +427,9 @@ namespace SchoolManagement.Controllers
                               select new Models.db.TblUser
                               {
 
-                                  UserId = user_.UserId,
+                                  UserId = user_.Id,
 
-                                  Name = user_.Name +" / "+user_.Email,
+                                  Name = user_.Name + " - " +user_.Role +" / "+user_.Email,
 
 
 
@@ -366,10 +440,17 @@ namespace SchoolManagement.Controllers
         public async Task<IActionResult> getUserPassword(Guid term)
         {
 
-            var list = db.TblUsers.Where(x => x.UserId == term).FirstOrDefault();
+            var user = db.TblUsers.Where(x => x.Id == term).FirstOrDefault();
             Hashing hashing = new Hashing();
-            list.Password = hashing.Decrypt(list.Password);
-            return Json(list);
+            user.Password = hashing.Decrypt(user.Password);
+
+
+         
+
+            ViewBag.Role = db.TableRoles.Where(x => x.UserId == user.Id).ToList();
+            ViewBag.dbRole = Enum.GetValues(typeof(MyEnums.UserLoginRule)).Cast<MyEnums.UserLoginRule>().ToList();
+
+            return PartialView("_Profile", user);
         }
         //public async Task<IActionResult> Logout()
         //{

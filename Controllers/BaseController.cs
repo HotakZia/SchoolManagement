@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,7 +12,8 @@ using System.Web;
 
 namespace SchoolManagement.Controllers
 {
-    
+    [Authorize(Roles = ("Authorize"))]
+
     public class BaseController : Controller
     {
       
