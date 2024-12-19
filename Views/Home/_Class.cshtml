@@ -1,0 +1,71 @@
+﻿
+
+@model IEnumerable<SchoolManagement.Models.Entities.Class_>
+<!-- Datatables CSS -->
+
+
+    <div class="card flex-fill student-space comman-shadow">
+        <div class="card-header d-flex align-items-center">
+            <h5 class="card-title">@DateTime.Now.Year Active Classes</h5>
+            <ul class="chart-list-out student-ellips">
+                <li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li>
+            </ul>
+        </div>
+        <div class="card-body">
+ 
+                @*<table class="table star-student table-hover table-center table-borderless table-striped">*@
+                <div class="table-responsive">
+                    <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                        <thead class="student-thread">
+                            <tr>
+                              
+                                <th>Class</th>
+                                <th>Teacher</th>
+                                <th>Shift</th>
+                                <th>Rome</th>
+                             
+                            
+                               
+
+
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count() >= 1)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    string Imge = "";
+
+                            <tr>
+
+                                <td>@item.Name</td>
+                                <td>@item.TeacherName</td>
+                             
+                                <td>@item.Shift </td>
+                                <td>@item.Room </td>
+
+
+
+
+
+                            </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr><td colspan="10"> <h5 style="text-align:center;color:orangered">0 recods founded!</h5></td></tr>
+
+                            }
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+           
+        </div>
+    </div>
+

@@ -434,6 +434,10 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.DayOfWeek).HasMaxLength(50);
+
+                entity.Property(e => e.HourOfDay).HasMaxLength(50);
+
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
@@ -441,6 +445,8 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.Name).HasMaxLength(250);
 
                 entity.Property(e => e.Shift).HasMaxLength(50);
+
+                entity.Property(e => e.Subject).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Sport>(entity =>

@@ -190,5 +190,48 @@ namespace SchoolManagement.Models
             Exam,
             // Add more categories as needed
         }
+        public enum ClassSubjects
+        {
+            Mathematics,
+            Science,
+            English,
+            History,
+            Geography,
+            ComputerScience,
+            Physics,
+            Chemistry,
+            Biology,
+            Literature,
+            Art,
+            PhysicalEducation
+        }
+        public enum Alphabet
+        {
+            A, B, C, D, E, F, G, H, I, J, K, L, M,
+            N, O, P, Q, R, S, T, U, V, W, X, Y, Z
+        }
+        public enum ShiftHours
+        {
+            Hour,
+            Two,
+            Three,
+            Four,
+            Five,
+            Six,
+            Seven,
+            Eight,
+            Nine,
+            Ten
+        }
+        public enum DayOfWeek
+        {
+            Sunday,
+            Monday,
+            Tuesday,
+            Wednesday,
+            Thursday,
+            Friday,
+            Saturday
+        }
     }
 }

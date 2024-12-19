@@ -23,8 +23,8 @@ namespace SchoolManagement.Controllers
         {
             var list = await (from Schedule in db.Schedules
                               join class_ in db.Classes on Schedule.ClassId equals class_.Id
-                              join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
-                              join teacher in db.Teachers on Subject.TeacherId equals teacher.TeacherId
+                              //join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
+                              join teacher in db.Teachers on Schedule.TeacherId equals teacher.TeacherId
                               where Schedule.Status==true/* &&Schedule.Year==DateTime.Now.Year*/
 
                               select new Models.Entities.Schedual
@@ -41,11 +41,11 @@ namespace SchoolManagement.Controllers
                                  
                                   ModifiedBy = Schedule.ModifiedBy,
                                   ModifiedDate = Schedule.ModifiedDate,
-                                 SubjecName=Subject.SubjectName,
+                                 SubjecName=Schedule.Subject,
                                  ClassName=class_.Name,
                                  HourOfDay=Schedule.HourOfDay,
                                  DayOfWeek=Schedule.DayOfWeek,
-                                 SubjectId=Schedule.SubjectId,
+                                 Subject=Schedule.Subject,
                                  CreatedDate=Schedule.CreatedDate,
                                  Id=Schedule.Id,
                                  Name=Schedule.Name,
@@ -103,15 +103,25 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Year,StartTime, EndTime,Shift,Id,Name,ClassId,SubjectId,HourOfDay,DayOfWeek,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number")] Schedule schedule)
+        public async Task<IActionResult> Create([Bind("TeacherId,Year,StartTime, EndTime,Shift,Id,Name,ClassId,Subject,HourOfDay,DayOfWeek,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number")] Schedule schedule)
         {
             try
             {
-                if (ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
-                    var checkDuplicate = db.Schedules.Where(x => x.HourOfDay == schedule.HourOfDay &&
+
+                    showMessageString = new
+                    {
+                        status = "false",
+                        message = string.Join("; ", ModelState.Values
+                                       .SelectMany(x => x.Errors)
+                                       .Select(x => x.ErrorMessage)),
+                    };
+                    return Json(showMessageString);
+                }
+                var checkDuplicate = db.Schedules.Where(x => x.HourOfDay == schedule.HourOfDay &&
                       x.DayOfWeek == schedule.DayOfWeek &&
-                      x.SubjectId == schedule.SubjectId &&
+                      x.Subject == schedule.Subject &&
                       x.ClassId == schedule.ClassId).FirstOrDefault();
                     if (checkDuplicate!=null)
                     {
@@ -137,7 +147,8 @@ namespace SchoolManagement.Controllers
                     return Json(showMessageString);
                    
           
-                }
+                
+          
                 
             }
                    
@@ -178,7 +189,7 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Year,StartTime, EndTime,Shift,Id,Name,ClassId,SubjectId,HourOfDay,DayOfWeek,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number")] Schedule schedule)
+        public async Task<IActionResult> Edit(Guid id, [Bind("TeacherId,Year,StartTime, EndTime,Shift,Id,Name,ClassId,Subject,HourOfDay,DayOfWeek,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number")] Schedule schedule)
         {
             if (id != schedule.Id)
             {

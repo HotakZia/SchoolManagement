@@ -11,9 +11,9 @@ namespace SchoolManagement.Models.Entities
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid? ClassId { get; set; }
-        public Guid? SubjectId { get; set; }
-        public int? HourOfDay { get; set; }
-        public int? DayOfWeek { get; set; }
+        public string Subject { get; set; }
+        public string HourOfDay { get; set; }
+        public string DayOfWeek { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string ModifiedBy { get; set; }

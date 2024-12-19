@@ -578,4 +578,5 @@ D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcore
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Notices\Edit.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Notices\Index.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Shared\_Notification.cshtml.g.cs
-D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Classes\_Class.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Home\_Class.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Home\_Schedule.cshtml.g.cs

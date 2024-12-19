@@ -20,6 +20,28 @@ namespace SchoolManagement.Controllers
         //    _context = context;
         //}
 
+        // GET: Classes
+        [HttpPost]
+        public async Task<IActionResult> getTeacherByName(string term)
+        {
+
+            var list = await (from Teacher in db.Teachers
+
+
+                              where Teacher.FirstName.StartsWith(term)||Teacher.LastName.StartsWith(term)
+
+                              select new Models.Entities.Class_
+                              {
+
+                                  Id = Teacher.TeacherId,
+
+                                  Name = Teacher.FirstName+ " / " + Teacher.LastName+ " / " + Teacher.RoleNumber
+
+
+
+                              })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
+            return Json(list);
+        }
         // GET: Teachers
         public async Task<IActionResult> Index()
         {

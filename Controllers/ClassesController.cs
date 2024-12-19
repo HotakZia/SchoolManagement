@@ -33,7 +33,7 @@ namespace SchoolManagement.Controllers
 
                                   Id = class_.Id,
 
-                                  Name=class_.Name +" / "+class_.Shift+" / "+class_.Year+"/ "+ class_.Grad
+                                  Name=class_.Name +" / "+class_.Shift+" / "+class_.Year
 
 
 
@@ -70,15 +70,15 @@ namespace SchoolManagement.Controllers
                         Attachment = class_.Attachment,
                         Shift = class_.Shift,
                         Status = class_.Status,
-                        //Year = class_.Year,
+                        Year = class_.Year,
                         TeacherName=teacher.FirstName+" "+teacher.LastName +" "+teacher.RoleNumber,
                         SchedualList = (from Schedule in db.Schedules
-                                               join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
+                                               //join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
                                                where Schedule.ClassId==class_.Id
                                                select new Models.Entities.Subjetc
                                                {
-                                                   SubjectName = Subject.SubjectName+"/ "+Subject.Grade+"-"+Subject.Year,
-                                                  SubjectId = Subject.Id
+                                                   SubjectName = Schedule.Subject,
+                                                 
                                                }).ToList()
                        
                     }).ToList();
@@ -147,6 +147,7 @@ namespace SchoolManagement.Controllers
                     @class.Id = Guid.NewGuid();
                     @class.CreatedDate = DateTime.Now;
                     @class.Status = true;
+                    @class.Name = @class.Grad + " " + @class.Name;
                     db.Add(@class);
                     await db.SaveChangesAsync();
                     showMessageString = new
@@ -208,6 +209,7 @@ namespace SchoolManagement.Controllers
                 try
                 {
                     @class.ModifiedDate = DateTime.Now;
+                    @class.Name = @class.Grad + " " + @class.Name;
                     db.Update(@class);
                     await db.SaveChangesAsync();
                 }

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<SchoolManagement.Models.Entities.Schedual>
+@{ int number = 1;}
+
+<div class="card flex-fill student-space comman-shadow">
+    <div class="card-header d-flex align-items-center">
+        <h5 class="card-title">Today Schedule @DateTime.Now.DayOfWeek.ToString()</h5>
+        <ul class="chart-list-out student-ellips">
+            <li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li>
+        </ul>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                <thead class="student-thread">
+                    <tr>
+                        <th>#</th>
+
+
+                        <th>Class</th>
+                        <th>Teacher</th>
+                        <th>Subject</th>
+
+
+                        <th>Shift</th>
+                        <th>Hour</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        string Imge = "";
+
+                        <tr>
+                            <td>@number</td>
+                            <td>@item.ClassName</td>
+                            <td>@item.TeacherName</td>
+                            <td>@item.SubjecName</td>
+                            <td>@item.Shift</td>
+                            <td>@item.HourOfDay</td>
+
+
+
+                        </tr>
+                        number++;
+                    }
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+

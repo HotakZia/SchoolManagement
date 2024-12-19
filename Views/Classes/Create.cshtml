@@ -44,7 +44,8 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Name" class="control-label"></label>
-                                    <input asp-for="Name" class="form-control" />
+                                    <select asp-for="Name" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Alphabet>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
+
                                     <span asp-validation-for="Name" class="text-danger"></span>
                                 </div>
                             </div>
@@ -53,24 +54,15 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Grad <span class="login-danger">*</span></label>
-                                    <select class="form-control select" id="Grad" name="Grad">
-                                        <option>Please Select Grad  </option>
-                                        <option>12</option>
-                                        <option>11</option>
-                                        <option>10</option>
-                                    </select>
+                                    <select asp-for="Grad" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Grade>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
+
                                     <span asp-validation-for="Grad" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Teacher <span class="login-danger">*</span></label>
-                                    @*<select class="form-control select" id="TeacherId" name="TeacherId">
-                    <option>Please Select Teacher  </option>
-                    <option>12</option>
-                    <option>11</option>
-                    <option>10</option>
-                </select>*@
+           
                                     @Html.DropDownList("TeacherId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })
                                     <span asp-validation-for="TeacherId" class="text-danger"></span>
                                 </div>
@@ -80,11 +72,8 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Shift" class="control-label"></label>
-                                    <select id="Shift" name="Shift" class="form-control select">
-                                        <option value="Morning">Morning</option>
-                                        <option value="Afternoon">Afternoon</option>
-                                        <option value="Evening">Evening</option>
-                                    </select>
+                                    <select asp-for="Shift" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Shift>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
+
                                     <span asp-validation-for="Shift" class="text-danger"></span>
                                 </div>
                             </div>
@@ -104,7 +93,7 @@
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
-                                    <label asp-for="Number" class="control-label"></label>
+                                    <label asp-for="Number" class="control-label">Class Number</label>
                                     <input asp-for="Number" class="form-control" />
                                     <span asp-validation-for="Number" class="text-danger"></span>
                                 </div>

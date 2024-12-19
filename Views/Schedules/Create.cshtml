@@ -7,28 +7,13 @@
 
 <div class="content container-fluid">
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col-sm-12">
-                <div class="page-sub-header">
-                    <h3 class="page-title">Create Schedules</h3>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="students.html">Student</a></li>
-                        <li class="breadcrumb-item active">Add Students</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Page Header -->
 
     <div class="row">
         <div class="col-sm-12">
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
 
 
@@ -43,30 +28,33 @@
                                 <h5 class="form-title student-info">Register New Schedual<span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
                             </div>
 
-                            @*<div class="col-12 col-sm-4">
-            <div class="form-group local-forms">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-        </div>*@
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="TeacherId" class="control-label"></label>
+                                    <input type="text" id="txtTeacher" class="form-control" />
+                                    <input asp-for="TeacherId" type="hidden" id="TeacherId" class="form-control" />
+                                    <span asp-validation-for="TeacherId" class="text-danger"></span>
+                                </div>
+                            </div>
 
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="ClassId" class="control-label"></label>
 
-                                    @Html.DropDownList("ClassId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })
-
+                                    @*@Html.DropDownList("ClassId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })*@
+                                    <input type="text" id="txtClass" class="form-control" />
+                                    <input asp-for="ClassId" type="hidden" id="ClassId" class="form-control" />
                                     <span asp-validation-for="ClassId" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
-                                    <label asp-for="SubjectId" class="control-label"></label>
+                                    <label asp-for="Subject" class="control-label"></label>
+                                    <select asp-for="Subject" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.ClassSubjects>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
 
-                                    @Html.DropDownList("SubjectId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })
+                                    @*@Html.DropDownList("SubjectId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })*@
 
-                                    <span asp-validation-for="SubjectId" class="text-danger"></span>
+                                    <span asp-validation-for="Subject" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
@@ -85,53 +73,24 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Shift" class="control-label"></label>
-                                    <select class="form-control select" name="Shift" id="Shift">
-                                        <option selected disabled> Shift</option>
-                                        <option value="Morning">Morning</option>
-                                        <option value="Afternoon">afternoon</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
+                                    <select asp-for="Shift" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Shift>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
 
-
-                                    </select>
                                     <span asp-validation-for="Shift" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="HourOfDay" class="control-label"></label>
-                                    <select class="form-control select" name="HourOfDay" id="HourOfDay">
-                                        <option selected disabled> Hour Of Shift</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
+                                    <select asp-for="HourOfDay" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.ShiftHours>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
 
-
-                                    </select>
                                     <span asp-validation-for="HourOfDay" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="DayOfWeek" class="control-label"></label>
-                                    <select class="form-control select" name="DayOfWeek" id="DayOfWeek">
-                                        <option selected disabled> Day of week</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                    </select>
-                                    <span asp-validation-for="DayOfWeek" class="text-danger"></span>
+                                    <select asp-for="DayOfWeek" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.DayOfWeek>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
+
                                 </div>
                             </div>
 
@@ -166,13 +125,15 @@
                                 </div>
                             </div>
                         </div>
-</form>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
+<script src="~/js/jQuery JavaScript Library v3.7.1.js"></script>
+<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -212,3 +173,140 @@
     }
     </script>
 }
+
+
+<script>
+    $('#txtClass').autocomplete({
+
+        minlength: 1,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtClass').val();
+            //alert(SearchText);
+            $('#txtClass').removeClass('notfound');
+            $('#txtClass').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Classes/getClassByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtClass').removeClass('loading');
+                        $('#txtClass').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtClass').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtClass').val(ui.item.label);
+
+            $('#ClassId').val(ui.item.value);
+            $('#txtClass').removeClass('notfound');
+            $('#txtClass').addClass('checked');
+
+            return false;
+
+        },
+
+
+
+    });
+  
+        $('#txtTeacher').autocomplete({
+
+        minlength: 1,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtTeacher').val();
+            //alert(SearchText);
+            $('#txtTeacher').removeClass('notfound');
+            $('#txtTeacher').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Teachers/getTeacherByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtTeacher').removeClass('loading');
+                        $('#txtTeacher').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtTeacher').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtTeacher').val(ui.item.label);
+
+            $('#TeacherId').val(ui.item.value);
+            $('#txtTeacher').removeClass('notfound');
+            $('#txtTeacher').addClass('checked');
+
+            return false;
+
+        },
+
+
+
+    });
+</script>
