@@ -287,16 +287,51 @@ namespace SchoolManagement.Controllers
         }
 
         // GET: Exams/Create
-        public IActionResult Create(Guid?SubJectId,Guid?ClassId)
+        public IActionResult Create(Guid? ScheduleId)
         {
-            if (SubJectId!=null&&ClassId!=null)
+            var examList = new List<Exam>();
+            if (ScheduleId != null)
             {
-                ViewBag.Subject = db.Subjects.Where(x => x.Id == SubJectId).FirstOrDefault();
-                ViewBag.Students = db.Students.Where(x => x.ClassId == ClassId).ToList();
+                var subject_= db.Schedules.Where(x => x.Id == ScheduleId).FirstOrDefault();
+               var Students_ = db.Students.Where(x => x.ClassId == subject_.ClassId).ToList();
+                var CurrentExam = db.Exams.Where(x => x.SubJectId == ScheduleId&&x.ClassId==subject_.ClassId).ToList();
+                ViewBag.Subject = subject_.Subject;
+                foreach (var stu in Students_)
+                {
+                    examList.Add(new Exam{Result=stu.FirstName+" "+stu.LastName+" "+stu.RoleNumber,
+                        StudentId=stu.StudentId,
+                        SubJectId=subject_.Id,
+                        TeacherId=subject_.TeacherId,
+                        ClassId=subject_.ClassId,
+                        Year=subject_.Year,
+                    });
+                    
+
+
+
+                }
+                foreach (var item in CurrentExam)
+                {
+                    foreach (var item2 in examList)
+                    {
+                        if (item.StudentId==item2.StudentId)
+                        {
+                          
+                            item2.FirstExam=item.FirstExam;
+                            item2.SecondExam = item.SecondExam;
+                            item2.ClassActivity = item.ClassActivity;
+                            item2.HomeActivity = item.HomeActivity;
+                            item2.Attendance = item.Attendance;
+                            item2.Comment = item.Comment;
+                        }
+                    }
+                }
                 
-                
+               
+                return View(examList);
             }
-            return View();
+            return View(examList);
+          
         }
 
         // POST: Exams/Create
@@ -311,22 +346,17 @@ namespace SchoolManagement.Controllers
                 if (ModelState.IsValid)
 
                 {
-                    foreach (var item in exam)
+                    var oldList = db.Exams.Where(x => x.ClassId == exam.FirstOrDefault().ClassId&& x.SubJectId == exam.FirstOrDefault().SubJectId).ToList();
+                    if (oldList.Count>=1)
                     {
-                        var checkDupplicate = db.Exams.Where(x => x.StudentId == item.StudentId &&
-                          x.SubJectId == item.SubJectId &&
-                          x.Number == item.Number&&x.Year==item.Year).FirstOrDefault();
-                        if (checkDupplicate!=null)
+                        foreach (var item in oldList)
                         {
-                            showMessageString = new
-                            {
-                                status = "duplicate",
-                                message = "duplicate data."
+                            db.Exams.Remove(item);
 
-                            };
-                            return Json(showMessageString);
                         }
+                      
                     }
+        
                     foreach (var item in exam)
                     {
 

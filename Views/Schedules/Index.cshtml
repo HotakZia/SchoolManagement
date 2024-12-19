@@ -143,8 +143,9 @@
                                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm bg-danger-light">
                                                 <i class="feather-edit"></i>
                                             </a>
-                                            @*asp-route-SubJectId="@item.SubjectId"*@     <a asp-action="Create" asp-controller="Exams" asp-route-ClassId="@item.ClassId" class="btn btn-sm bg-info-light">
+                                            @*asp-route-SubJectId="@item.SubjectId"*@     <a asp-action="Create" asp-controller="Exams" asp-route-ScheduleId="@item.Id" class="btn btn-sm bg-info-light">
                                                 <i class="feather-alert-circle"></i>
+                                     
                                             </a>
                                         </div>
                                     </td>

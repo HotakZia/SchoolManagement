@@ -1,30 +1,16 @@
 ﻿@model IList<SchoolManagement.Models.db.Exam>
 
-
+@{    int number = 0;}
 <div class="content container-fluid">
 
-    <!-- Page Header -->
-    @*<div class="page-header">
-            <div class="row align-items-center">
-                <div class="col-sm-12">
-                    <div class="page-sub-header">
-                        <h3 class="page-title">Add Payments</h3>
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="students.html">Student</a></li>
-                            <li class="breadcrumb-item active">Add Students</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-    <!-- /Page Header -->
+
 
     <div class="row">
         <div class="col-sm-12">
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"  class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
          
                         @Html.AntiForgeryToken()
@@ -35,85 +21,73 @@
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="row">
                             <div class="col-12">
-                                <h5 class="form-title student-info">@ViewBag.Subject.SubjectName Marks Entry<span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                                <h5 class="form-title student-info">@ViewBag.Subject Marks Sheet<span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
                             </div>
 
-                            @if (ViewBag.Students != null && ViewBag.Students.Count >= 1)
+
+
+
+
+                            @foreach (var item in Model)
                             {
-                                int number = 0;
-                                @foreach (var item in ViewBag.Students)
-                                {
-                                    @if (@ViewBag.Subject != null)
-                                    {
-                                        <input type="hidden" value="@ViewBag.Subject.Year" asp-for="@Model[number].Year" />
-                                        <input type="hidden" asp-for="@Model[number].TeacherId" value="@ViewBag.Subject.TeacherId" />
-                                        <input type="hidden" asp-for="@Model[number].SubJectId" value="@ViewBag.Subject.Id" />
+
+                                <input type="hidden" asp-for="@Model[number].Year" />
+                                <input type="hidden" asp-for="@Model[number].TeacherId" />
+                                <input type="hidden" asp-for="@Model[number].SubJectId" />
+                                <input type="hidden" asp-for="@Model[number].StudentId" />
+                                <input type="hidden" asp-for="@Model[number].ClassId" />
+
+                                <div class="col-12 col-sm-2">
+                                    <div class="form-group local-forms">
+                                        <label class="control-label"></label>
+                                        <input value="@item.Result" disabled class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="form-group local-forms">
+                                        <label asp-for="@Model[number].FirstExam" class="control-label"></label>
+                                        <input maxlength="2" max="99"  asp-for="@Model[number].FirstExam" class="form-control" />
+                                        <span asp-validation-for="@Model[number].FirstExam" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="form-group local-forms">
+                                        <label asp-for="@Model[number].SecondExam" class="control-label"></label>
+                                        <input maxlength="2" max="99" asp-for="@Model[number].SecondExam" class="form-control" />
+                                        <span asp-validation-for="@Model[number].SecondExam" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="form-group local-forms">
+                                        <label asp-for="@Model[number].ClassActivity" class="control-label"></label>
+                                        <input maxlength="2" max="99" asp-for="@Model[number].ClassActivity" class="form-control" />
+                                        <span asp-validation-for="@Model[number].ClassActivity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <div class="form-group local-forms">
+                                        <label asp-for="@Model[number].HomeActivity" class="control-label"></label>
+                                        <input maxlength="2" max="99" asp-for="@Model[number].HomeActivity" class="form-control" />
+                                        <span asp-validation-for="@Model[number].HomeActivity" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <input asp-for="@Model[number].Attendance" value="0" type="hidden" class="form-control" />
+                                <div class="col-12 col-sm-2">
+                                    <div class="form-group local-forms">
+                                        <label asp-for="@Model[number].Comment" class="control-label"></label>
+                                        <input asp-for="@Model[number].Comment" class="form-control" />
+                                        <span asp-validation-for="@Model[number].Comment" class="text-danger"></span>
+                                    </div>
+                                </div>
 
 
-
-
-                                    }
-                                    else
-                                    {
-                                        <input type="hidden" value="@DateTime.Now.Year" asp-for="@Model[number].Year" />
-                                        <input type="hidden" asp-for="@Model[number].TeacherId" value="@Guid.Empty" />
-
-                                    }
-                                    <input type="hidden" asp-for="@Model[number].StudentId" value="@item.StudentId" />
-                                    <input type="hidden" asp-for="@Model[number].ClassId" value="@item.ClassId" />
-                                    <div class="col-12 col-sm-2">
-                                        <div class="form-group local-forms">
-                                            <label class="control-label"></label>
-                                            <input value="@item.FirstName @item.LastName" disabled class="form-control" />
-                                            <span asp-validation-for="@Model[number].FirstExam" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-2">
-                                        <div class="form-group local-forms">
-                                            <label asp-for="@Model[number].FirstExam" class="control-label"></label>
-                                            <input asp-for="@Model[number].FirstExam" class="form-control" />
-                                            <span asp-validation-for="@Model[number].FirstExam" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-2">
-                                        <div class="form-group local-forms">
-                                            <label asp-for="@Model[number].SecondExam" class="control-label"></label>
-                                            <input asp-for="@Model[number].SecondExam" class="form-control" />
-                                            <span asp-validation-for="@Model[number].SecondExam" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-2">
-                                        <div class="form-group local-forms">
-                                            <label asp-for="@Model[number].ClassActivity" class="control-label"></label>
-                                            <input asp-for="@Model[number].ClassActivity" class="form-control" />
-                                            <span asp-validation-for="@Model[number].ClassActivity" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-sm-2">
-                                        <div class="form-group local-forms">
-                                            <label asp-for="@Model[number].HomeActivity" class="control-label"></label>
-                                            <input asp-for="@Model[number].HomeActivity" class="form-control" />
-                                            <span asp-validation-for="@Model[number].HomeActivity" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    @*<div class="col-12 col-sm-2">
-                    <div class="form-group local-forms">
-                        <label asp-for="@Model[number].Attendance" class="control-label"></label>
-                        <input asp-for="@Model[number].Attendance" value="0" type="hidden" class="form-control" />
-                        <span asp-validation-for="@Model[number].Attendance" class="text-danger"></span>
-                    </div>
-                </div>*@
-                                    <input asp-for="@Model[number].Attendance" value="0" type="hidden" class="form-control" />
-                                    <div class="col-12 col-sm-2">
-                                        <div class="form-group local-forms">
-                                            <label asp-for="@Model[number].Comment" class="control-label"></label>
-                                            <input asp-for="@Model[number].Comment" class="form-control" />
-                                            <span asp-validation-for="@Model[number].Comment" class="text-danger"></span>
-                                        </div>
-                                    </div>
-                                    number++;
-                                }
+                                   number++;
                             }
+
+                         
+
+
 
 
                             <div class="col-12">

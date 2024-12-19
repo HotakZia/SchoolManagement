@@ -29,6 +29,7 @@ namespace SchoolManagement.Controllers
 
                               select new Models.Entities.Schedual
                               {
+                                  
                                   Shift=Schedule.Shift,
                                   ClassId = Schedule.ClassId,
                                  
@@ -54,6 +55,7 @@ namespace SchoolManagement.Controllers
                                   EndTime=Schedule.EndTime,
                                   TeacherName=teacher.FirstName+" "+teacher.LastName,
                                 Year=Schedule.Year,
+                                
 
 
                               })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();

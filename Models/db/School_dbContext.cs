@@ -188,9 +188,9 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.Attendance).HasColumnType("decimal(3, 1)");
+                entity.Property(e => e.Attendance).HasColumnType("decimal(3, 0)");
 
-                entity.Property(e => e.ClassActivity).HasColumnType("decimal(3, 1)");
+                entity.Property(e => e.ClassActivity).HasColumnType("decimal(3, 0)");
 
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
@@ -198,9 +198,9 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.FirstApprovalTime).HasColumnType("datetime");
 
-                entity.Property(e => e.FirstExam).HasColumnType("decimal(3, 1)");
+                entity.Property(e => e.FirstExam).HasColumnType("decimal(3, 0)");
 
-                entity.Property(e => e.HomeActivity).HasColumnType("decimal(3, 1)");
+                entity.Property(e => e.HomeActivity).HasColumnType("decimal(3, 0)");
 
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
@@ -210,7 +210,7 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.SecondApprovalTime).HasColumnType("datetime");
 
-                entity.Property(e => e.SecondExam).HasColumnType("decimal(3, 1)");
+                entity.Property(e => e.SecondExam).HasColumnType("decimal(3, 0)");
 
                 entity.Property(e => e.ThiredApprovalTime).HasColumnType("datetime");
             });
