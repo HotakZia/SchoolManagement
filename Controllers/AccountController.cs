@@ -253,7 +253,7 @@ namespace SchoolManagement.Controllers
                     new Claim("userId", user.UserId.ToString()),
                      new Claim("Email", user.Email),
                      //new Claim("Image", base64Image),
-                     new Claim("profil",base64Image),
+                     //new Claim("profil",base64Image),
                 new Claim("Role", user.Role),
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Email, user.Email),

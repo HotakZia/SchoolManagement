@@ -21,6 +21,64 @@ namespace SchoolManagement.Controllers
         //{
         //    _logger = logger;
         //}
+        public  ActionResult GetActiveClasses()
+        {
+
+
+
+            var list = (from class_ in db.Classes
+                    join teacher in db.Teachers on class_.TeacherId equals teacher.TeacherId
+
+                    where class_.Status==true
+
+                    select new Models.Entities.Class_
+                    {
+                        Id = class_.Id,
+                        TeacherId = class_.TeacherId,
+                        Room = class_.Room,
+                        Name = class_.Name,
+                        Comment = class_.Comment,
+                        CreatedBy = class_.CreatedBy,
+                        CreatedDate = class_.CreatedDate,
+                        Grad = class_.Grad,
+                        ModifiedBy = class_.ModifiedBy,
+                        ModifiedDate = class_.ModifiedDate,
+                        Number = class_.Number,
+                        Attachment = class_.Attachment,
+                        Shift = class_.Shift,
+                        Status = class_.Status,
+                        //Year = class_.Year,
+                        TeacherName = teacher.FirstName + " " + teacher.LastName + " " + teacher.RoleNumber,
+                        SchedualList = (from Schedule in db.Schedules
+                                        join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
+                                        where Schedule.ClassId == class_.Id
+                                        select new Models.Entities.Subjetc
+                                        {
+                                            SubjectName = Subject.SubjectName + "/ " + Subject.Grade + "-" + Subject.Year,
+                                            SubjectId = Subject.Id
+                                        }).ToList()
+
+                    }).ToList();
+            return PartialView("_Class",list);
+        }
+        [HttpGet]
+        public ActionResult GetNotifications()
+        { string role = User.Claims.FirstOrDefault(x => x.Type == "Role")?.Value;
+
+            var data = db.Notices.Where(x => x.Status == true &&x.Date>=DateTime.Now&& (x.Type == role ||x.Type=="All") ).Take(10).ToList();
+
+
+            if (role == "Admin")
+            {
+                 data = db.Notices.Where(x => x.Status == true && x.Date >= DateTime.Now).Take(20).ToList();
+            }
+                //var data = db.Table_Notification.Select(x=>new {x.Id,x.Created,x.Item_Image,x.URL,x.NotiHeader }).ToList() ;
+
+
+
+
+                return PartialView("_Notification",data);
+        }
         [Route("teacher")]
 
         [Authorize(Roles = ("Teacher"))]

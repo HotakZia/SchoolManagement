@@ -1,0 +1,38 @@
+﻿@model List<SchoolManagement.Models.db.Notice>
+    <ul class="notification-list">
+        @foreach (var item in Model)
+        {
+            item.Comment = new string(item.Comment?.Take(20).ToArray());
+
+
+            // Calculate the time difference from the past date to the current date
+            TimeSpan timeDifference = DateTime.Now - item.CreatedDate.Value;
+
+            // Extract days, hours, and minutes from the time difference
+            int daysDifference = timeDifference.Days;
+            int hoursDifference = timeDifference.Hours;
+            int minutesDifference = timeDifference.Minutes;
+            <li class="notification-message">
+
+
+                <a asp-action="Details" asp-controller="Notices" asp-route-id="@item.Id">
+                    <div class="media d-flex">
+                        <span class="avatar avatar-sm flex-shrink-0">
+                            <img class="avatar-img rounded-circle" alt="User Image" src="~/template/assets/img/speaker.png">
+                        </span>
+                        <div class="media-body flex-grow-1">
+                            <p class="noti-details"><span class="noti-title">@item.Title</span>@item.RegisterNumber <span class="noti-title">@item.Comment</span></p>
+                            <p class="noti-time">
+                                <span class="notification-time">
+                                    @(daysDifference > 1 ? $"{daysDifference} days, " : "")
+                                    @(hoursDifference > 1 ? $"{hoursDifference} hours, " : "")
+                                    @(minutesDifference > 1 ? $"{minutesDifference} minutes ago" : "")
+                                </span>
+                            </p>                        </div>
+                    </div>
+                </a>
+            </li>
+        }
+
+       
+    </ul>

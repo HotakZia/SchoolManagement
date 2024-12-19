@@ -30,6 +30,7 @@ namespace SchoolManagement.Models.db
         public virtual DbSet<Hostel> Hostels { get; set; }
         public virtual DbSet<Inventory> Inventories { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
+        public virtual DbSet<Notice> Notices { get; set; }
         public virtual DbSet<Parent> Parents { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
@@ -348,6 +349,29 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.StudentId).HasColumnName("StudentID");
             });
 
+            modelBuilder.Entity<Notice>(entity =>
+            {
+                entity.ToTable("Notice");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Date).HasColumnType("date");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.RegisterNumber).HasMaxLength(50);
+
+                entity.Property(e => e.Title).HasMaxLength(250);
+
+                entity.Property(e => e.Type).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Parent>(entity =>
             {
                 entity.ToTable("Parent");
@@ -585,11 +609,11 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.CreatedDate).HasColumnType("date");
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Email).HasMaxLength(250);
 
-                entity.Property(e => e.LastLogin).HasColumnType("date");
+                entity.Property(e => e.LastLogin).HasColumnType("datetime");
 
                 entity.Property(e => e.Name).HasMaxLength(250);
 

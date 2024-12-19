@@ -61,7 +61,7 @@ namespace SchoolManagement.Controllers
             {
                 try
                 {
-                    var duplicate = db.Books.Where(x => x.Name == blog.Title && x.Id == blog.RelationId).FirstOrDefault();
+                    var duplicate = db.Blogs.Where(x => x.Title == blog.Title && x.Id == blog.RelationId).FirstOrDefault();
                     if (duplicate != null)
                     {
                         showMessageString = new
@@ -175,6 +175,8 @@ namespace SchoolManagement.Controllers
 
             if (ModelState.IsValid)
             {
+                var duplicate = db.Blogs.Where(x => x.Title == blog.Title && x.Id == blog.RelationId&&x.Id!=id).FirstOrDefault();
+
                 try
                 {
                     db.Update(blog);

@@ -1,0 +1,172 @@
+﻿@model SchoolManagement.Models.db.Notice
+
+
+<!-- Ckeditor CSS-->
+<link rel="stylesheet" href="~/template/assets/css/ckeditor.css">
+
+<div class="content container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="bank-inner-details">
+                        <div class="row">
+                            <form asp-action="Edit" method="post" data-ajax-success="OnSuccess"
+                                  data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+                                <input type="hidden" asp-for="Id" />
+
+                                <input type="hidden" asp-for="CreatedBy" />
+
+                                <input type="hidden" asp-for="CreatedDate" />
+
+
+                                @Html.AntiForgeryToken()
+
+
+                                @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5 class="form-title student-info">Register New Book<span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                                    </div>
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group local-forms">
+                                            <label asp-for="Title" class="control-label">Notice Title<span class="login-danger">*</span></label>
+                                            <input asp-for="Title" class="form-control" />
+                                            <span asp-validation-for="Title" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group local-forms">
+
+                                            <label asp-for="RegisterNumber" class="control-label">Register Number<span class="login-danger">*</span></label>
+                                            <input asp-for="RegisterNumber" id="editor" class="form-control" />
+                                            <span asp-validation-for="RegisterNumber" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group local-forms">
+                                            <label asp-for="Type" class="control-label">Aduince<span class="login-danger">*</span></label>
+                                            <select asp-for="Type" class="form-control">
+                                                <option>Any</option>
+                                                <option>Teachers</option>
+                                                <option>Students</option>
+                                            </select>
+                                            <span asp-validation-for="Type" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group local-forms">
+
+                                            <label asp-for="Date" class="control-label">Date<span class="login-danger">*</span></label>
+                                            <input asp-for="Date" type="date" id="" class="form-control" />
+                                            <span asp-validation-for="Date" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group local-forms">
+                                            <label asp-for="Status" class="control-label">Status<span class="login-danger">*</span></label>
+                                            <select asp-for="Status" class="form-control">
+                                                <option>All</option>
+                                                <option>Teachers</option>
+                                                <option>Students</option>
+                                            </select>
+                                            <span asp-validation-for="Type" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12">
+                                        <div class="form-group local-forms">
+
+                                            <label asp-for="Comment" class="control-label">Description<span class="login-danger">*</span></label>
+                                            <input asp-for="Comment" id="editor" class="form-control" />
+                                            <span asp-validation-for="Comment" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-12">
+                                        <div class="student-submit">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- ckeditor JS -->
+<script src="~/template/assets/js/ckeditor.js" type="b10a95405c9c06f6a9707a74-text/javascript"></script>
+
+
+
+<!-- Custom JS -->
+@*<script src="~/template/assets/js/script.js" type="b10a95405c9c06f6a9707a74-text/javascript"></script>*@
+
+<script src="../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="b10a95405c9c06f6a9707a74-|49" defer></script>
+
+
+
+
+
+
+
+@*<script>
+        CKEDITOR.replace('a12', {
+            toolbar: 'Basic',
+            language: 'en'
+        });
+    </script>*@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+         if (data.status == "true") {
+
+                 swal("Saved!",  data.message, "success");
+
+             $("#Title").val("");
+             $("#Comment").val("");
+
+           @*document.location.href = "@Url.Action("Index","tbl_Transiction")",true;*@
+         }
+         else if (data.status=="duplicate") {
+              swal("Dupplicate Record!",  data.message, "warning");
+         }
+        else {
+        swal("False!", data.message, "error");
+        }
+
+
+        //$('#listContainer').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+    </script>
+}

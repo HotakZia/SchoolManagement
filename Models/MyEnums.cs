@@ -181,6 +181,14 @@ namespace SchoolManagement.Models
             AccountLocked, // User account is locked and cannot login
             AccountDisabled // User account is disabled and cannot login
         }
-
+        public enum NoticeCategory
+        {
+            General,
+            Academic,
+            Event,
+            Holiday,
+            Exam,
+            // Add more categories as needed
+        }
     }
 }

@@ -64,12 +64,12 @@
 window.onload = function () {
     var lchart = new CanvasJS.Chart("lchartContainer", {
 	animationEnabled: true,
-	title: {
+	@*title: {
 		text: "Monthly"
 	},
 	subtitles: [{
 		text: "Resource.From @DateTime.Now.Year"
-	}],
+	}],*@
 	axisY: {
 		title: "Monthly 2",
 		gridThickness: 0
@@ -85,10 +85,10 @@ var Cchart = new CanvasJS.Chart("CchartContainer", {
 	theme: "light2", // "light1", "light2", "dark1", "dark2"
 	exportEnabled: true,
 	animationEnabled: true,
-	title: {
-		text: "Quantity",
-		//fontSize: 21
-	},
+	//title: {
+	//	text: "Quantity",
+	//	fontSize: 21
+	//},
 	data: [{
 		type: "pie",
 		startAngle: 160,
