@@ -21,6 +21,139 @@ namespace SchoolManagement.Controllers
         //{
         //    _context = context;
         //}
+        
+        public async Task<IActionResult> changeStudent(List<Guid?> StudentId, List<Guid?> Check, Guid NewClassId, Guid OldClassId)
+        {
+            var currentClass = db.Classes.Where(x => x.Id == OldClassId&&x.Status==true).FirstOrDefault();
+            var newClass = db.Classes.Where(x => x.Id == NewClassId && x.Status == true).FirstOrDefault();
+            var list = new List<Models.Entities.Student>();
+            ViewBag.newCId = NewClassId;
+            ViewBag.oldCId = OldClassId;
+            if (currentClass!=null&&newClass!=null)
+            {
+                ModelState.AddModelError("", "class not found!");
+                return PartialView("_pass",list);
+            }
+            if (newClass.Grad! > currentClass.Grad)
+            {
+                ModelState.AddModelError("","choose correct class!"); 
+                return PartialView("_pass", list);
+            }
+            foreach (var item in Check)
+            {
+                var marks = db.Exams.Where(x => x.ClassId == OldClassId && x.StudentId == item&&x.Status==true).Count();
+                if (currentClass.NumberOfSubject>=marks)
+                {
+                
+                    var student = db.Students.Where(x => x.StudentId == item).FirstOrDefault();
+                    student.ClassId = NewClassId;
+                    db.Update(student);
+                }
+            }
+            db.SaveChanges();
+             list = await (from student in db.Students
+                          join class_ in db.Classes on student.ClassId equals class_.Id
+                          where student.ClassId == OldClassId
+                          select new Models.Entities.Student
+                          {
+                              ClassId = student.ClassId,
+                              StudentId = student.StudentId,
+                              Tazkira = student.Tazkira,
+                              RoleNumber = student.RoleNumber,
+                              FirstName = student.FirstName,
+                              LastName = student.LastName,
+                              FatherName = student.FatherName,
+                              ClassName = class_.Name,
+                              DateOfBirth = student.DateOfBirth,
+                              Attachment = student.Attachment,
+                              Contact = student.Contact,
+                              Status = student.Status,
+                              BloodGroup = student.BloodGroup,
+                              City = student.City,
+                              AdmissionDate = student.AdmissionDate,
+                              Street = student.Street,
+                              Comment = student.Comment,
+                              CreatedBy = student.CreatedBy,
+                              Gender = student.Gender,
+                              GfatherName = student.GfatherName,
+                              GuardianName = student.GuardianName,
+                              GuardianPhone = student.GuardianPhone,
+                              ModifiedBy = student.ModifiedBy,
+                              ModifiedDate = student.ModifiedDate,
+                              Province = student.Province,
+
+
+                          })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
+
+            return PartialView("_pass", list);
+        }
+        [HttpPost]
+        public async Task<IActionResult> getResult(int Year, Guid Id)
+        {
+            var list = await (from Exam in db.Exams
+                              join Schulde in db.Schedules on Exam.SubJectId equals Schulde.Id
+                              where Exam.StudentId == Id && Exam.Year == Year && Exam.Status == true
+                              select new Models.Entities.Exam
+                              {
+
+                                  ClassId = Exam.ClassId,
+                                  Attachment = Exam.Attachment,
+                                  Status = Exam.Status,
+                                  Comment = Exam.Comment,
+                                  CreatedBy = Exam.CreatedBy,
+                                  ModifiedBy = Exam.ModifiedBy,
+                                  ModifiedDate = Exam.ModifiedDate,
+                                  SubjectName = Schulde.Subject,
+                                  CreatedDate = Exam.CreatedDate,
+                                  Id = Exam.Id,
+                                  SubJectId = Schulde.Id,
+
+                                  Number = Exam.Number,
+
+                                  Year = Exam.Year,
+                                  Attendance = Exam.Attendance,
+                                  ClassActivity = Exam.ClassActivity,
+                                  StudentId = Exam.StudentId,
+                                  SecondExam = Exam.SecondExam,
+                                  FirstExam = Exam.FirstExam,
+                                  Result = Exam.Result,
+                                  TeacherId = Exam.TeacherId,
+                                  HomeActivity = Exam.HomeActivity,
+                                  DeanApproverId = Exam.DeanApprover,
+                                  TeacherApproverId = Exam.TeacherApprover,
+                                  FinalApproverId = Exam.FinalApprover,
+
+                                  DeanApproverComment = Exam.DeanApprovalComment,
+                                  TeacherApproverComment = Exam.TeacherApprovalComment,
+                                  FinalApproverComment = Exam.FinalApprovalComment,
+
+                                  TeacherApprovalTime = Exam.TeacherApprovalTime,
+                                  FinalApprovalTime = Exam.TeacherApprovalTime,
+                                  DearnApprovalTime = Exam.DeanApprovalTime,
+                              }).ToListAsync();
+            if (list.Count>=1)
+            {
+                decimal? total = 0;
+                int pass = 0;
+                foreach (var item in list)
+                {
+                    total += item.FirstExam + item.SecondExam + item.HomeActivity + item.ClassActivity + item.Attendance;
+                    if (total>60)
+                    {
+                        pass++;
+                    }
+                }
+                if (total>=100&&pass>=1)
+                {
+                    ViewBag.Result = "Pass";
+                }
+                else
+                {
+                    ViewBag.Result = "Faile";
+                }
+            }
+            return PartialView("_ResultSheet", list);
+        }
         public async Task<IActionResult> LoadFile(Guid? Id)
         {
             var list = db.Files.Where(x => x.RelationId == Id).OrderByDescending(x => x.CreatedDate).ToList();
@@ -309,8 +442,12 @@ namespace SchoolManagement.Controllers
         public async Task<IActionResult> pass(Guid? Id)
         {
             ViewBag.Id = new SelectList(db.Classes.ToList(), "Id", "Name");
-            ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
-          
+            if (Id!=null)
+            {
+                int? classGrad = db.Classes.Where(x=>x.Id==Id).Select(x=>x.Grad).FirstOrDefault();
+                ViewBag.NewClassId = new SelectList(db.Classes.Where(x=>x.Grad==classGrad+1).ToList(), "Id", "Name");
+            }
+
             IList<Models.Entities.Student> list = new List<Models.Entities.Student>();
             if (Id == null)
             {
@@ -318,9 +455,7 @@ namespace SchoolManagement.Controllers
             }
             list = await (from student in db.Students
                           join class_ in db.Classes on student.ClassId equals class_.Id
-
                           where student.ClassId == Id
-
                           select new Models.Entities.Student
                           {
                               ClassId = student.ClassId,
@@ -349,7 +484,10 @@ namespace SchoolManagement.Controllers
                               ModifiedDate = student.ModifiedDate,
                               Province = student.Province,
                               CreatedDate=student.CreatedDate,
-                              Number=db.Exams.Where(x=>x.ClassId==class_.Id&&x.StudentId==student.StudentId&&x.Status==true).Count()
+                              Number=student.RoleNumber,
+                             Shift=student.Shift,
+                             ClassSubjectNumber=class_.NumberOfSubject,
+                             ExamNumber=db.Exams.Where(x=>x.ClassId==class_.Id&&x.StudentId==student.StudentId&&x.Status==true).Count()
 
                           })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
      
@@ -436,7 +574,7 @@ namespace SchoolManagement.Controllers
                               ModifiedDate = student.ModifiedDate,
                               Province = student.Province,
                               CreatedDate = student.CreatedDate,
-                              Number = db.Exams.Where(x => x.ClassId == class_.Id && x.StudentId == student.StudentId && x.Status == true).Count()
+                              //Number = db.Exams.Where(x => x.ClassId == class_.Id && x.StudentId == student.StudentId && x.Status == true).Count()
 
                           }).FirstOrDefaultAsync();
             if (data == null)
@@ -632,6 +770,7 @@ namespace SchoolManagement.Controllers
             {
                 return NotFound();
             }
+           
             ViewBag._class = db.Classes.Where(x => x.Id == student.ClassId).FirstOrDefault();
             ViewBag.Payment = new SelectList(db.Payments.ToList(), "Id", "Name");
             return View(student);

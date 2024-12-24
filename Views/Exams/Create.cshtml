@@ -1,6 +1,6 @@
 ﻿@model IList<SchoolManagement.Models.db.Exam>
 
-@{    int number = 0;}
+@{ int number = 0;}
 <div class="content container-fluid">
 
 
@@ -10,9 +10,9 @@
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"  class="needs-validation" novalidate
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
-         
+
                         @Html.AntiForgeryToken()
 
 
@@ -46,7 +46,7 @@
                                 <div class="col-12 col-sm-2">
                                     <div class="form-group local-forms">
                                         <label asp-for="@Model[number].FirstExam" class="control-label"></label>
-                                        <input maxlength="2" max="99"  asp-for="@Model[number].FirstExam" class="form-control" />
+                                        <input maxlength="2" max="99" asp-for="@Model[number].FirstExam" class="form-control" />
                                         <span asp-validation-for="@Model[number].FirstExam" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -82,10 +82,10 @@
                                 </div>
 
 
-                                   number++;
+                                number++;
                             }
 
-                         
+
 
 
 
@@ -101,6 +101,7 @@
             </div>
         </div>
     </div>
+  
 </div>
 
 

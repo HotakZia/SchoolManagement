@@ -1,0 +1,44 @@
+﻿@model IEnumerable<SchoolManagement.Models.Entities.Exam>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+
+                <table class="table-striped" border="1">
+
+                    <tbody>
+                        <tr>
+                            <td>Subject</td>
+                            <td>Frist Exam</td>
+                            <td>Second Exam</td>
+                            <td>Class</td>
+                            <td>Home</td>
+                            <td>Attendance</td>
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>@item.SubjectName</td>
+                                <td>@item.FirstExam</td>
+                                <td>@item.SecondExam</td>
+                                <td>@item.ClassActivity</td>
+                                <td>@item.HomeActivity</td>
+                                <td>@item.Attendance</td>
+
+                            </tr>
+
+                        }
+                        
+                    </tbody>
+
+                </table>
+                <p>Status:</p><strong>@ViewBag.Result</strong>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <p>100$ passed </p>
+            </div>
+
+        </div>

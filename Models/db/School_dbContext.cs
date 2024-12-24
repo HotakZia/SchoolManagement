@@ -140,8 +140,6 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Grad).HasMaxLength(50);
-
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
@@ -196,7 +194,17 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.FirstApprovalTime).HasColumnType("datetime");
+                entity.Property(e => e.DeanApprovalComment).HasMaxLength(250);
+
+                entity.Property(e => e.DeanApprovalTime).HasColumnType("datetime");
+
+                entity.Property(e => e.DeanApproverName).HasMaxLength(50);
+
+                entity.Property(e => e.FinalApprovalComment).HasMaxLength(250);
+
+                entity.Property(e => e.FinalApprovalTime).HasColumnType("datetime");
+
+                entity.Property(e => e.FinalApproverName).HasMaxLength(50);
 
                 entity.Property(e => e.FirstExam).HasColumnType("decimal(3, 0)");
 
@@ -208,11 +216,13 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.Result).HasMaxLength(50);
 
-                entity.Property(e => e.SecondApprovalTime).HasColumnType("datetime");
-
                 entity.Property(e => e.SecondExam).HasColumnType("decimal(3, 0)");
 
-                entity.Property(e => e.ThiredApprovalTime).HasColumnType("datetime");
+                entity.Property(e => e.TeacherApprovalComment).HasMaxLength(250);
+
+                entity.Property(e => e.TeacherApprovalTime).HasColumnType("datetime");
+
+                entity.Property(e => e.TeacherApproverName).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Fee>(entity =>

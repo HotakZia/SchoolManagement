@@ -22,23 +22,28 @@ namespace SchoolManagement.Models.Entities
         public decimal? ClassActivity { get; set; }
         public decimal? HomeActivity { get; set; }
         public decimal? Attendance { get; set; }
-        public Guid? ThiredApproval { get; set; }
+       
         public Guid? ClassId { get; set; }
-        public Guid? SecondApproval { get; set; }
-        public Guid? FirstApproval { get; set; }
-        public string? ThiredApproverName { get; set; }
-        public string? SecondApproverName { get; set; }
-        public string? FirstApproverName { get; set; }
+      
+        public string TeacherApproverName { get; set; }
+        public string DeanApproverName { get; set; }
+        public string FinalApproverName { get; set; }
+        public string TeacherApproverComment { get; set; }
+        public string DeanApproverComment { get; set; }
+        public string FinalApproverComment { get; set; }
+        public Guid? TeacherApproverId { get; set; }
+        public Guid? DeanApproverId { get; set; }
+        public Guid? FinalApproverId { get; set; }
         public Guid? SubJectId { get; set; }
         public Guid? TeacherId { get; set; }
         public string TeacherName { get; set; }
         public string SubjectName { get; set; }
         public string ClassName { get; set; }
         public Guid? StudentId { get; set; }
-        public DateTime? ThiredApprovalTime { get; set; }
+        public DateTime? FinalApprovalTime { get; set; }
 
-        public DateTime? SecondApprovalTime { get; set; }
-        public DateTime? FirstApprovalTime { get; set; }
+        public DateTime? TeacherApprovalTime { get; set; }
+        public DateTime? DearnApprovalTime { get; set; }
         public string Result { get; set; }
         public int? Year { get; set; }
     }

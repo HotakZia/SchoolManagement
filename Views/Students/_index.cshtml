@@ -18,7 +18,6 @@
                 <th>Class</th>
                 <th>Guardian</th>
                 <th>Contact</th>
-              
 
                 <th class="text-end">Action</th>
             </tr>
@@ -28,69 +27,76 @@
             {
                 string Imge = "";
 
-                <tr>
-                    <input type="hidden" name="StudentId" value="@item.StudentId" />
+            <tr>
+                <input type="hidden" name="StudentId" value="@item.StudentId" />
 
-                    <input type="hidden" name="ClassId" value="@ViewBag.ClassId" />
+                <input type="hidden" name="ClassId" value="@ViewBag.ClassId" />
 
 
-               
-                    <td>@item.RoleNumber</td>
 
-                    @if (item.Attachment != null)
-                    {
-                        Imge = Convert.ToBase64String(item.Attachment);
-                <td>
+                <td>@item.RoleNumber</td>
 
-                    <img src="@string.Format("data:image/jpeg;base64,{0}", Imge)" class="img-fluid avatar-lg rounded" />
-                    @if (item.Status == true)
-                    {
-                        <i class="fa fa-check-circle"></i>
-                        @item.FirstName @item.LastName
-
-                    }
-                    else
-                    {
-                        <i class="fa fa-delete-left"></i>
-                        @item.FirstName @item.LastName
-
-                    }
-                </td>
-                    }
-                    @*else
-                    {
-                        <td>
-                            <a href="teacher-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-02.jpg" alt="User Image"></a>
-                            <a href="teacher-details.html">Aaliyah</a>
-                            @item.FirstName @item.LastName
-                        </td>
-                    }*@
-
-                    <td>@item.ClassName</td>
-                    <td>@item.GfatherName / @item.GuardianPhone</td>
+                @if (item.Attachment != null)
+                {
+                    Imge = Convert.ToBase64String(item.Attachment);
                     <td>
-                        @Html.DisplayFor(modelItem => item.Contact)
-                    </td>
-                 
 
-                    <td class="text-end">
-                        <div class="actions">
-                            <a asp-action="Details" asp-route-id="@item.StudentId" class="btn btn-sm bg-success-light me-2">
-                                <i class="feather-eye"></i>
-                            </a>
-                            <a asp-action="Edit" asp-route-id="@item.StudentId" class="btn btn-sm bg-danger-light">
-                                <i class="feather-edit"></i>
-                            </a>
-                            <a onclick='LoadPerants("@item.StudentId")' class="btn btn-sm bg-danger-light">
-                                <i class="feather-users"></i>
-                            </a>
-                            <a onclick='LoadFiles("@item.StudentId")' class="btn btn-sm bg-danger-light">
-                                <i class="fa fa-certificate"></i>
-                            </a>
+                        <img src="@string.Format("data:image/jpeg;base64,{0}", Imge)" class="img-fluid avatar-lg rounded" />
+                        @if (item.Status == true)
+                        {
+                            <i class="fa fa-check-circle"></i>
+                            @item.FirstName @item.LastName
 
-                        </div>
+                        }
+                        else
+                        {
+                            <i class="fa fa-delete-left"></i>
+                            @item.FirstName @item.LastName
+
+                        }
                     </td>
-                </tr>
+                }
+                @*else
+        {
+            <td>
+                <a href="teacher-details.html" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="assets/img/profiles/avatar-02.jpg" alt="User Image"></a>
+                <a href="teacher-details.html">Aaliyah</a>
+                @item.FirstName @item.LastName
+            </td>
+        }*@
+
+                <td>@item.ClassName</td>
+                <td>@item.GfatherName / @item.GuardianPhone</td>
+                <td>@item.Contact</td>
+                @*<td>
+                    <select id="dropdown">
+                        <option selected>Choose Class</option>
+                        <option onclick='getResult("@item.StudentId","First")'>First </option>
+                        <option onclick='getResult("@item.StudentId", "Second")'>Second </option>
+                        <option onclick='LoadPerants("@item.StudentId")'>111</option>
+                    </select>
+                </td>*@
+
+                <td class="text-end">
+                    <div class="actions">
+                        <a asp-action="Details" asp-route-id="@item.StudentId" class="btn btn-sm bg-success-light me-2">
+                            <i class="feather-eye"></i>
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@item.StudentId" class="btn btn-sm bg-danger-light">
+                            <i class="feather-edit"></i>
+                        </a>
+                        <a onclick='LoadPerants("@item.StudentId")' class="btn btn-sm bg-danger-light">
+                            <i class="feather-users"></i>
+                        </a>
+                        <a onclick='LoadFiles("@item.StudentId")' class="btn btn-sm bg-danger-light">
+                            <i class="fa fa-file"></i>
+                        </a>
+                        <a onclick='getResult("@item.StudentId","2024")' class="btn btn-sm bg-danger-light">
+                            <i class="fa fa-certificate"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
             }
 
 

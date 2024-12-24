@@ -79,18 +79,19 @@ namespace SchoolManagement.Models
         }
         public enum Grade
         {
-            FirstGrade,
-            SecondGrade,
-            ThirdGrade,
-            FourthGrade,
-            FifthGrade,
-            SixthGrade,
-            SeventhGrade,
-            EighthGrade,
-            NinthGrade,
-            TenthGrade,
-            EleventhGrade,
-            TwelfthGrade
+            Nusery=0,
+            FirstGrade=1,
+            SecondGrade=2,
+            ThirdGrade=3,
+            FourthGrade=4,
+            FifthGrade=5,
+            SixthGrade=6,
+            SeventhGrad=7,
+            EighthGrade=8,
+            NinthGrade=9,
+            TenthGrade=10,
+            EleventhGrade=11,
+            TwelfthGrade=12
         }
         public enum ItemCategory
         {
@@ -139,6 +140,7 @@ namespace SchoolManagement.Models
         }
         public enum Position
         {
+            Dean,
             Principal,
             Teacher,
             Librarian,
@@ -171,9 +173,13 @@ namespace SchoolManagement.Models
         }
         public enum UserLoginRule
         {
+            Dean,
+            Principal,
+            Teacher,
+            Librarian,
+            Counselor,
             Admin,
             Authorize,
-            Teacher,
             Student,
             Standard, // Standard login without any additional rules
             TwoFactorAuthentication, // User must authenticate using two-factor authentication

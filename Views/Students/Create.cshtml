@@ -1,7 +1,78 @@
 ﻿@model SchoolManagement.Models.db.Student
 
+<style>
+    [data-slots] {
+        font-family: monospace
+    }
+</style>
+<label>
+    Date:
+    <input placeholder="dd-mm-yyyy" data-slots="dmy" class="form-control" value="@Model.DateOfBirth.Value.ToString("dd-mm-yyyy")">
+</label>
+<br>
+<label>
+    Telephone:
+    <input placeholder="+93 (07_) ___-____" data-slots="_" data-accept="\d" maxlength="19" min="19">
+</label>
+<br>
+<label>
+    MAC Address:
+    <input placeholder="XX:XX:XX:XX:XX:XX" data-slots="X" data-accept="[\dA-F]">
+</label>
+<br>
+<label>
+    Alphanumeric:
+    <input placeholder="__-__-__-____" data-slots="_" data-accept="\w" size="13">
+</label>
+<br>
+<label>
+    Credit Card:
+    <input placeholder=".... .... .... ...." data-slots="." data-accept="\d" size="19">
+</label>
+<br>
+
+<script>
+    // This code empowers all input tags having a placeholder and data-slots attribute
+    document.addEventListener('DOMContentLoaded', () => {
+        for (const el of document.querySelectorAll("[placeholder][data-slots]")) {
+            const pattern = el.getAttribute("placeholder"),
+                slots = new Set(el.dataset.slots || "_"),
+                prev = (j => Array.from(pattern, (c, i) => slots.has(c) ? j = i + 1 : j))(0),
+                first = [...pattern].findIndex(c => slots.has(c)),
+                accept = new RegExp(el.dataset.accept || "\\d", "g"),
+                clean = input => {
+                    input = input.match(accept) || [];
+                    return Array.from(pattern, c =>
+                        input[0] === c || slots.has(c) ? input.shift() || c : c
+                    );
+                },
+                format = () => {
+                    const [i, j] = [el.selectionStart, el.selectionEnd].map(i => {
+                        i = clean(el.value.slice(0, i)).findIndex(c => slots.has(c));
+                        return i < 0 ? prev.at(-1) : back ? prev[i - 1] || first : i;
+                    });
+                    el.value = clean(el.value).join("");
+                    el.setSelectionRange(i, j);
+                    back = false;
+                };
+            let back = false;
+            el.addEventListener("keydown", (e) => back = e.key === "Backspace");
+            el.addEventListener("input", format);
+            el.addEventListener("focus", format);
+            el.addEventListener("blur", () => el.value === pattern && (el.value = ""));
+        }
+    });
+
+
+
+</script>
+<input required placeholder="+93 (07_) ___-____" data-slots="_" data-accept="\d" maxlength="19" min="19"  pattern="^\+93 \(\d{2}\) \d{3}-\d{4}$"            title="Please enter a complete phone number in the format: +93 (07_) ___-____"
+>
+
+
 
 <div class="content container-fluid">
+
 
 
 
@@ -255,28 +326,28 @@
 
 
                             @*<div class="col-12 col-sm-4">
-            <div class="form-group students-up-files">
-                <label>
-                    Upload Student Photo (150px X 150px)
-                    <div class="invalid-feedback">
-                        Please upload profile photo.
-                    </div>
-                </label>
+                                    <div class="form-group students-up-files">
+                                        <label>
+                                            Upload Student Photo (150px X 150px)
+                                            <div class="invalid-feedback">
+                                                Please upload profile photo.
+                                            </div>
+                                        </label>
 
-                <div class="uplod">
-                    <label class="file-upload image-upbtn mb-0">
-                        Choose File <input type="file" name="Image" required>
+                                        <div class="uplod">
+                                            <label class="file-upload image-upbtn mb-0">
+                                                Choose File <input type="file" name="Image" required>
 
-                        <span asp-validation-for="@Model.Attachment" class="text-danger"></span>
-                    </label>
+                                                <span asp-validation-for="@Model.Attachment" class="text-danger"></span>
+                                            </label>
 
-                </div>
-            </div>
-        </div>*@
+                                        </div>
+                                    </div>
+                                </div>*@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Comment </label>
-                                    <input class="form-control" type="text" asp-for="Comment" placeholder="Enter Comment" >
+                                    <input class="form-control" type="text" asp-for="Comment" placeholder="Enter Comment">
                                     <div class="invalid-feedback">
                                         Please typ a comment.
                                     </div>
@@ -318,13 +389,13 @@
 
 
 
-<script src="../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="8fd9cd6760df466b51b89013-|49" defer></script>
 
-<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
-<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
-
+@*<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+    <script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>*@
 
 
+<script src="~/template/assets/js/jquery.maskedinput.min.js" type="18eb242060ea2ce53c17f355-text/javascript"></script>
+<script src="~/template/assets/js/mask.js" type="18eb242060ea2ce53c17f355-text/javascript"></script>
 
 
 <script>
@@ -334,7 +405,7 @@
         minlength: 1,
         source: function (request, response) {
 
-          
+
             var SearchText = $('#txtClass').val();
             //alert(SearchText);
             $('#txtClass').removeClass('notfound');
@@ -437,17 +508,17 @@
     </script>
 }
 
- <script>
-        function displayImage(event) {
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            
-            reader.onload = function(e) {
-                document.getElementById('uploadedImage').src = e.target.result;
-            }
-            
-            reader.readAsDataURL(file);
+<script>
+    function displayImage(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById('uploadedImage').src = e.target.result;
         }
-    </script>
+
+        reader.readAsDataURL(file);
+    }
+</script>
 
 

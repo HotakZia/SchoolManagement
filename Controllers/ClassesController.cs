@@ -127,7 +127,7 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Grad,TeacherId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Shift,Year,Number,Room")] Class @class)
+        public async Task<IActionResult> Create([Bind("NumberOfSubject,Id,Name,Grad,TeacherId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Shift,Year,Number,Room")] Class @class)
         {
             try
             {
@@ -197,7 +197,7 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Grad,TeacherId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Shift,Year,Number,Room")] Class @class)
+        public async Task<IActionResult> Edit(Guid id, [Bind("NumberOfSubject,Id,Name,Grad,TeacherId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Shift,Year,Number,Room")] Class @class)
         {
             if (id != @class.Id)
             {

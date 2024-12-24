@@ -34,8 +34,10 @@
                 </div>
                 <div class="col-lg-5 col-md-6">
                     <div class="form-group">
-                        <input type="text" id="txtClassB" name="txtClassB" class="form-control" placeholder="Search class B ...">
-                        <input type="hidden" id="classBId" name="classBId" />
+                    
+
+                        @*<input type="text" id="txtClassB" name="txtClassB" class="form-control" placeholder="Search class B ...">
+        <input type="hidden" id="classBId" name="classBId" />*@
                     </div>
                 </div>
 
@@ -64,7 +66,7 @@
                                 <div class="col-auto text-end float-end ms-auto download-grp">
                                     <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
 
-                                    <a href="#" class="btn btn-success me-2"><i class="fas fa-chain"></i>Change Class</a>
+                               
 
 
 
@@ -73,7 +75,7 @@
                             </div>
                         </div>
                         <!-- /Page Header -->
-                        <div class="row" id="studentsList"> @Html.Partial("_index", Model)</div>
+                        <div class="row" id="studentsList"> @Html.Partial("_pass", Model)</div>
 
                     </div>
                 </form>
@@ -81,8 +83,8 @@
         </div>
     </div>
 </div>
-<script src="~/js/jQeury.js"></script>
-<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
 
 
 
@@ -162,9 +164,9 @@
                 //contentType: "application/json;characterset=utf-8",
                 dataType: "html",
                 success: function (data) {
-                    
+
                     //$("#_pass").html(data);
-                    document.getElementById('_index').innerHTML = data;
+                    document.getElementById('studentsList').innerHTML = data;
 
                 },
 
@@ -182,8 +184,7 @@
 
 
     });
-</script>
-<script>
+
     $('#txtClassB').autocomplete({
 
         minlength: 3,
@@ -205,10 +206,13 @@
                 //contentType: "application/json;characterset=utf-8",
 
                 success: function (data) {
-                    alert(data);
-        $('#_pass').html(data); // Update the content of the element with the received data
+          
+                    //document.getElementById('studentsList').innerHTML = data;
+                       response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
 
-},
+                },
 
                 error: function (result) {
                     debugger
@@ -225,7 +229,7 @@
 
             $('#txtClassB').val(ui.item.label);
 
-            $('#ClassBId').val(ui.item.value);
+            $('#newClassId').val(ui.item.value);
             $('#txtClassB').removeClass('notfound');
             $('#txtClassB').addClass('checked');
 

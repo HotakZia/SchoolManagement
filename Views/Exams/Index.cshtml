@@ -8,17 +8,7 @@
 <div class="content container-fluid">
 
     <!-- Page Header -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col">
-                <h3 class="page-title">Students</h3>
-                <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Students</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+
     <!-- /Page Header -->
     <form asp-action="Index" method="get" data-ajax="true" data-ajax-update="#examList"
           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure">
@@ -28,26 +18,44 @@
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group">
-                        @Html.DropDownList("SubjectId",null, "-- Please Select --", htmlAttributes: new { @class = "form-control select"})
-
+                        @*@Html.DropDownList("SubjectId", null, "-- Please Select --", htmlAttributes: new { @class = "form-control select" })*@
+                        <input type="text" id="txtClass" class="form-control" placeholder="type class name..." />
+                        <input type="hidden" name="ClassId" />
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group">
-                        <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Search by Name ...">
-                        <input type="hidden" id="StudentId" name="StudentId"/>
+                        <input type="text" id="txtSubject" class="form-control" placeholder="type subject name..." />
+                        <input type="hidden" name="SubjectId" />
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-3 col-md-6">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search by Phone ...">
+                        <input type="text" id="txtName" name="txtName" class="form-control" placeholder="type student name ...">
+                        <input type="hidden" id="StudentId" name="StudentId" />
                     </div>
                 </div>
-                <div class="col-lg-2">
+         
+                <div class="col-lg-3 col-md-6">
+                
+                        <div class="input-group form-group">
+                            
+                            <select class="form-control" name="Year">
+                                @for (int i = 2000; i < DateTime.Now.Year + 1; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+
+                            </select>
+                            <button type="btn" class="btn btn-primary">Search</button>
+                   
+                    </div>
+                </div>
+                @*<div class="col-lg-2">
                     <div class="search-student-btn">
                         <button type="btn" class="btn btn-primary">Search</button>
                     </div>
-                </div>
+                </div>*@
             </div>
         </div>
     </form>
@@ -64,10 +72,8 @@
                                 <h3 class="page-title">Studnets</h3>
                             </div>
                             <div class="col-auto text-end float-end ms-auto download-grp">
-                                <a href="teachers.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
-                                <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
+
                                 <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
-                                <a href="add-teacher.html" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                             </div>
                         </div>
                     </div>
@@ -145,6 +151,138 @@
                 $('#StudentId').val(ui.item.value);
                 $('#txtName').removeClass('notfound');
               $('#txtName').addClass('checked');
+
+            return false;
+
+        },
+
+
+
+    });
+     $('#txtClass').autocomplete({
+
+        minlength: 3,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtClass').val();
+            //alert(SearchText);
+            $('#txtClass').removeClass('notfound');
+            $('#txtClass').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Classes/getClassByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                                           $('#txtClass').removeClass('loading');
+                    $('#txtClass').addClass('notfound');
+
+
+                    }
+                    else {
+                           $('#txtClass').removeClass('loading');
+                  
+
+                    }
+                
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+               $('#txtClass').val(ui.item.label);
+
+                $('#ClassId').val(ui.item.value);
+                $('#txtClass').removeClass('notfound');
+              $('#txtClass').addClass('checked');
+
+            return false;
+
+        },
+
+
+
+     });
+     $('#txtSubject').autocomplete({
+
+        minlength: 3,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtSubject').val();
+            //alert(SearchText);
+            $('#txtSubject').removeClass('notfound');
+            $('#txtSubject').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Schedules/getSubjectByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                                           $('#txtSubject').removeClass('loading');
+                    $('#txtSubject').addClass('notfound');
+
+
+                    }
+                    else {
+                           $('#txtSubject').removeClass('loading');
+                  
+
+                    }
+                
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+               $('#txtSubject').val(ui.item.label);
+
+                $('#SubjectId').val(ui.item.value);
+                $('#txtSubject').removeClass('notfound');
+              $('#txtSubject').addClass('checked');
 
             return false;
 

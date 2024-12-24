@@ -9,7 +9,7 @@ namespace SchoolManagement.Models.db
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Grad { get; set; }
+        public int? Grad { get; set; }
         public Guid? TeacherId { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
@@ -22,5 +22,6 @@ namespace SchoolManagement.Models.db
         public int? Year { get; set; }
         public string Number { get; set; }
         public string Room { get; set; }
+        public int? NumberOfSubject { get; set; }
     }
 }

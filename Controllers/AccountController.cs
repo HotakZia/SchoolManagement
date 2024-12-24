@@ -101,7 +101,7 @@ namespace SchoolManagement.Controllers
            
             ViewBag.Connection = connection;
             var checkuser = db.TblUsers.Count();
-            
+            ViewBag.loginName = "admin";//model.EmailId;
             if (checkuser <= 0)
             {
                 try
@@ -168,6 +168,7 @@ namespace SchoolManagement.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
             return View();
         }
 

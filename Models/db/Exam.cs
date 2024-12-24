@@ -21,17 +21,23 @@ namespace SchoolManagement.Models.db
         public decimal? ClassActivity { get; set; }
         public decimal? HomeActivity { get; set; }
         public decimal? Attendance { get; set; }
-        public Guid? ThiredApproval { get; set; }
-        public Guid? SecondApproval { get; set; }
-        public Guid? FirstApproval { get; set; }
+        public Guid? FinalApprover { get; set; }
+        public Guid? DeanApprover { get; set; }
+        public Guid? TeacherApprover { get; set; }
         public Guid? SubJectId { get; set; }
         public Guid? StudentId { get; set; }
-        public DateTime? ThiredApprovalTime { get; set; }
-        public DateTime? SecondApprovalTime { get; set; }
-        public DateTime? FirstApprovalTime { get; set; }
+        public DateTime? FinalApprovalTime { get; set; }
+        public DateTime? DeanApprovalTime { get; set; }
+        public DateTime? TeacherApprovalTime { get; set; }
         public string Result { get; set; }
         public int? Year { get; set; }
         public Guid? TeacherId { get; set; }
         public Guid? ClassId { get; set; }
+        public string TeacherApprovalComment { get; set; }
+        public string DeanApprovalComment { get; set; }
+        public string FinalApprovalComment { get; set; }
+        public string TeacherApproverName { get; set; }
+        public string DeanApproverName { get; set; }
+        public string FinalApproverName { get; set; }
     }
 }

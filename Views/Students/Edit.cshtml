@@ -115,7 +115,8 @@
                                 <div class="form-group local-forms @*calendar-icon*@">
                                     <label>Date Of Birth  <span class="login-danger">*</span></label>
                                     @*class="form-control datetimepicker"*@
-                                    <input asp-for="DateOfBirth" class="form-control" required id="DateOfBirth" type="date" placeholder="DD-MM-YYYY">
+                                    <input asp-for="DateOfBirth"  placeholder="mm-dd-yyyy" data-slots="dmy" value="@Model.DateOfBirth.Value.ToString("MM-dd-yyyy")" type="text" class="form-control"  >
+
                                     <div class="invalid-feedback">
                                         Please select date of birth.
                                     </div>
@@ -125,7 +126,8 @@
                             <div class="col-12 col-sm-8">
                                 <div class="form-group local-forms">
                                     <label>Tazkira Number<span class="login-danger">*</span></label>
-                                    <input class="form-control" type="text" required asp-for="Tazkira" maxlength="20" id="Tazkira" placeholder="Enter Tazkira Number">
+                                    <input required asp-for="Tazkira" class="form-control" placeholder="____-____-_____" data-slots="_" data-accept="\d" size="15" maxlength="16" title="Please enter a complete Tazkira number in the format: ____-____-_____">
+
                                     <div class="invalid-feedback">
                                         Tazkira number is required choose a first name.
                                     </div>
@@ -213,7 +215,8 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Guardian Phone <span class="login-danger">*</span></label>
-                                    <input class="form-control" asp-for="GuardianPhone" id="GuardianPhone" type="text" placeholder="Enter Guardian Phone" required>
+                                    <input asp-for="GuardianPhone" class="form-control" placeholder="+93 (07_) ___-____" data-slots="_" data-accept="\d" maxlength="19"  pattern="^\+93 \(\d{2}\) \d{3}-\d{4}$"            title="Please enter a complete phone number in the format: +93 (07_) ___-____">
+                                    @*<input  class="form-control" asp-for="GuardianPhone" id="GuardianPhone" type="text" placeholder="Enter Guardian Phone" required>*@
                                     <div class="invalid-feedback">
                                         Guardian phone number is required..
                                     </div>
@@ -226,7 +229,8 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Contact <span class="login-danger">*</span></label>
-                                    <input class="form-control" type="text" asp-for="Contact" id="Contact" required placeholder="Enter Contact Info">
+                                    <input asp-for="Contact" class="form-control" placeholder="+93 (07_) ___-____" data-slots="_" data-accept="\d" maxlength="19" pattern="^\+93 \(\d{2}\) \d{3}-\d{4}$" title="Please enter a complete phone number in the format: +93 (07_) ___-____">
+
                                     <div class="invalid-feedback">
                                         Student contact is required.
                                     </div>
@@ -474,8 +478,8 @@ window.location.href = url;
          else if (data.status=="duplicate") {
               swal("Dupplicate Record!",  data.message, "warning");
          }
-        else {
-        swal("False!", data.message, "error");
+         else {
+             swal("False!", data.message, "error");
         }
 
 
@@ -504,6 +508,41 @@ window.location.href = url;
 
         reader.readAsDataURL(file);
     }
+
+        // This code empowers all input tags having a placeholder and data-slots attribute
+        document.addEventListener('DOMContentLoaded', () => {
+        for (const el of document.querySelectorAll("[placeholder][data-slots]")) {
+            const pattern = el.getAttribute("placeholder"),
+            slots = new Set(el.dataset.slots || "_"),
+            prev = (j => Array.from(pattern, (c, i) => slots.has(c) ? j = i + 1 : j))(0),
+            first = [...pattern].findIndex(c => slots.has(c)),
+            accept = new RegExp(el.dataset.accept || "\\d", "g"),
+                clean = input => {
+            input = input.match(accept) || [];
+        return Array.from(pattern, c =>
+            input[0] === c || slots.has(c) ? input.shift() || c : c
+        );
+    },
+                format = () => {
+                    const [i, j] = [el.selectionStart, el.selectionEnd].map(i => {
+            i = clean(el.value.slice(0, i)).findIndex(c => slots.has(c));
+                        return i < 0 ? prev.at(-1) : back ? prev[i - 1] || first : i;
+    });
+    el.value = clean(el.value).join("");
+    el.setSelectionRange(i, j);
+    back = false;
+};
+let back = false;
+el.addEventListener("keydown", (e) => back = e.key === "Backspace");
+el.addEventListener("input", format);
+el.addEventListener("focus", format);
+el.addEventListener("blur", () => el.value === pattern && (el.value = ""));
+}
+});
+
+
+
+
 </script>
 
 

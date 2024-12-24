@@ -6,17 +6,15 @@
     <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
         <thead class="student-thread">
             <tr>
-                <th>
-                    <div class="form-check check-tables">
-                        <input class="form-check-input" type="checkbox" value="something">
-                    </div>
-                </th>
-                <th>Student Name</th>
-                <th>Subject</th>
-                <th>First</th>
-                <th>Second</th>
-                <th>Other</th>
+
+                <th>Student </th>
+                <th>Class </th>
+                <th>Subject </th>
+                <th>Teacher </th>
                 <th>Year</th>
+
+                <th>Marks</th>
+                <th>Approvals</th>
                 <th>Result</th>
 
                 <th class="text-end">Action</th>
@@ -29,38 +27,44 @@
                 {
                     string Imge = "";
 
-                    <tr>
-                        <td>
-                            <div class="form-check check-tables">
-                                <input class="form-check-input" type="checkbox" value="something">
-                            </div>
-                        </td>
-                        <td>@item.StudentName</td>
+            <tr>
 
+                <td>@item.StudentName</td>
+                <td>@item.ClassName</td>
 
+                <td>@item.TeacherName</td>
+                <td>@item.SubjectName</td>
+                <td>@item.Year </td>
+                <td>
+                    <select>
+                        <option>FirstExam: @item.FirstExam</option>
+                        <option>SecondExam: @item.SecondExam</option>
+                        <option>ClassActivity: @item.ClassActivity</option>
+                        <option>HomeActivity: @item.HomeActivity</option>
+                        <option>Attendance: @item.Attendance</option>
+                    </select>
+                </td>
+                <td>
+                    <select>
+                        <option>1 Approval: @item.TeacherApproverId- @item.TeacherApprovalTime</option>
+                        <option>2 Approval: @item.DeanApproverId - @item.DearnApprovalTime</option>
+                        <option>3 Approval: @item.FinalApproverId - @item.FinalApprovalTime</option>
+                     
+                    </select>
+                </td>
+                <td>@item.Result</td>
 
-                        <td>@item.SubjectName</td>
-                        <td>@item.FirstExam </td>
-                        <td>
-                            @item.SecondExam
-                        </td>
-                        <td>Other Activities</td>
-                        <td>
-                            @item.Year
-                        </td>
-                        <td>@item.Result</td>
-
-                        <td class="text-end">
-                            <div class="actions">
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm bg-success-light me-2">
-                                    <i class="feather-eye"></i>
-                                </a>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm bg-danger-light">
-                                    <i class="feather-edit"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
+                <td class="text-end">
+                    <div class="actions">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm bg-success-light me-2">
+                            <i class="feather-eye"></i>
+                        </a>
+                        <a asp-action="Create" asp-route-ScheduleId="@item.SubJectId" class="btn btn-sm bg-danger-light">
+                            <i class="feather-edit"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
                 }
             }
             else

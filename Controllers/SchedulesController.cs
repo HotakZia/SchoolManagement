@@ -17,7 +17,27 @@ namespace SchoolManagement.Controllers
         //{
         //    _context = context;
         //}
+        [HttpPost]
+        public async Task<IActionResult> getSubjectByName(string term)
+        {
 
+            var list = await (from Subject in db.Schedules
+
+
+                              where Subject.Subject.StartsWith(term)
+
+                              select new Models.Entities.Class_
+                              {
+
+                                  Id = Subject.Id,
+
+                                  Name = Subject.Subject+" "+Subject.Shift +" "+ Subject.Year
+
+
+
+                              })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
+            return Json(list);
+        }
         // GET: Schedules
         public async Task<IActionResult> Index()
         {
