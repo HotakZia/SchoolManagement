@@ -1,0 +1,102 @@
+﻿@model IList<SchoolManagement.Models.Entities.TimeTable>
+
+
+
+
+<div class="content container-fluid">
+
+
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            <div class="card comman-shadow">
+                <div class="card-body">
+            
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-lg-3"><strong>Name:</strong> @ViewBag.Class.Name</div>
+                            <div class="col-lg-3"><strong>Teacher:</strong> @ViewBag.Class.TeacherName</div>
+                            <div class="col-lg-2"><strong>Shift:</strong> @ViewBag.Class.Shift</div>
+                            <div class="col-lg-2"><strong>Grad</strong> @ViewBag.Class.Grad</div>
+                            <div class="col-lg-2"><strong>Year</strong> @ViewBag.Class.Year</div>
+
+                            <hr />
+                            <div class="col-12 col-sm-12">
+                                <table class="table table-bordered" border="1">
+                                    <thead>
+                                        <tr style="text-align:center">
+                                            <th style="text-align:left">Day</th>
+                                            <th>1H</th>
+                                            <th>2H</th>
+                                            <th>3H</th>
+                                            <th>4H</th>
+                                            <th>5H</th>
+                                            <th>6H</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @foreach (MyEnums.DayOfWeek day in Enum.GetValues(typeof(MyEnums.DayOfWeek)))
+                                        {
+                                            int numer = 1;
+
+                                            <tr>
+                                                <th align="center" style="vertical-align: middle">@day</th>
+
+                                                @foreach (MyEnums.ShiftHours hour in Enum.GetValues(typeof(MyEnums.ShiftHours)))
+                                                {
+
+                                                    @*<td>
+                                        @Model.Where(x => x.DayOfWeek == day.ToString() && x.HourOfDay == ((int)hour).ToString()).Select(x => x.Subject).FirstOrDefault()
+                                    </td>*@
+                                                    <td align="center">
+                                                        <p>
+                                                            @Model.Where(x => x.DayOfWeek == day.ToString() && x.HourOfDay == ((int)hour).ToString()).Select(x => x.Subject).FirstOrDefault()
+                                                        </p>
+                                                        <hr />
+                                                        <small style="color:orangered;font-size:smaller">
+                                                            @Model.Where(x => x.DayOfWeek == day.ToString() && x.HourOfDay == ((int)hour).ToString()).Select(x => x.Teacher).FirstOrDefault()
+                                                        </small>
+                                                    </td>
+                                                    @*@foreach (var item in Model)
+                                    {
+                                        @if (item.DayOfWeek == day.ToString() && item.HourOfDay == ((int)hour).ToString())
+                                        {
+                                            <td align="center">
+                                                <p>@item.Subject  @item.HourOfDay</p>@numer
+                                                <hr />
+                                                <small style="color:orangered;font-size:smaller">@item.Teacher</small>
+                                            </td>
+                                               numer++;
+                                        }
+
+
+
+
+                                    }*@
+
+
+                                                }
+
+
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+
+                        </div>
+
+                    </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+

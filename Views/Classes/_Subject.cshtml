@@ -1,0 +1,176 @@
+﻿@model IEnumerable<SchoolManagement.Models.Entities.Schedual>
+
+
+<div class="content container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card card-table">
+                <div class="card-body">
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h3 class="page-title">Assigned Subjects</h3>
+                            </div>
+                   
+                        </div>
+                    </div>
+                    <!-- /Page Header -->
+
+                    <div class="table-responsive">
+                        <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                            <thead class="student-thread">
+                                <tr>
+
+                                    <th>Number#</th>
+                                    <th>Name</th>
+                                    <th>Comment</th>
+
+
+                                    <th>Exam</th>
+                                    <th>Exam</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                 
+
+                                <tr>
+
+                                    <td>@item.Number</td>
+
+                                    <td>@item.SubjecName</td>
+
+                                    <td>@item.Comment</td>
+
+
+
+                                    <td>
+                                        <div class="actions">
+                                            <a asp-action="Create" asp-controller="Exams" asp-route-ClassId="@item.ClassId" asp-route-ScheduleId="@item.Subject" class="btn btn-sm bg-info-light">
+                                                <i class="feather-alert-circle"></i>
+
+                                            </a>
+                                           
+                                    </td>
+
+                                    <td class="text-end">
+                                        <div class="actions">
+                                        
+                                            <a asp-action="details" asp-controller="Exams" asp-route-id="@item.Subject" class="btn btn-sm bg-info-light">
+                                                <i class="fa fa-certificate"></i>
+
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    function LoadFiles(Id) {
+
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/LoadFile", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
+    function DeleteFile(Id) {
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/DeleteFiles", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        $('.page-loader').hide();
+    }
+
+</script>
+@section Scripts {
+
+
+
+
+    <script>
+
+        function OnBegin() {
+            $('.page-loader').show();
+
+        }
+        function OnSuccess(data) {
+            $('#AModelBody').html(data);
+               swal("Saved!",  data.message, "success");
+        }
+        function OnComplete() {
+            $('.page-loader').hide();
+
+        }
+    </script>
+}
+<div class="modal fade bd-example-modal-lg" id="AModel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body" id="AModelBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="printDiv()"><i class="fa fa-print"></i> Print</button>
+            </div>
+        </div>
+    </div>
+</div>

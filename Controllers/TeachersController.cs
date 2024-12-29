@@ -35,7 +35,7 @@ namespace SchoolManagement.Controllers
 
                                   Id = Teacher.TeacherId,
 
-                                  Name = Teacher.FirstName+ " / " + Teacher.LastName+ " / " + Teacher.RoleNumber
+                                  Name = Teacher.FirstName+ " " + Teacher.LastName+ " / " + Teacher.RoleNumber
 
 
 

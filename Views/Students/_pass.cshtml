@@ -9,13 +9,21 @@
     <div class="table-responsive">
         <form asp-action="changeStudent" method="get" data-ajax="true" data-ajax-update="#studentsList"
               data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure">
-            @if (ViewBag.NewClassId != null)
-            {
-                @Html.DropDownList("NewClassId", null, htmlAttributes: new { @class = "form-control select colg-lg-4", @placeholder = "-- Please Select --" })
+            <div class="row">
+                <div class="col-lg-4">
+                    @if (ViewBag.NewClassId != null)
+                    {
+                        @Html.DropDownList("NewClassId", null, htmlAttributes: new { @class = "form-control select colg-lg-4", @placeholder = "-- Please Select --" })
 
-            }
-            <button type="submit" class="btn btn-success me-2"><i class="fas fa-chain"></i>Change Class</button>
-            @*<input type="hidden" id="newClassId" name="NewClassId" />*@
+                    }
+                </div>
+                <div class="col-lg-4">
+                    <button type="submit" class="btn btn-success me-2"><i class="fas fa-chain"></i>Change Class</button>
+                </div>
+            </div>
+          
+         
+   
             <input type="hidden" id="oldClassId" name="OldClassId" value="@Model.Select(x=>x.ClassId).FirstOrDefault()" />
             <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
 

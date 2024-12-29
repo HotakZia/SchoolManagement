@@ -42,6 +42,7 @@ namespace SchoolManagement.Models.db
         public virtual DbSet<TableRole> TableRoles { get; set; }
         public virtual DbSet<TblUser> TblUsers { get; set; }
         public virtual DbSet<Teacher> Teachers { get; set; }
+        public virtual DbSet<TimeTable> TimeTables { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<Transport> Transports { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -444,15 +445,9 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.DayOfWeek).HasMaxLength(50);
-
-                entity.Property(e => e.HourOfDay).HasMaxLength(50);
-
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Name).HasMaxLength(250);
 
                 entity.Property(e => e.Shift).HasMaxLength(50);
 
@@ -683,6 +678,27 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.SubjectTaught).HasMaxLength(250);
 
                 entity.Property(e => e.Tazkira).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<TimeTable>(entity =>
+            {
+                entity.ToTable("TimeTable");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.DayOfWeek).HasMaxLength(50);
+
+                entity.Property(e => e.HourOfDay).HasMaxLength(50);
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Number).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<Transaction>(entity =>

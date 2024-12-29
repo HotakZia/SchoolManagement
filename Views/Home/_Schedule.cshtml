@@ -16,14 +16,15 @@
                     <tr>
                         <th>#</th>
 
-
-                        <th>Class</th>
                         <th>Teacher</th>
+                        <th>Class</th>
+                        <th>Shift</th>
+                        <th>Hour</th>
                         <th>Subject</th>
 
 
-                        <th>Shift</th>
-                        <th>Hour</th>
+
+
 
                     </tr>
                 </thead>
@@ -33,17 +34,16 @@
                     {
                         string Imge = "";
 
-                        <tr>
-                            <td>@number</td>
-                            <td>@item.ClassName</td>
-                            <td>@item.TeacherName</td>
-                            <td>@item.SubjecName</td>
-                            <td>@item.Shift</td>
-                            <td>@item.HourOfDay</td>
+                    <tr>
+                        <td>@number</td>
+                        <td><a asp-route-id="@item.Id" asp-action="Details" asp-controller="Teachers">@item.TeacherName</a> </td>
+                        <td><a asp-route-id="@item.ClassId" asp-action="TimeTable" asp-controller="Classes">@item.ClassName</a> </td>
+                        <td>@item.Shift</td>
+                        <td>@item.HourOfDay</td>
+                        <td>@item.SubjecName</td>
 
 
-
-                        </tr>
+                    </tr>
                         number++;
                     }
 

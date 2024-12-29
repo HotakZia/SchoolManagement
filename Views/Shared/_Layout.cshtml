@@ -1,51 +1,12 @@
-﻿@*<!DOCTYPE html>
-    <html lang="en">
-    <head>
+﻿
+    @*<head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>@ViewData["Title"] - SchoolManagement</title>
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" />
-    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SchoolManagement</a>
-                    <button class="navbar-toggler" type="button" data-toggle="colflapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-        </header>
-        <div class="container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>
+    </head>*@
 
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2024 - SchoolManagement - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </footer>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        @RenderSection("Scripts", required: false)
-    </body>
-    </html>*@
 
 <!DOCTYPE html>
 <html lang="en">
@@ -78,6 +39,9 @@
     <!-- Main CSS -->
     <link rel="stylesheet" href="~/template/assets/css/style.css">
     <link href="~/template/assets/sweetalert/css/sweetalert.css" rel="stylesheet" />
+
+    <link href="~/template/assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
+
     <style>
         .loading {
             background-color: #ffffff;
@@ -155,6 +119,18 @@
             </div>
         </div>
     </div>
+    <div class="modal fade bd-example-modal-lg" id="AModel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body" id="AModelBody">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="printDiv()"><i class="fa fa-print"></i> Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade bd-example-modal-lg" id="A4Model_" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -228,14 +204,14 @@
                         <img src="~/template/assets/img/icons/header-icon-05.svg" alt="">
                         <small class="text-danger" id="notificationsCount"></small>
                     </a>
-                  
+
                     <div class="dropdown-menu notifications">
                         <div class="topnav-dropdown-header">
                             <span class="notification-title">Notifications</span>
                             @*<a href="javascript:void(0)" class="clear-noti"> Clear All </a>*@
                         </div>
                         <div class="noti-content" id="myNotifications">
-                          @Html.Partial("_Notification", new List<SchoolManagement.Models.db.Notice>())
+                            @Html.Partial("_Notification", new List<SchoolManagement.Models.db.Notice>())
                         </div>
                         <div class="topnav-dropdown-footer">
                             <a asp-action="Index" asp-controller="Notices">View all Notifications</a>
@@ -305,7 +281,7 @@
                             <a asp-action="Profile" asp-controller="Account" asp-route-id="@User.Claims.FirstOrDefault(x=>x.Type=="userId").Value" class="dropdown-item">My Profile</a>
                         }
 
-                        <a class="dropdown-item"  asp-action="Index" asp-controller="Notices">Inbox</a>
+                        <a class="dropdown-item" asp-action="Index" asp-controller="Notices">Inbox</a>
                         <a class="dropdown-item" asp-action="LogOut" asp-controller="Account">Logout</a>
                     </div>
                 </li>
@@ -341,6 +317,7 @@
                                 <li><a asp-action="index" asp-controller="students">Student List</a></li>
                                 <li><a asp-action="create" asp-controller="students">Student Add</a></li>
                                 <li><a asp-action="Index" asp-controller="AttendanceLogs">Student Attandance</a></li>
+                                <li><a asp-action="pass" asp-controller="students">Student Pass</a></li>
 
                             </ul>
                         </li>
@@ -561,8 +538,10 @@
     </div>
     <!-- /Main Wrapper -->
     <!-- jQuery -->
-    <script src="~/template/assets/js/jquery-3.7.1.min.js" type="c437656adcf261e14fc51405-text/javascript"></script>
+    @*<script src="~/template/assets/js/jquery-3.7.1.min.js" type="c437656adcf261e14fc51405-text/javascript"></script>*@
     <script src="~/js/jQuery JavaScript Library v3.7.1.js"></script>
+    <script src="~/template/assets/plugins/select2/js/select2.min.js" type="f4c59587db699f42642ee9f4-text/javascript"></script>
+
     <!-- Bootstrap Core JS -->
     <script src="~/template/assets/js/bootstrap.bundle.min.js" type="c437656adcf261e14fc51405-text/javascript"></script>
 
@@ -581,6 +560,7 @@
     <script src="~/template/assets/sweetalert/js/sweetalert.min.js"></script>
     <script src="~/js/Unobtrusive Ajax.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/template/assets/js/form-validation.js"></script>
 
 
     <script src="../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="c437656adcf261e14fc51405-|49" defer></script>
@@ -599,11 +579,11 @@
     <script>
         var created;
         $(document).ready(function () {
-          
+
             UpdateNotifications()
             setInterval(function () {
                 UpdateNotifications();
-           }, 300000); // Refresh every 5 minutes (300,000 milliseconds)
+            }, 300000); // Refresh every 5 minutes (300,000 milliseconds)
         });
 
         function UpdateNotifications() {
@@ -618,10 +598,10 @@
 
 
                     $('#myNotifications').html(response);
-                       
 
 
-                    
+
+
                 },
                 failure: function (response) {
                     alert(response.d);
@@ -629,6 +609,42 @@
             });
         }
     </script>
+    <script>
+        // This code empowers all input tags having a placeholder and data-slots attribute
+        document.addEventListener('DOMContentLoaded', () => {
+            for (const el of document.querySelectorAll("[placeholder][data-slots]")) {
+                const pattern = el.getAttribute("placeholder"),
+                    slots = new Set(el.dataset.slots || "_"),
+                    prev = (j => Array.from(pattern, (c, i) => slots.has(c) ? j = i + 1 : j))(0),
+                    first = [...pattern].findIndex(c => slots.has(c)),
+                    accept = new RegExp(el.dataset.accept || "\\d", "g"),
+                    clean = input => {
+                        input = input.match(accept) || [];
+                        return Array.from(pattern, c =>
+                            input[0] === c || slots.has(c) ? input.shift() || c : c
+                        );
+                    },
+                    format = () => {
+                        const [i, j] = [el.selectionStart, el.selectionEnd].map(i => {
+                            i = clean(el.value.slice(0, i)).findIndex(c => slots.has(c));
+                            return i < 0 ? prev.at(-1) : back ? prev[i - 1] || first : i;
+                        });
+                        el.value = clean(el.value).join("");
+                        el.setSelectionRange(i, j);
+                        back = false;
+                    };
+                let back = false;
+                el.addEventListener("keydown", (e) => back = e.key === "Backspace");
+                el.addEventListener("input", format);
+                el.addEventListener("focus", format);
+                el.addEventListener("blur", () => el.value === pattern && (el.value = ""));
+            }
+        });
+
+
+
+    </script>
+
 
 </body>
 

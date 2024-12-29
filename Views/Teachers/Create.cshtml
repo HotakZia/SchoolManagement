@@ -42,7 +42,7 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="DateOfBirth" class="control-label"></label>
-                                    <input asp-for="DateOfBirth" type="date" class="form-control" required />
+                                    <input value="@DateTime.Now.AddYears(-18).ToString("MM-dd-yyyy")" asp-for="DateOfBirth" placeholder="mm-dd-yyyy" data-slots="dmy" type="text" class="form-control">
                                     <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Tazkira" class="control-label"></label>
-                                    <input required asp-for="Tazkira" class="form-control" />
+                                    <input required asp-for="Tazkira" class="form-control" placeholder="____-____-_____" data-slots="_" data-accept="\d" size="15" maxlength="16" title="Please enter a complete Tazkira number in the format: ____-____-_____">
                                     <span asp-validation-for="Tazkira" class="text-danger"></span>
                                 </div>
                             </div>
@@ -114,14 +114,14 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Email" class="control-label"></label>
-                                    <input required asp-for="Email" class="form-control" />
+                                    <input required type="email" asp-for="Email" class="form-control" />
                                     <span asp-validation-for="Email" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Phone" class="control-label"></label>
-                                    <input required asp-for="Phone" class="form-control" />
+                                    <input asp-for="Phone" class="form-control" placeholder="+93 (07_) ___-____" data-slots="_" data-accept="\d" maxlength="19" title="Please enter a complete phone number in the format: +93 (07_) ___-____">
                                     <span asp-validation-for="Phone" class="text-danger"></span>
                                 </div>
                             </div>
@@ -179,7 +179,7 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="RoleNumber" class="control-label"></label>
-                                    <input required asp-for="RoleNumber" class="form-control" />
+                                    <input required asp-for="RoleNumber" class="form-control" placeholder="Tch-@DateTime.Now.Year-_____" data-slots="_" data-accept="\d" maxlength="15" title="Please enter role number: YYYY-XXXXX">
                                     <span asp-validation-for="RoleNumber" class="text-danger"></span>
                                 </div>
                             </div>
@@ -187,7 +187,7 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Salary" class="control-label"></label>
-                                    <input required asp-for="Salary" class="form-control" />
+                                    <input required asp-for="Salary" class="form-control" data-accept="\d" maxlength="6" />
                                     <span asp-validation-for="Salary" class="text-danger"></span>
                                 </div>
                             </div>

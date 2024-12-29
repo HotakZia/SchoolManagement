@@ -17,6 +17,76 @@ namespace SchoolManagement.Controllers
         //{
         //    _context = context;
         //}
+
+                    [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> createTimeTable(List<TimeTable> timeTables)
+        {
+
+            if (!ModelState.IsValid)
+            {
+
+                showMessageString = new
+                {
+                    status = "false",
+                    message = string.Join("; ", ModelState.Values
+                                   .SelectMany(x => x.Errors)
+                                   .Select(x => x.ErrorMessage)),
+                };
+                return Json(showMessageString);
+               
+            }
+            try
+            {
+                int number = 0;
+                foreach (var item in timeTables)
+                {
+                    if (item.SubjectId != null)
+                    {
+                        var dupplicate = db.TimeTables.Where(x => x.ClassId == item.ClassId
+                        && x.DayOfWeek == item.DayOfWeek
+                        && x.HourOfDay == item.HourOfDay
+                        && x.Status == true 
+                        && x.SubjectId == item.SubjectId
+                        &&x.Year==item.Year).FirstOrDefault();
+                        if (dupplicate != null)
+                        {
+                            showMessageString = new
+                            {
+                                status = "false",
+                                message ="in "+ item.DayOfWeek +" "+ item.HourOfDay + " hour is duplicate record!"
+                            };
+                            return Json(showMessageString);
+                        }
+                        item.Id = Guid.NewGuid();
+                        item.CreatedDate = DateTime.Now;
+                        item.Status = true;
+                        db.TimeTables.Add(item);
+                        number++;
+                    }
+                    
+                }
+                db.SaveChanges();
+                showMessageString = new
+                {
+                    status = "true",
+                    message =number+" recods have been added"
+                };
+                return Json(showMessageString);
+
+            }
+            catch (Exception ex)
+            {
+
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+                };
+                return Json(showMessageString);
+            }
+            return Json(showMessageString);
+        }
         [HttpPost]
         public async Task<IActionResult> getSubjectByName(string term)
         {
@@ -39,46 +109,42 @@ namespace SchoolManagement.Controllers
             return Json(list);
         }
         // GET: Schedules
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int grad)
         {
-            var list = await (from Schedule in db.Schedules
-                              join class_ in db.Classes on Schedule.ClassId equals class_.Id
-                              //join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
+            var list = new List<Models.Entities.Schedual>();
+          
+                list = await (from Schedule in db.Schedules
+                                  //join class_ in db.Classes on Schedule.ClassId equals class_.Id
+                                  //join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
                               join teacher in db.Teachers on Schedule.TeacherId equals teacher.TeacherId
-                              where Schedule.Status==true/* &&Schedule.Year==DateTime.Now.Year*/
+                              where Schedule.Status == true /*&&Schedule.Grad==grad*/
 
                               select new Models.Entities.Schedual
                               {
-                                  
-                                  Shift=Schedule.Shift,
-                                  ClassId = Schedule.ClassId,
-                                 
+
+                                  Shift = Schedule.Shift,
                                   Attachment = Schedule.Attachment,
-                                  
                                   Status = Schedule.Status,
-                                 
                                   Comment = Schedule.Comment,
                                   CreatedBy = Schedule.CreatedBy,
-                                 
                                   ModifiedBy = Schedule.ModifiedBy,
                                   ModifiedDate = Schedule.ModifiedDate,
-                                 SubjecName=Schedule.Subject,
-                                 ClassName=class_.Name,
-                                 HourOfDay=Schedule.HourOfDay,
-                                 DayOfWeek=Schedule.DayOfWeek,
-                                 Subject=Schedule.Subject,
-                                 CreatedDate=Schedule.CreatedDate,
-                                 Id=Schedule.Id,
-                                 Name=Schedule.Name,
-                                  Number=Schedule.Number,
-                                  StartTime=Schedule.StartTime,
-                                  EndTime=Schedule.EndTime,
-                                  TeacherName=teacher.FirstName+" "+teacher.LastName,
-                                Year=Schedule.Year,
-                                
+                                  SubjecName = Schedule.Subject,
+                                  // ClassName=class_.Name,
+
+                                  Subject = Schedule.Subject,
+                                  CreatedDate = Schedule.CreatedDate,
+                                  Id = Schedule.Id,
+
+                                  Number = Schedule.Number,
+                                  Grad=Schedule.Grad,
+                                  TeacherName = teacher.FirstName + " " + teacher.LastName,
+                                  Year = Schedule.Year,
+
 
 
                               })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
+         
             return View(list);
         }
 
@@ -90,14 +156,47 @@ namespace SchoolManagement.Controllers
                 return NotFound();
             }
 
-            var schedule = await db.Schedules
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (schedule == null)
+       
+            var singleSchedule =  (from Schedule in db.Schedules
+                              join teacher in db.Teachers on Schedule.TeacherId equals teacher.TeacherId
+                              where Schedule.Id == id&&Schedule.Status==true/* &&Schedule.Year==DateTime.Now.Year*/
+
+                              select new Models.Entities.Schedual
+                              {
+
+                                  Shift = Schedule.Shift,
+                                  Attachment = Schedule.Attachment,
+
+                                  Status = Schedule.Status,
+                                  Grad=Schedule.Grad,
+                                  Comment = Schedule.Comment,
+                                  CreatedBy = Schedule.CreatedBy,
+
+                                  ModifiedBy = Schedule.ModifiedBy,
+                                  ModifiedDate = Schedule.ModifiedDate,
+                                  SubjecName = Schedule.Subject,
+
+                                  Subject = Schedule.Subject,
+                                  CreatedDate = Schedule.CreatedDate,
+                                  Id = Schedule.Id,
+
+                                  Number = Schedule.Number,
+
+                                  TeacherName = teacher.FirstName + " " + teacher.LastName,
+                                  Year = Schedule.Year,
+                                  
+
+
+                              }).FirstOrDefault();
+            if (singleSchedule == null)
             {
                 return NotFound();
             }
+            ViewBag.Subjec = singleSchedule;
 
-            return View(schedule);
+            ViewBag.ClassId = new SelectList(db.Schedules.Where(x=>x.Grad==singleSchedule.Grad&&x.Status==true).ToList(), "Id", "Name");
+
+            return View();
         }
 
         // GET: Schedules/Create
@@ -105,9 +204,9 @@ namespace SchoolManagement.Controllers
         {
             try
             {
-                ViewBag.SubjectId = new SelectList(db.Subjects.ToList(), "Id", "SubjectName");
+                //ViewBag.SubjectId = new SelectList(db.Subjects.ToList(), "Id", "SubjectName");
 
-                ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
+                //ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
 
 
             }
@@ -125,7 +224,7 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TeacherId,Year,StartTime, EndTime,Shift,Id,Name,ClassId,Subject,HourOfDay,DayOfWeek,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number")] Schedule schedule)
+        public async Task<IActionResult> Create([Bind("Grad,TeacherId,Year,Shift,Id,Subject,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number")] Schedule schedule)
         {
             try
             {
@@ -141,10 +240,7 @@ namespace SchoolManagement.Controllers
                     };
                     return Json(showMessageString);
                 }
-                var checkDuplicate = db.Schedules.Where(x => x.HourOfDay == schedule.HourOfDay &&
-                      x.DayOfWeek == schedule.DayOfWeek &&
-                      x.Subject == schedule.Subject &&
-                      x.ClassId == schedule.ClassId).FirstOrDefault();
+                var checkDuplicate = db.Schedules.Where(x => x.TeacherId == schedule.TeacherId&&x.Subject==schedule.Subject&&x.Year==schedule.Year&&x.Shift==schedule.Shift).FirstOrDefault();
                     if (checkDuplicate!=null)
                     {
                         showMessageString = new
@@ -211,20 +307,48 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("TeacherId,Year,StartTime, EndTime,Shift,Id,Name,ClassId,Subject,HourOfDay,DayOfWeek,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number")] Schedule schedule)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Grad,TeacherId,Year,Shift,Id,Subject,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number")] Schedule schedule)
         {
             if (id != schedule.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                showMessageString = new
+                {
+                    status = "false",
+                    message = "modelstat is no valid"
+
+                };
+                return Json(showMessageString);
+            }
                 try
                 {
+                var checkDuplicate = db.Schedules.Where(x => x.TeacherId == schedule.TeacherId && x.Subject == schedule.Subject && x.Year == schedule.Year && x.Shift == schedule.Shift&&x.Id!=schedule.Id).FirstOrDefault();
+                if (checkDuplicate != null)
+                {
+                    showMessageString = new
+                    {
+                        status = "duplicate",
+                        message = "Dupplicate Schedual."
+
+                    };
+                    return Json(showMessageString);
+                }
+                schedule.ModifiedDate = DateTime.Now;
                     db.Update(schedule);
                     await db.SaveChangesAsync();
-                }
+                showMessageString = new
+                {
+                    status = "true",
+                    message = "TimeTable has been updated.",
+                    Id=schedule.Id
+
+                };
+                return Json(showMessageString);
+            }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!ScheduleExists(schedule.Id))
@@ -237,7 +361,7 @@ namespace SchoolManagement.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
+            
             return View(schedule);
         }
 

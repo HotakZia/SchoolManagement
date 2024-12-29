@@ -2,7 +2,7 @@
 
 
 
-@{           int number =0 ;}
+@{ int number = 0;}
 
 
 
@@ -15,7 +15,7 @@
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="createTimeTable" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
+                    <form asp-action="createTimeTable" asp-controller="Schedules" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
 
 
@@ -24,11 +24,11 @@
 
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="row">
-                            <div class="col-lg-3"><strong>Subject:</strong> @ViewBag.Subjec.Subject</div>
-                            <div class="col-lg-3"><strong>Teacher:</strong> @ViewBag.Subjec.TeacherName</div>
-                            <div class="col-lg-2"><strong>Shift:</strong> @ViewBag.Subjec.Shift</div>
-                            <div class="col-lg-2"><strong>Grad</strong> @ViewBag.Subjec.Grad</div>
-                            <div class="col-lg-2"><strong>Year</strong> @ViewBag.Subjec.Year</div>
+                            <div class="col-lg-3"><strong>Name:</strong> @ViewBag.Class.Name</div>
+                            <div class="col-lg-3"><strong>Teacher:</strong> @ViewBag.Class.TeacherName</div>
+                            <div class="col-lg-2"><strong>Shift:</strong> @ViewBag.Class.Shift</div>
+                            <div class="col-lg-2"><strong>Grad</strong> @ViewBag.Class.Grad</div>
+                            <div class="col-lg-2"><strong>Year</strong> @ViewBag.Class.Year</div>
 
                             <hr />
                             <div class="col-12 col-sm-12">
@@ -48,40 +48,31 @@
                                     <tbody>
                                         @foreach (MyEnums.DayOfWeek day in Enum.GetValues(typeof(MyEnums.DayOfWeek)))
                                         {
+                                            int column = 1;
                                             <tr>
                                                 <td>@day</td>
 
                                                 @foreach (MyEnums.ShiftHours hour in Enum.GetValues(typeof(MyEnums.ShiftHours)))
                                                 {
-                                                    int column = 1;
-                                            <td>
 
-                                                <select asp-for="@Model[number].ClassId" asp-items="@ViewBag.ClassId">
-                                                    <option disabled selected>-- --</option>
-                                                </select>
+                                                    <td>
 
-                                                <input asp-for="@Model[number].DayOfWeek" type="hidden" value="@day" />
-                                                <input asp-for="@Model[number].HourOfDay" type="hidden" value="@column" />
-                                                <input asp-for="@Model[number].SubjectId" type="hidden" value="@ViewBag.Subjec.Id" />
-                                                <input asp-for="@Model[number].Year" type="hidden" value="@ViewBag.Subjec.Year" />
-                                            </td>
+                                                        <select style="width:100px" asp-for="@Model[number].SubjectId" asp-items="@ViewBag.AssigneeList">
+                                                            <option disabled selected>-- --</option>
+                                                        </select>
+
+                                                        <input asp-for="@Model[number].DayOfWeek" type="hidden" value="@day" />
+                                                        <input asp-for="@Model[number].HourOfDay" type="hidden" value="@column" />
+                                                        <input asp-for="@Model[number].ClassId" type="hidden" value="@ViewBag.Class.Id" />
+                                                        <input asp-for="@Model[number].Year" type="hidden" value="@ViewBag.Class.Year" />
+                                                    </td>
                                                     number++;
                                                     column++;
                                                 }
 
 
                                             </tr>
-                                            @*<tr>
-                            <td>@day    <input asp-for="@Model[1].DayOfWeek" type="text" value="@day" /></td>
-                            @for (int i = 1; i <= 6; i++)
-                            {
-                                <td>
-                                    <input asp-for="@Model[i].DayOfWeek" type="text" value="@day" />
-                                    <input asp-for="@Model[i].HourOfDay" type="text" value="@i" />
-                                    <select asp-for="@Model[i].ClassId" asp-items="@ViewBag.ClassId" class="form-control select" placeholder="-- Please Select --"><option selected>-- --</option></select>
-                                </td>
-                            }
-                        </tr>*@
+                                      
                                         }
                                     </tbody>
                                 </table>
@@ -103,7 +94,6 @@
     </div>
 
 </div>
-
 
 
 @section Scripts {

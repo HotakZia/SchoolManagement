@@ -20,49 +20,64 @@ namespace SchoolManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> tackAction(Guid? ScheduleId,string Comment)
         {
-            Guid userId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "userId").Value.ToString());
-            string userRole = User.Claims.Where(x => x.Type == "Role").Select(x => x.Value).FirstOrDefault();
-            //var approver = db.Teachers.Where(x => x.TeacherId == Guid.Empty).FirstOrDefault();
-            var list = db.Exams.Where(x => x.SubJectId == ScheduleId).ToList();
-            foreach (var item in list)
+            try
             {
-             
-           
-                if (item.TeacherApprover==null&&(User.Claims.Where(x=>x.Value=="Teacher").Select(x=>x.Value).FirstOrDefault()== "Teacher"||userRole=="Admin"))
+                Guid userId = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "userId").Value.ToString());
+                string userRole = User.Claims.Where(x => x.Type == "Role").Select(x => x.Value).FirstOrDefault();
+                //var approver = db.Teachers.Where(x => x.TeacherId == Guid.Empty).FirstOrDefault();
+                var list = db.Exams.Where(x => x.SubJectId == ScheduleId).ToList();
+                foreach (var item in list)
                 {
-                    item.TeacherApprover = userId;
-                    item.TeacherApprovalTime = DateTime.Now;
-                    item.TeacherApproverName = User.Claims.FirstOrDefault(x => x.Type == "UserName").Value;
-                    item.TeacherApprovalComment =Comment;
-                    item.Status = false;
-                }
-                else if (item.DeanApprover == null && (User.Claims.Where(x => x.Value == "Dean").Select(x => x.Value).FirstOrDefault() == "Dean" || userRole == "Admin"))
-                {
-                    item.DeanApprover = userId;
-                    item.DeanApprovalTime = DateTime.Now;
-                    item.DeanApproverName = User.Claims.FirstOrDefault(x => x.Type == "UserName").Value;
-                    item.DeanApprovalComment = Comment;
-                    item.Status = true;
-                }
-                else if (item.FinalApprover == null && (User.Claims.Where(x => x.Value == "Final").Select(x => x.Value).FirstOrDefault() == "Final" || userRole == "Admin"))
-                {
-                    item.FinalApprover = userId;
-                    item.FinalApprovalTime = DateTime.Now;
-                    item.FinalApproverName = User.Claims.FirstOrDefault(x => x.Type == "UserName").Value;
-                    item.FinalApprovalComment = Comment;
-                    item.Status = true;
-                }
-                db.Exams.Update(item);
-            }
-            db.SaveChanges();
-           
-            showMessageString = new
-            {
-                status = "true",
-                message = "Exam sheet has been approved."
 
-            };
-            return Json(showMessageString);
+
+                    if (item.TeacherApprover == null && (User.Claims.Where(x => x.Value == "Teacher").Select(x => x.Value).FirstOrDefault() == "Teacher" || userRole == "Admin"))
+                    {
+                        item.TeacherApprover = userId;
+                        item.TeacherApprovalTime = DateTime.Now;
+                        item.TeacherApproverName = User.Claims.FirstOrDefault(x => x.Type == "UserName").Value;
+                        item.TeacherApprovalComment = Comment;
+                        item.Status = false;
+                    }
+                    else if (item.DeanApprover == null && (User.Claims.Where(x => x.Value == "Dean").Select(x => x.Value).FirstOrDefault() == "Dean" || userRole == "Admin"))
+                    {
+                        item.DeanApprover = userId;
+                        item.DeanApprovalTime = DateTime.Now;
+                        item.DeanApproverName = User.Claims.FirstOrDefault(x => x.Type == "UserName").Value;
+                        item.DeanApprovalComment = Comment;
+                        item.Status = true;
+                    }
+                    else if (item.FinalApprover == null && (User.Claims.Where(x => x.Value == "Final").Select(x => x.Value).FirstOrDefault() == "Final" || userRole == "Admin"))
+                    {
+                        item.FinalApprover = userId;
+                        item.FinalApprovalTime = DateTime.Now;
+                        item.FinalApproverName = User.Claims.FirstOrDefault(x => x.Type == "UserName").Value;
+                        item.FinalApprovalComment = Comment;
+                        item.Status = true;
+                    }
+                    db.Exams.Update(item);
+                }
+                db.SaveChanges();
+
+                showMessageString = new
+                {
+                    status = "true",
+                    message = "Exam sheet has been approved.",
+                    Id=ScheduleId
+
+                };
+                return Json(showMessageString);
+            }
+            catch (Exception ex)
+            {
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+
+                };
+                return Json(showMessageString);
+            }
+          
         }
 
         // GET: Exams
@@ -218,7 +233,7 @@ namespace SchoolManagement.Controllers
             // Perform the join and projection
             list = await (from Exam in query
                            join Schulde in db.Schedules on Exam.SubJectId equals Schulde.Id
-                           join class_  in db.Classes on Schulde.ClassId equals class_.Id
+                           //join class_  in db.Classes on Schulde.ClassId equals class_.Id
                            join teacher in db.Teachers on Exam.TeacherId equals teacher.TeacherId
                            join student in db.Students on Exam.StudentId equals student.StudentId
                            //where Exam.StudentId == StudentId && Exam.SubJectId == SubjectId && Exam.Year == DateTime.Now.Year && Exam.ClassId == ClassId
@@ -233,7 +248,7 @@ namespace SchoolManagement.Controllers
                                ModifiedBy = Exam.ModifiedBy,
                                ModifiedDate = Exam.ModifiedDate,
                                SubjectName = Schulde.Subject,
-                               ClassName = class_.Name,
+                              
                                //SubJectId = Schulde.si.SubjectId,
                                CreatedDate = Exam.CreatedDate,
                                Id = Exam.Id,
@@ -267,6 +282,10 @@ namespace SchoolManagement.Controllers
                                TeacherApprovalTime = Exam.TeacherApprovalTime,
                                FinalApprovalTime = Exam.FinalApprovalTime,
                                DearnApprovalTime = Exam.DeanApprovalTime,
+
+                               DeanApproverName=Exam.DeanApproverName,
+                               FinalApproverName=Exam.FinalApproverName,
+                               TeacherApproverName=Exam.TeacherApproverName
                            }).ToListAsync();
 
             // Return the result
@@ -306,7 +325,7 @@ namespace SchoolManagement.Controllers
                               //SubJectId = Schulde.SubjectId,
                               CreatedDate = Exam.CreatedDate,
                               Id = Exam.Id,
-                              StudentName = student.FatherName + " " + student.LastName,
+                              StudentName = student.FatherName + " " + student.LastName+"/"+student.RoleNumber,
                               Number = Exam.Number,
                               //TeacherName = teacher.FirstName + " " + teacher.LastName,
                               Year = Exam.Year,
@@ -357,51 +376,64 @@ namespace SchoolManagement.Controllers
         }
 
         // GET: Exams/Create
-        public IActionResult Create(Guid? ScheduleId)
+        public IActionResult Create(Guid? ScheduleId,Guid? ClassId)
         {
-            var examList = new List<Exam>();
-            if (ScheduleId != null)
+            try
             {
-                var subject_= db.Schedules.Where(x => x.Id == ScheduleId).FirstOrDefault();
-               var Students_ = db.Students.Where(x => x.ClassId == subject_.ClassId).ToList();
-                var CurrentExam = db.Exams.Where(x => x.SubJectId == ScheduleId&&x.ClassId==subject_.ClassId).ToList();
-                ViewBag.Subject = subject_.Subject;
-              
-                foreach (var stu in Students_)
+                var examList = new List<Exam>();
+                if (ScheduleId != null)
                 {
-                    examList.Add(new Exam{Result=stu.FirstName+" "+stu.LastName+" "+stu.RoleNumber,
-                        StudentId=stu.StudentId,
-                        SubJectId=subject_.Id,
-                        TeacherId=subject_.TeacherId,
-                        ClassId=subject_.ClassId,
-                        Year=subject_.Year,
-                    });
-                    
+                    //var Subject = db.TimeTables.Where(x => x.Id == ScheduleId).FirstOrDefault();
+                    var Assignee = db.Schedules.Where(x => x.Id == ScheduleId).FirstOrDefault();
+                    var Students_ = db.Students.Where(x => x.ClassId == ClassId).ToList();
+                    var CurrentExam = db.Exams.Where(x => x.SubJectId == Assignee.Id && x.ClassId == ClassId).ToList();
+                    ViewBag.Subject = Assignee.Subject;
 
-
-
-                }
-                foreach (var item in CurrentExam)
-                {
-                    foreach (var item2 in examList)
+                    foreach (var stu in Students_)
                     {
-                        if (item.StudentId==item2.StudentId)
+                        examList.Add(new Exam
                         {
-                          
-                            item2.FirstExam=item.FirstExam;
-                            item2.SecondExam = item.SecondExam;
-                            item2.ClassActivity = item.ClassActivity;
-                            item2.HomeActivity = item.HomeActivity;
-                            item2.Attendance = item.Attendance;
-                            item2.Comment = item.Comment;
+                            Result = stu.FirstName + " " + stu.LastName + " " + stu.RoleNumber,
+                            StudentId = stu.StudentId,
+                            SubJectId = Assignee.Id,
+                            TeacherId = Assignee.TeacherId,
+                            ClassId =ClassId,
+                            Year = Assignee.Year,
+                        });
+
+
+
+
+                    }
+                    foreach (var item in CurrentExam)
+                    {
+                        foreach (var item2 in examList)
+                        {
+                            if (item.StudentId == item2.StudentId)
+                            {
+
+                                item2.FirstExam = item.FirstExam;
+                                item2.SecondExam = item.SecondExam;
+                                item2.ClassActivity = item.ClassActivity;
+                                item2.HomeActivity = item.HomeActivity;
+                                item2.Attendance = item.Attendance;
+                                item2.Comment = item.Comment;
+                                item2.Status = item.Status;
+                            }
                         }
                     }
+
+
+                    return View(examList);
                 }
-                
-               
                 return View(examList);
             }
-            return View(examList);
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+           
           
         }
 
@@ -414,9 +446,20 @@ namespace SchoolManagement.Controllers
         {
             try
             {
+                Guid? Id = Guid.Empty;
+
                 if (ModelState.IsValid)
 
                 {
+                    if (exam.FirstOrDefault().Status==true)
+                    {
+                        showMessageString = new
+                        {
+                            status = "false",
+                            message = "the submited list can't be updated!",
+                         
+                        };
+                    }
                     var oldList = db.Exams.Where(x => x.ClassId == exam.FirstOrDefault().ClassId&& x.SubJectId == exam.FirstOrDefault().SubJectId).ToList();
                     if (oldList.Count>=1)
                     {
@@ -431,11 +474,11 @@ namespace SchoolManagement.Controllers
                     foreach (var item in exam)
                     {
 
-
+                        Id = item.SubJectId;
                         item.Id = Guid.NewGuid();
                         item.CreatedDate = DateTime.Now;
                         //item.Status = true;
-
+                
                         if (item.FirstExam+item.SecondExam+item.ClassActivity+item.HomeActivity+item.Attendance>=60)
                         {
                             item.Result = "Pass";
@@ -451,8 +494,8 @@ namespace SchoolManagement.Controllers
                     showMessageString = new
                     {
                         status = "true",
-                        message = "Exam sheet has been submited."
-
+                        message = "Exam sheet has been submited.",
+                        Id=Id,
                     };
                         return Json(showMessageString);
                     //return RedirectToAction(nameof(Index));

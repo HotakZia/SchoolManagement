@@ -46,28 +46,28 @@
                                 <div class="col-12 col-sm-2">
                                     <div class="form-group local-forms">
                                         <label asp-for="@Model[number].FirstExam" class="control-label"></label>
-                                        <input maxlength="2" max="99" asp-for="@Model[number].FirstExam" class="form-control" />
+                                        <input data-accept="\d"  maxlength="2" max="99" asp-for="@Model[number].FirstExam" class="form-control" />
                                         <span asp-validation-for="@Model[number].FirstExam" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-2">
                                     <div class="form-group local-forms">
                                         <label asp-for="@Model[number].SecondExam" class="control-label"></label>
-                                        <input maxlength="2" max="99" asp-for="@Model[number].SecondExam" class="form-control" />
+                                        <input data-accept="\d"  maxlength="2" max="99" asp-for="@Model[number].SecondExam" class="form-control" />
                                         <span asp-validation-for="@Model[number].SecondExam" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-2">
                                     <div class="form-group local-forms">
                                         <label asp-for="@Model[number].ClassActivity" class="control-label"></label>
-                                        <input maxlength="2" max="99" asp-for="@Model[number].ClassActivity" class="form-control" />
+                                        <input data-accept="\d"  maxlength="2" max="99" asp-for="@Model[number].ClassActivity" class="form-control" />
                                         <span asp-validation-for="@Model[number].ClassActivity" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-2">
                                     <div class="form-group local-forms">
                                         <label asp-for="@Model[number].HomeActivity" class="control-label"></label>
-                                        <input maxlength="2" max="99" asp-for="@Model[number].HomeActivity" class="form-control" />
+                                        <input data-accept="\d"  maxlength="2" max="99" asp-for="@Model[number].HomeActivity" class="form-control" />
                                         <span asp-validation-for="@Model[number].HomeActivity" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -88,13 +88,16 @@
 
 
 
-
-
-                            <div class="col-12">
-                                <div class="student-submit">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                            @if (Model.Count()>=1&& Model.FirstOrDefault().Status != true)
+                            {
+                                <div class="col-12">
+                                    <div class="student-submit">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+
+
                         </div>
                     </form>
                 </div>
@@ -124,6 +127,11 @@
              $("#Comment").val("");
               $("#Amount").val("");
            @*document.location.href = "@Url.Action("Index","tbl_Transiction")",true;*@
+               // Construct the URL with the ID
+             var url = '/Exams/Details/' + data.Id; // Replace 'controller' and 'action' with your actual controller and action names
+
+// Redirect to the new URL
+window.location.href = url;
          }
          else if (data.status=="duplicate") {
               swal("Dupplicate Record!",  data.message, "warning");

@@ -1,103 +1,285 @@
-﻿@model SchoolManagement.Models.db.Class
+﻿@model SchoolManagement.Models.Entities.Class_
 
-@{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+
+
+<div class="content container-fluid">
+
+
+    <div class="row">
+
+        <div class="col-sm-12">
+
+            <div class="card comman-shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-3"><strong>Name:</strong> @Model.Name</div>
+                        <div class="col-lg-3"><strong>Teacher:</strong> @Model.TeacherName</div>
+                        <div class="col-lg-2"><strong>Shift:</strong> @Model.Shift</div>
+                        <div class="col-lg-2"><strong>Grad</strong> @Model.Grad</div>
+                        <div class="col-lg-2"><strong>Year</strong> @Model.Year</div>
+
+                        <hr />
+                        <div class="table-responsive">
+                            <table id="studentTable" class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                                <thead class="student-thread">
+                                    <tr>
+
+                                        <th>ID</th>
+                                        <th>Name</th>
+
+                                        <th>Guardian</th>
+                                        <th>Contact</th>
+
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (ViewBag.Student != null)
+                                    {
+                                        @foreach (var item in ViewBag.Student)
+                                        {
+                                            string Imge = "";
+
+                                            <tr>
+
+
+
+                                                <td>@item.RoleNumber</td>
+
+                                                @if (item.Attachment != null)
+                                                {
+                                                    Imge = Convert.ToBase64String(item.Attachment);
+                                                    <td>
+
+                                                        <img src="@string.Format("data:image/jpeg;base64,{0}", Imge)" class="img-fluid avatar-lg rounded" />
+                                                        @if (item.Status == true)
+                                                        {
+                                                            <i class="fa fa-check-circle"></i>
+                                                            <a asp-action="Details" asp-controller="Students" asp-route-id="@item.StudentId">   @item.FirstName @item.LastName</a>
+
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fa fa-delete-left"></i>
+                                                            <a asp-action="Details" asp-controller="Students" asp-route-id="@item.StudentId">   @item.FirstName @item.LastName</a>
+
+
+                                                        }
+                                                    </td>
+                                                }
+
+
+                                                <td>@item.GfatherName / @item.GuardianPhone</td>
+                                                <td>@item.Contact</td>
+
+
+                                                <td class="text-end">
+                                                    <div class="actions">
+                                             
+                                                        <a asp-controller="Students" asp-action="Edit" asp-route-id="@item.StudentId" class="btn btn-sm bg-danger-light">
+                                                            <i class="feather-edit"></i>
+                                                        </a>
+                                                        <a onclick='LoadPerants("@item.StudentId")' class="btn btn-sm bg-danger-light">
+                                                            <i class="feather-users"></i>
+                                                        </a>
+                                                        <a onclick='LoadFiles("@item.StudentId")' class="btn btn-sm bg-danger-light">
+                                                            <i class="fa fa-file"></i>
+                                                        </a>
+                                                        <a onclick='getResult("@item.StudentId","2024")' class="btn btn-sm bg-danger-light">
+                                                            <i class="fa fa-certificate"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        <tr><td colspan="10" align="center"><p>0 students assign to this class</p></td></tr>
+
+
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+
+@section Scripts {
+
+
+
+
+    <script>
+
+        function OnBegin() {
+            $('.page-loader').show();
+
+        }
+        function OnSuccess(data) {
+            $('#AModelBody').html(data);
+        }
+        function OnComplete() {
+            $('.page-loader').hide();
+
+        }
+    </script>
 }
 
-<h1>Details</h1>
 
-<div>
-    <h4>Class</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Grad)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Grad)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TeacherId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TeacherId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Comment)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Comment)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Attachment)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Attachment)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Shift)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Shift)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Year)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Year)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Number)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Number)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Room)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Room)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+<script>
+
+    function getResult(Id, Year) {
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/getResult", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id, "Year": Year },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
+    function LoadFiles(Id) {
+
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/LoadFile", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
+    function DeleteFile(Id) {
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/DeleteFiles", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        $('.page-loader').hide();
+    }
+    function LoadPerants(Id) {
+
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/LpadPerants", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
+    function DeletePerants(Id) {
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Students/DeletePerants", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+        });
+        $('.page-loader').hide();
+    }
+</script>
+
+

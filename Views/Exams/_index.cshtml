@@ -31,9 +31,9 @@
 
                 <td>@item.StudentName</td>
                 <td>@item.ClassName</td>
-
-                <td>@item.TeacherName</td>
                 <td>@item.SubjectName</td>
+                <td>@item.TeacherName</td>
+
                 <td>@item.Year </td>
                 <td>
                     <select>
@@ -46,10 +46,10 @@
                 </td>
                 <td>
                     <select>
-                        <option>1 Approval: @item.TeacherApproverId- @item.TeacherApprovalTime</option>
-                        <option>2 Approval: @item.DeanApproverId - @item.DearnApprovalTime</option>
-                        <option>3 Approval: @item.FinalApproverId - @item.FinalApprovalTime</option>
-                     
+                        <option>Teacher: @item.TeacherApproverName- @item.TeacherApprovalTime</option>
+                        <option>Dearn: @item.DeanApproverName - @item.DearnApprovalTime</option>
+                        <option>Final: @item.FinalApproverName - @item.FinalApprovalTime</option>
+
                     </select>
                 </td>
                 <td>@item.Result</td>

@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<SchoolManagement.Models.Entities.Exam>
 
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 @if (Model.Count() >= 1)
 {
     <div class="row">
@@ -170,6 +173,7 @@
         if (data.status == "true") {
 
             swal("Saved!", data.message, "success");
+                      
         }
         else {
             swal("False!", data.message, "error");

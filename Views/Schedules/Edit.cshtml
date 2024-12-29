@@ -40,16 +40,6 @@
 
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
-                                    <label asp-for="ClassId" class="control-label"></label>
-
-                                    @*@Html.DropDownList("ClassId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })*@
-                                    <input type="text" id="txtClass" class="form-control" />
-                                    <input asp-for="ClassId" type="hidden" id="ClassId" class="form-control" />
-                                    <span asp-validation-for="ClassId" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms">
                                     <label asp-for="Subject" class="control-label"></label>
                                     <select asp-for="Subject" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.ClassSubjects>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
 
@@ -60,10 +50,18 @@
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
+                                    <label asp-for="Grad" class="control-label"></label>
+                                    <select asp-for="Grad" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Grade>().Select(item => new SelectListItem { Text = item.Text, Value = item.Value.ToString() })" id="" class="form-control select2" required></select>
+                                    <span asp-validation-for="Grad" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
                                     <label asp-for="Year" class="control-label"></label>
                                     <select class="form-control select" id="Year" name="Year">
-                                        @for (int i = 2000; i < DateTime.Now.Year + 2; i++)
+                                        @for (int i = DateTime.Now.AddYears(-1).Year; i < DateTime.Now.Year + 2; i++)
                                         {
+                                            <option selected value="@Model.Year">@Model.Year</option>
                                             <option value="@i">@i</option>
                                         }
 
@@ -79,37 +77,6 @@
                                     <span asp-validation-for="Shift" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms">
-                                    <label asp-for="HourOfDay" class="control-label"></label>
-                                    <select asp-for="HourOfDay" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.ShiftHours>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
-
-                                    <span asp-validation-for="HourOfDay" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms">
-                                    <label asp-for="DayOfWeek" class="control-label"></label>
-                                    <select asp-for="DayOfWeek" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.DayOfWeek>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
-
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms">
-                                    <label asp-for="StartTime" class="control-label"></label>
-                                    <input asp-for="StartTime" type="time" class="form-control" />
-                                    <span asp-validation-for="StartTime" class="text-danger"></span>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms">
-                                    <label asp-for="EndTime" class="control-label"></label>
-                                    <input asp-for="EndTime" type="time" class="form-control" />
-                                    <span asp-validation-for="EndTime" class="text-danger"></span>
-                                </div>
-                            </div>
 
 
                             <div class="col-12 col-sm-4">
@@ -117,6 +84,13 @@
                                     <label asp-for="Comment" class="control-label"></label>
                                     <input asp-for="Comment" class="form-control" />
                                     <span asp-validation-for="Comment" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="Status" class="control-label"></label>
+                                    <input asp-for="Status" class="form-control" />
+                                    <span asp-validation-for="Status" class="text-danger"></span>
                                 </div>
                             </div>
 

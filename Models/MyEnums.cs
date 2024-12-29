@@ -218,16 +218,13 @@ namespace SchoolManagement.Models
         }
         public enum ShiftHours
         {
-            Hour,
-            Two,
-            Three,
-            Four,
-            Five,
-            Six,
-            Seven,
-            Eight,
-            Nine,
-            Ten
+            FirstHour=1,
+SecondHour=2,
+ThirdHour=3,
+FourthHour=4,
+FifthHour=5,
+SixthHour=6,
+
         }
         public enum DayOfWeek
         {

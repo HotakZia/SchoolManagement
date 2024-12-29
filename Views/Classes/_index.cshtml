@@ -17,7 +17,7 @@
               
 
 
-                <th class="text-end">Action</th>
+                <th class="text-end" style="width:30%">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -26,32 +26,40 @@
                 int number = 0;
                 foreach (var item in Model)
                 {
-                    string Imge = "";
+                  
 
             <tr>
                 <td>
                    @number
                 </td>
-                <td>@item.Name</td>
+                <td><a asp-action="Details" asp-route-id="@item.Id">@item.Name</a> </td>
                 <td>@item.TeacherName</td>
                 <td>@item.Shift </td>
                 <td>@item.Room </td>
-             
                 <td>@item.Year </td>
               
 
-                <td class="text-end">
+                <td class="text-end" style="width:30%">
                     <div class="actions">
-                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm bg-success-light me-2">
-                            <i class="feather-eye"></i>
-                        </a>
+
                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm bg-danger-light">
                             <i class="feather-edit"></i>
                         </a>
 
                         <a asp-action="Create" asp-controller="AttendanceLogs" asp-route-ClassId="@item.Id" class="btn btn-sm bg-info-light">
                             <i class="feather-alert-circle"></i>
+                            Attendance
                         </a>
+                        <a asp-action="TimeTable" asp-controller="Classes" asp-route-Id="@item.Id" class="btn btn-sm bg-info-light">
+                          Time Table  <i class="feather-tablet"></i>
+                        </a>
+                        <a asp-action="TimeTableEdit" asp-controller="Classes" asp-route-Id="@item.Id" class="btn btn-sm bg-info-light">
+                           TT Edit <i class="feather-tablet"></i>
+                        </a>
+                        <a onclick='LoadSubjects("@item.Id")' class="btn btn-sm bg-info-light">
+                            Subjects<i class="feather-external-link"></i>
+                        </a>
+                        @item.Grad
                     </div>
                 </td>
             </tr>

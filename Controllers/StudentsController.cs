@@ -29,12 +29,12 @@ namespace SchoolManagement.Controllers
             var list = new List<Models.Entities.Student>();
             ViewBag.newCId = NewClassId;
             ViewBag.oldCId = OldClassId;
-            if (currentClass!=null&&newClass!=null)
+            if (currentClass==null||newClass==null)
             {
                 ModelState.AddModelError("", "class not found!");
                 return PartialView("_pass",list);
             }
-            if (newClass.Grad! > currentClass.Grad)
+            if (newClass.Grad< currentClass.Grad)
             {
                 ModelState.AddModelError("","choose correct class!"); 
                 return PartialView("_pass", list);
@@ -90,9 +90,10 @@ namespace SchoolManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> getResult(int Year, Guid Id)
         {
+            var student = db.Students.Where(x => x.StudentId == Id).FirstOrDefault();
             var list = await (from Exam in db.Exams
                               join Schulde in db.Schedules on Exam.SubJectId equals Schulde.Id
-                              where Exam.StudentId == Id && Exam.Year == Year && Exam.Status == true
+                              where Exam.StudentId == Id &&Exam.ClassId==student.ClassId&& Exam.Year == Year && Exam.Status == true
                               select new Models.Entities.Exam
                               {
 

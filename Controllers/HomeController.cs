@@ -24,40 +24,26 @@ namespace SchoolManagement.Controllers
         public async Task<IActionResult> getActiveScedule()
         {
             string day = DateTime.Now.DayOfWeek.ToString();
-            var list = (from Schedule in db.Schedules
-                              join class_ in db.Classes on Schedule.ClassId equals class_.Id
-                              //join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
-                              join teacher in db.Teachers on Schedule.TeacherId equals teacher.TeacherId
-                              where Schedule.Status == true&&Schedule.DayOfWeek==day
+            int year = DateTime.Now.Year;
+            var list = (from subject in db.TimeTables
+                              join class_ in db.Classes on subject.ClassId equals class_.Id
+                              join assignee in db.Schedules on subject.SubjectId equals assignee.Id
+                              join teacher in db.Teachers on assignee.TeacherId equals teacher.TeacherId
+                              where assignee.Status == true&&subject.Status==true &&subject.Year==year&&subject.DayOfWeek==day
 
                               select new Models.Entities.Schedual
                               {
-                                  Shift = Schedule.Shift,
-                                  ClassId = Schedule.ClassId,
-
-                                  Attachment = Schedule.Attachment,
-
-                                  Status = Schedule.Status,
-
-                                  Comment = Schedule.Comment,
-                                  CreatedBy = Schedule.CreatedBy,
-
-                                  ModifiedBy = Schedule.ModifiedBy,
-                                  ModifiedDate = Schedule.ModifiedDate,
-                                  SubjecName = Schedule.Subject,
-                                  ClassName = class_.Name,
-                                  HourOfDay = Schedule.HourOfDay,
-                                  DayOfWeek = Schedule.DayOfWeek,
-                                  //SubjectId = Schedule.SubjectId,
-                                  CreatedDate = Schedule.CreatedDate,
-                                  Id = Schedule.Id,
-                                  Name = Schedule.Name,
-                                  Number = Schedule.Number,
-                                  StartTime = Schedule.StartTime,
-                                  EndTime = Schedule.EndTime,
+                                  Shift = assignee.Shift,                                
+                                  Status = assignee.Status,
+                                  SubjecName = assignee.Subject,
+                                  Id = teacher.TeacherId,
                                   TeacherName = teacher.FirstName + " " + teacher.LastName,
-                                  Year = Schedule.Year,
-
+                                  Year = subject.Year,
+                                  HourOfDay=subject.HourOfDay,
+                                  DayOfWeek=subject.DayOfWeek,
+                                  ClassName=class_.Name,
+                                  ClassId=class_.Id,
+                                 
 
                               })/*.OrderByDescending(x => x.CreatedDate)*/.ToList();
             return PartialView("_Schedule",list);
@@ -92,7 +78,7 @@ namespace SchoolManagement.Controllers
                         TeacherName = teacher.FirstName + " " + teacher.LastName + " " + teacher.RoleNumber,
                         SchedualList = (from Schedule in db.Schedules
                                         //join Subject in db.Subjects on Schedule.SubjectId equals Subject.Id
-                                        where Schedule.ClassId == class_.Id
+                                        //where Schedule.ClassId == class_.Id
                                         select new Models.Entities.Subjetc
                                         {
                                             SubjectName = Schedule.Subject,

@@ -5,21 +5,7 @@
 
 <div class="content container-fluid">
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col-sm-12">
-                <div class="page-sub-header">
-                    <h3 class="page-title">Add New Class</h3>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="students.html">Student</a></li>
-                        <li class="breadcrumb-item active">Add Class</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Page Header -->
+
 
     <div class="row">
         <div class="col-sm-12">
@@ -54,7 +40,7 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Grad <span class="login-danger">*</span></label>
-                                    <select asp-for="Grad" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Grade>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="" class="form-control select2" required></select>
+                                    <select asp-for="Grad" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.Grade>().Select(item => new SelectListItem { Text = item.Text, Value = item.Value.ToString() })" id="" class="form-control select2" required></select>
 
                                     <span asp-validation-for="Grad" class="text-danger"></span>
                                 </div>
@@ -82,10 +68,10 @@
                                 <div class="form-group local-forms">
                                     <label asp-for="Year" class="control-label"></label>
                                     <select class="form-control select" id="Year" name="Year">
-                                        @for (int i = 2000; i < DateTime.Now.Year+2; i++)
-                                        {
-                                            <option value="@i">@i</option>
-                                        }
+                                        <option value="@DateTime.Now.AddYears(-1).Year">@DateTime.Now.AddYears(-1).Year</option>
+                                        <option selected value="@DateTime.Now.Year">@DateTime.Now.Year</option>
+                                        <option value="@DateTime.Now.AddYears(1).Year">@DateTime.Now.AddYears(1).Year</option>
+
 
                                     </select>
                                     <span asp-validation-for="Year" class="text-danger"></span>
@@ -114,7 +100,7 @@
                                     <span asp-validation-for="Comment" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-4">
+                            @*<div class="col-12 col-sm-4">
                                 <div class="form-group students-up-files">
                                     <label>Upload Attachment</label>
                                     <div class="uplod">
@@ -125,7 +111,7 @@
 
                                     </div>
                                 </div>
-                            </div>
+                            </div>*@
 
 
                             <div class="col-12">
