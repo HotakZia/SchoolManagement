@@ -39,5 +39,6 @@ namespace SchoolManagement.Models.db
         public string TeacherApproverName { get; set; }
         public string DeanApproverName { get; set; }
         public string FinalApproverName { get; set; }
+        public int? Grad { get; set; }
     }
 }

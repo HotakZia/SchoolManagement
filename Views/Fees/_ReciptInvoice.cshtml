@@ -1,12 +1,12 @@
-﻿@model SchoolManagement.Models.Entities.Fees
+﻿@model IEnumerable<SchoolManagement.Models.Entities.Fees>
 @{
-    ViewBag.Title = "_PrintInvoice";
-    Layout = null;
+
     string Image = "";
     if (ViewBag.systemInfo.Logo != null)
     {
         Image = Convert.ToBase64String(ViewBag.systemInfo.Logo);
     }
+    decimal? total = 0;
 }
 
 
@@ -17,156 +17,197 @@
 
 
 
-<section class="content">
-
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-
-
-                <div class="invoice p-3 mb-3">
-
-                    <div class="row">
-                        <div class="col-12">
-                            <h4>
-                                <i>
-                                    <img class="img-circle" src="@string.Format("data:image/jpeg;base64,{0}",Image)" id="ImagePreview" width="100" height="100" />
-                                </i> @ViewBag.systemInfo.Name, Inc.
-                                @*<small class="float-right">Date: 2/10/2014</small>*@
-                            </h4>
-                        </div>
-
-                    </div>
-
-                    <div class="row invoice-info">
-                        <div class="col-sm-4 invoice-col">
-                            From
-                            <address>
-                                <div>@ViewBag.SystemInfo.Name</div>
-                                <div>@ViewBag.SystemInfo.Email</div>
-                                <div>@ViewBag.SystemInfo.PhoneNumber</div>
-                                <div>@ViewBag.SystemInfo.Website</div>
-
-                            </address>
-                        </div>
-
-                        <div class="col-sm-4 invoice-col">
-                            To
-                            <address>
-                                <div>
-                                    <strong>@Model.StudentName son of @Model.FatherName role Id @Model.RollId</strong>
-                                </div>
-                                <div>Model.Customer_Street, Model.Customer_Zip_Cod</div>
-                                <div>Model.Customer_State, Model.Customer_City</div>
-                                <div>Model.Customer_Email</div>
-                                <div>Model.Customer_Mobile</div>
-                            </address>
-                        </div>
-
-                        <div class="col-sm-4 invoice-col">
-
-
-
-                            <b>Order ID:</b> @Model.Number<br>
-                            <b>Payment Due:</b>@Model.CreatedDate.Value.ToShortTimeString()<br>
-                            <b>Creator:</b> Model.User_Name
-                        </div>
-
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-12 table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Payment Name</th>
-                                      
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    @{
-                                        int _RowNumber = 0;
-
-
-
-                                        foreach (var item in ViewBag.list)
-                                        {
-                                            <tr>
-                                                <td>@_RowNumber</td>
-                                                <td>@item.Name</td>
-                                           
-                                                <td>@string.Format("{0:0.0}", @item.Amount)</td>
-                                              
-
-
-                                            </tr>
-                                            _RowNumber = _RowNumber + 1;
-                                        }
-                                    }
-
-
-                                </tbody>
-                            </table>
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-6">
-                            <p class="lead">About @ViewBag.SystemInfo.Name:</p>
-
-                            <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-                                @ViewBag.SystemInfo.Location
-                            </p>
-                        </div>
-
-                        <div class="col-6">
-                            <p class="lead">@Model.CreatedDate.Value.ToLongDateString()</p>
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <th style="width:50%">Subtotal:</th>
-                                            <td>@Model.Amount</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Tax (0%)</th>
-                                            <td>0</td>
-                                        </tr>
-                                        @*<tr>
-                                                <th>Shipping:</th>
-                                                <td>$5.80</td>
-                                            </tr>*@
-                                        <tr>
-                                            <th>Total:</th>
-                                            <td>@Model.Amount AFN</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-</section>
-
-
-
 <script>window.addEventListener("load", window.print());</script>
+
+
+
+
+
+
+
+
+
+<div class="invoice p-3 mb-3" id='DivIdToPrint'>
+
+    @*<img class="img-circle" src="@string.Format("data:image/jpeg;base64,{0}",Image)" id="ImagePreview" height="30" width="30" align-items:center />*@
+
+        <h3 style="text-align:center">@ViewBag.SystemInfo.Name</h3>
+    
+
+    <h5 style="text-align:center">@ViewBag.SystemInfo.TagLine</h5>
+
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td>Receipt:  <strong>@Model.FirstOrDefault().Number</strong></td>
+
+                <td ><strong>Date: </strong>@Model.FirstOrDefault().Date.Value.ToString("MMMM-yy")</td>
+
+            </tr>
+        </tbody>
+    </table>
+    <hr />
+    <table border="1" class="table table-bordered table-hover" width="100%" align="center" id="Rtable">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Payment Name</th>
+
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+                int _RowNumber = 0;
+
+
+
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@_RowNumber</td>
+                        <td>@item.FeeType</td>
+
+                        <td>@string.Format("{0:0.0}", @item.Amount)</td>
+
+                    </tr>
+                    _RowNumber = _RowNumber + 1;
+                    total += item.Amount;
+                }
+            }
+
+
+        </tbody>
+
+
+    </table>
+    <hr />
+
+ 
+        <table width="100%">
+
+            <tbody>
+                <tr>
+                    <td>Sub Total
+                    <td>
+                    <td >@total<small> AFN</small></td>
+
+                </tr>
+
+
+                <tr>
+                    <td>Discount
+                    <td>
+                    <td >0% <small> AFN</small></td>
+                </tr>
+
+            </tbody>
+        </table>
+        <hr />
+        <table width="100%">
+
+
+            <tbody>
+
+
+
+                <tr>
+                    <td>Total</td>
+                    <td >@total<small>AFN</small></td>
+                </tr>
+                <tr>
+                    <td>Paid Amount</td>
+                    <td >
+                      @total<small>  AFN</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td>PaidBy</td>
+                    <td >@Model.FirstOrDefault().PaidBy</td>
+                </tr>
+
+
+            </tbody>
+        </table>
+    
+
+    <br />
+    <p style="text-align:center"> <strong>Thank you for trusting us!</strong></p>
+
+    <p style="text-align:center"> ******************************</p>
+
+    <p style="text-align:center">
+        @ViewBag.SystemInfo.Location<br />
+        @ViewBag.SystemInfo.Email /    @ViewBag.SystemInfo.PhoneNumber<br />
+        @ViewBag.SystemInfo.Website
+    </p>
+</div>
+
+
+
+
+@*<script>
+    function printDiv() {
+
+        var divToPrint = document.getElementById('DivIdToPrint');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+
+    }
+
+    $(document).ready(function () {
+        printDiv();
+        //$("header, footer").hide();
+    });
+</script>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

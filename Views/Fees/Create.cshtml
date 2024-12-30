@@ -1,111 +1,164 @@
-﻿@model SchoolManagement.Models.db.Fee
+﻿@model IList<SchoolManagement.Models.db.Fee>
 
-
-
+@{ int number = 0;}
+<script src="~/js/jQuery JavaScript Library v3.7.1.js"></script>
 
 <div class="content container-fluid">
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col-sm-12">
-                <div class="page-sub-header">
-                    <h3 class="page-title">Add Fees</h3>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="students.html">Student</a></li>
-                        <li class="breadcrumb-item active">Add Students</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Page Header -->
 
     <div class="row">
         <div class="col-sm-12">
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
 
 
                         @Html.AntiForgeryToken()
 
 
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                         <div class="row ">
 
                             <div class="col-12">
-                                <h5 class="form-title student-info">Register New Fees<span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                                <h5 class="form-title student-info">Pay Fees<span><a href="javascript:;"><span id="TotalAmountText"></span></a></span></h5>
                             </div>
-                            <div class="col-lg-8 row">
-                                <div class="col-sm-6">
+                            <div class="row">
+                                <div class="form-group local-forms col-lg-5">
                                     <div class="form-group local-forms">
-                                        <label asp-for="StudentId" class="control-label">Student Name <span class="login-danger">*</span></label>
-                                        <input asp-for="StudentId" type="hidden" id="StudentId" class="form-control" />
                                         <input type="text" required id="txtName" name="txtName" class="form-control" />
 
-                                        <span asp-validation-for="StudentId" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                      
+                                <div class="form-group local-forms col-lg-3">
                                     <div class="form-group local-forms">
-                                        <label asp-for="Amount" class="control-label">Pay Amount <span class="login-danger"></span></label>
-                                        <input asp-for="Amount" class="form-control" />
-                                        <span asp-validation-for="Amount" class="text-danger"></span>
+                                        <label asp-for="@Model[number].PaidBy" class="control-label">PadiBy <span class="login-danger"> *</span></label>
+                                        <input asp-for="@Model[number].PaidBy" id="PaidBy" maxlength="50" required class="form-control" value="na" />
+                                        <span asp-validation-for="@Model[number].PaidBy" class="text-danger"></span>
                                     </div>
                                 </div>
-
-                                <div class="col-8 col-sm-6">
-                                    <div class="form-group local-forms calendar-icon">
-                                        <label asp-for="Date" class="control-label">Date <span class="login-danger"> *</span></label>
-                                        <input asp-for="Date" type="date" class="form-control" />
-                                        <span asp-validation-for="Date" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-8 col-sm-6">
-                                    <div class="form-group local-forms ">
-
-                                        <label asp-for="Comment" class="control-label">Comment<span class="login-danger"> *</span></label>
-                                        <input asp-for="Comment" class="form-control" />
-                                        <span asp-validation-for="Comment" class="text-danger"></span>
-                                    </div>
-                                </div>
-
-                                <div class="col-12">
-                                    <div class="student-submit">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                <div class="form-group local-forms col-lg-4">
+                                    <div class="form-group local-forms">
+                                        <label asp-for="@Model[number].Comment" class="control-label">Comment <span class="login-danger"> *</span></label>
+                                        <input asp-for="@Model[number].Comment" id="Comment" maxlength="50" value="na" required class="form-control" />
+                                        <span asp-validation-for="@Model[number].Comment" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4">
-                                <h5 style="text-align:center">Sudent assign payments</h5>
-                                <p style="text-align:center">
-                                    1.
-                                    2.
-                                    3.
-                                </p>
+
+                            <hr />
+                            <div id="list_"></div>
+                            @*<table id="tbl123">
+                                <tbody></tbody>
+
+
+                            </table>*@
+                            <div class="col-12">
+                                <div class="student-submit">
+                                    <button type="submit" class="btn btn-primary" id=""> Submit</button>
+                                </div>
                             </div>
+
+
                         </div>
-
                     </form>
+                   
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    //function ccOnBegin() { $('.page-loader').show(); }
+    //function ccOnSuccess(data) {
+
+
+    //    if (data.status == "true") {
+    //        //$('#cModal').modal('toggle');
+    //        $('#ccModal').modal('hide');
+    //        swal("Saved!", "Company has been added.", "success");
+    //    }
+    //    else {
+
+    //        swal("False!", data.message, "error");
+    //        $("#eMessage").text(data.message);
+    //    }
+    //}
+    //function ccOnFailure(data) { $("#eMessage").text(data); }
+    //function ccOnComplete() { $('.page-loader').hide(); }
+
+    $('#user').autocomplete({
+        minlength: 3,
+        source: function (request, response) {
+            var SearchText = $("#user").val();
+            $('#user').removeClass('notfound')
+            $('#user').addClass('loading');
+            $.ajax({
+
+                type: "POST",
+                url: "/tbl_Company/GetCopmany",
+                data: { "term": $("#user").val() },
+                  contentType: 'text/html',
+
+                success: function (data) {
+
+                    if (data.length == 0) {
+                        $('#user').removeClass('loading');
+                        $('#user').addClass('notfound');
+                    }
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+        }
+        ,
+
+        select: function (event, ui) {
+            $('#user').val(ui.item.label);
+            $('#CompanyId').val(ui.item.value);
+
+            $('#user').removeClass('loading notfound');
+
+            return false;
+        }
+    })
+</script>
+
+
+
 <link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
 
 
 <script>
+    var totalAmount = 0;
+    var Id = "";
     $('#txtName').autocomplete({
 
         minlength: 3,
@@ -164,20 +217,28 @@
             $('#StudentId').val(ui.item.value);
             $('#txtName').removeClass('notfound');
             $('#txtName').addClass('checked');
+
+            if (Id == ui.item.value) {
+                alert("Duplicate name");
+                return;
+            }
+            Id = ui.item.value;
             $('.page-loader').show();
+            var studentName = ui.item.label;
+            var studentId = ui.item.value;
             $.ajax({
 
                 type: "POST",
-                async: true,
                 url: "/Fees/getStudentPayments",
                 //data: "{term:'" + SearchText + "'}",
                 data: { "Id": ui.item.value },
-                //contentType: "application/json;characterset=utf-8",
 
+                  
                 success: function (data) {
-
-                    $('.page-loader').hide();
                 
+                    $('#list_').html(data);
+                        $('.page-loader').hide();
+                  
                 },
 
                 error: function (result) {
@@ -190,6 +251,132 @@
             return false;
 
         },
+
+
+
+    });
+       $('#submitPost').click(function () {
+ 
+           var isAllValid = true;
+         
+
+            //validate Post items
+            $('#orderItemError').text('');
+            var list = [];
+            var errorItemCount = 0;
+
+
+
+            $('#tbl123 tbody tr').each(function (index, ele) {
+
+
+
+
+
+                if ($(this).find("td.stdId input[type='text']").val() == "" ) {
+                    errorItemCount++;
+                    $(this).find("td.stdId input[type='text']").css('border-color', 'red');
+                }
+
+                if ($(this).find("td.payId input[type='text']").val() == "") {
+                    errorItemCount++;
+                    $(this).find("td.payId input[type='text']").css('border-color', 'red');
+                }
+                   if ($(this).find("td.amount input[type='text']").val() == "") {
+                    errorItemCount++;
+                    $(this).find("td.amount input[type='text']").css('border-color', 'red');
+                }
+                if ($(this).find("td.type input[type='text']").val() == "") {
+                    errorItemCount++;
+                    $(this).find("td.type input[type='text']").css('border-color', 'red');
+                }
+                else {
+
+
+                    var items = {
+
+                        StudentId: $(this).find("td.stdId input[type='hidden']").val(),
+                        PaymentId: $(this).find("td.payId input[type='hidden']").val(),
+                        Amount: $(this).find("td.amount input[type='text']").val(),
+                         FeeType: $(this).find("td.type input[type='text']").val(),
+                         PaidBy: $("#PaidBy").val(),
+                        Date: $("#Date").val(),
+                         Comment: $("#Comment").val(),
+       
+
+                    }
+
+                    list.push(items);
+                   
+                }
+
+            })
+
+
+        //$.each(list, function (i, item) {
+        //    alert(item.Name);
+
+        //        });
+
+               if (errorItemCount >= 1) {
+                 $("#ErrorCounter").text(errorItemCount +"int the list");
+                isAllValid = false;
+            }
+
+     
+
+
+
+
+
+        if (isAllValid) {
+         var fData = new FormData();
+
+
+            $.each(list, function (index, object) {
+        
+                //fData.append('list[' + index + '].StudentId',"123");
+                //fData.append('list[' + index + '].PaymentId', object.PaymentId);
+                //fData.append('list[' + index + '].FeeType', object.Type);
+                //fData.append('list[' + index + '].Amount', object.Amount);
+                //fData.append('list[' + index + '].PaidBy', object.PaidBy);
+                //fData.append('list[' + index + '].Comment', object.Comment);
+                fData.append('list[' + index + '].Date',  $("#Date").val());
+      
+            });
+            var data = { fee:list }
+         
+
+  
+                        $.ajax({
+
+                            type: "POST",
+                            async: true,
+                            url: '/Fees/Create',
+                            data: JSON.stringify(data),
+                            //data: fData,
+                            //processData: false,
+                            //contentType: false,
+                            //cache: false,
+                            
+                    success: function (data) {
+
+
+
+                        if (data.status == "true") { alert() }
+                           
+
+
+                    },
+                    error: function (error) {
+                        document.getElementById("btn_basic").click();
+
+                        $(this).text('error');
+                    }
+
+                });
+
+        }
 
 
 
@@ -210,8 +397,8 @@
 
 
              swal("Saved!", data.message, "success");
-        
-                 LoadInvoice(data.Id)
+
+             LoadInvoice(data.Id, data.Date)
              $("#Name").val("");
              $("#Comment").val("");
 
@@ -236,25 +423,18 @@
     </script>
 }
 <script>
-    function LoadInvoice(Id) {
+    function LoadInvoice(Id,Date) {
 
-        
+
         $.ajax({
-            //type: "POST", //Method type
-            //url: "/Fees/ReciptInvoice", //url to load partial view
-            ////data: JSON.stringify({ feeId: Id }),
-            //data: { "feeId": Id },
+    
 
-            //contentType: "application/json; charset=utf-8",
-            //dataType: "json",
-
-
-               type: "POST",
-                async: true,
+            type: "POST",
+            async: true,
             url: "/Fees/ReciptInvoice", //url to load partial view
             //data: "{term:'" + SearchText + "'}",
-            data: { "Id": Id },
-                //contentType: "application/json;characterset=utf-8",
+            data: { "Id": Id, "Date": Date },
+            //contentType: "application/json;characterset=utf-8",
             success: function (response) {
                 $('#A4ModelBody').html(response);
                 $('#A4Model').modal('show');

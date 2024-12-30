@@ -33,6 +33,7 @@ namespace SchoolManagement.Models.db
         public virtual DbSet<Notice> Notices { get; set; }
         public virtual DbSet<Parent> Parents { get; set; }
         public virtual DbSet<Payment> Payments { get; set; }
+        public virtual DbSet<Salary> Salaries { get; set; }
         public virtual DbSet<Schedule> Schedules { get; set; }
         public virtual DbSet<Sport> Sports { get; set; }
         public virtual DbSet<Student> Students { get; set; }
@@ -243,6 +244,10 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Number).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.PaidBy).HasMaxLength(50);
             });
 
             modelBuilder.Entity<File>(entity =>
@@ -433,6 +438,31 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.Name).HasMaxLength(250);
 
                 entity.Property(e => e.Type).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<Salary>(entity =>
+            {
+                entity.ToTable("Salary");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.Amount).HasColumnType("decimal(10, 1)");
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Number).ValueGeneratedOnAdd();
+
+                entity.Property(e => e.PaidBy).HasMaxLength(50);
+
+                entity.Property(e => e.Type).HasMaxLength(50);
             });
 
             modelBuilder.Entity<Schedule>(entity =>
@@ -716,6 +746,8 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Number).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.PaidBy).HasMaxLength(250);
 

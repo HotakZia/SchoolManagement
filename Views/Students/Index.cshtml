@@ -28,8 +28,13 @@
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group">
-                        @Html.DropDownList("Id", null, "-- Please Select --", htmlAttributes: new { @class = "form-control select" })
+                        @Html.DropDownList("ClassId", null, "-- Please Select --", htmlAttributes: new { @class = "form-control select" })
 
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="form-group">
+                        <input type="date" class="form-control" name="date">
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
@@ -38,11 +43,7 @@
                         <input type="hidden" id="StudentId" name="StudentId" />
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search by Phone ...">
-                    </div>
-                </div>
+
                 <div class="col-lg-2">
                     <div class="search-student-btn">
                         <button type="btn" class="btn btn-primary">Search</button>
@@ -217,33 +218,6 @@
 
 <script>
 
-    function getResult(Id, Year) {
-        $('.page-loader').show();
-
-        $.ajax({
-
-
-            type: "POST",
-            async: true,
-            url: "/Students/getResult", //url to load partial view
-            //data: "{term:'" + SearchText + "'}",
-            data: { "Id": Id,"Year":Year },
-            //contentType: "application/json;characterset=utf-8",
-            success: function (response) {
-                $('#AModelBody').html(response);
-                $('#AModel').modal('show');
-
-            },
-            failure: function (response) {
-                alert(response.responseText);
-            },
-            error: function (response) {
-                alert(response.responseText);
-            }
-
-        });
-        $('.page-loader').hide();
-    }
     function LoadFiles(Id) {
 
         $('.page-loader').show();

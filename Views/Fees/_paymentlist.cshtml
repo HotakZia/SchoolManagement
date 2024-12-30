@@ -1,0 +1,36 @@
+﻿@model List<SchoolManagement.Models.db.Fee>
+@{ int number = 0;}
+    <div class="row">
+        @foreach (var item in Model)
+        {
+    
+            <p></p>
+            <input asp-for="@Model[number].StudentId"    type="hidden" required class="form-control" value="@item.StudentId" />
+            <input asp-for="@Model[number].PaymentId" type="hidden" required class="form-control" value="@item.PaymentId" />
+
+            <div class="form-group local-forms col-lg-4">
+       
+                    <label asp-for="@Model[number].Amount" class="control-label">Amount<span class="login-danger"> *</span></label>
+                    <input asp-for="@Model[number].Amount" type="text" required class="form-control" value="@item.Amount" />
+                    <span asp-validation-for="@Model[number].Amount" class="text-danger"></span>
+              
+            </div>
+
+            <div class="form-group local-forms col-lg-4">
+           
+                    <label asp-for="@Model[number].FeeType" class="control-label">Payment Name<span class="login-danger"> *</span></label>
+                    <input asp-for="@Model[number].FeeType" type="text" required class="form-control" value="@item.FeeType" />
+                    <span asp-validation-for="@Model[number].FeeType" class="text-danger"></span>
+               
+            </div>
+            <div class="form-group local-forms col-lg-4">
+             
+                    <label asp-for="@Model[number].Date" class="control-label">Date<span class="login-danger"> *</span></label>
+                    <input asp-for="@Model[number].Date" type="date" required class="form-control" value="@DateTime.Now.ToString("MM/dd/YYYY")" />
+                    <span asp-validation-for="@Model[number].Date" class="text-danger"></span>
+               
+            </div>
+            number++;
+        }
+
+    </div>

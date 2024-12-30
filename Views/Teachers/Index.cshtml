@@ -35,7 +35,6 @@
                                     <th>Full Name</th>
                                     <th>Position</th>
                                     <th>Contact</th>
-                                    <th>Joining Date</th>
 
                                     <th class="text-end">Action</th>
                                 </tr>
@@ -54,50 +53,53 @@
                                         Imge = Convert.ToBase64String(item.Attachment);
 
                                         <td>
-                                            <h2 class="table-avatar">
-                                                <a asp-route-id="@item.TeacherId" asp-action="Details" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="@string.Format("data:image/jpeg;base64,{0}",Imge)" alt="User Image"></a>
-                                                <a asp-route-id="@item.TeacherId" asp-action="Details">
-                                                    <i class="fa fa-check-circle"></i>
-                                                    @item.FirstName @item.LastName
-                                                </a>
-                                            </h2>
+                                            <a asp-action="Details" asp-route-id="@item.TeacherId">
+                                                <h2 class="table-avatar">
+                                                    <a asp-route-id="@item.TeacherId" asp-action="Details" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="@string.Format("data:image/jpeg;base64,{0}",Imge)" alt="User Image"></a>
+                                                    <a asp-route-id="@item.TeacherId" asp-action="Details">
+                                                        <i class="fa fa-check-circle"></i>
+                                                        @item.FirstName @item.LastName
+                                                    </a>
+                                                </h2>
+                                            </a>
                                         </td>
                                     }
                                     else
                                     {
                                         Imge = Convert.ToBase64String(item.Attachment);
 
-                                        <td>
-                                            <h2 class="table-avatar">
-                                                <a asp-route-id="@item.TeacherId" asp-action="Details" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="@string.Format("data:image/jpeg;base64,{0}",Imge)" alt="User Image"></a>
-                                                <a asp-route-id="@item.TeacherId" asp-action="Details">
-                                                    <i class="fa fa-check-circle"></i>
-                                                    @item.FirstName @item.LastName
-                                                </a>
-                                            </h2>
-                                        </td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.TeacherId">
+
+                                        <h2 class="table-avatar">
+                                            <a asp-route-id="@item.TeacherId" asp-action="Details" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="@string.Format("data:image/jpeg;base64,{0}",Imge)" alt="User Image"></a>
+                                            <a asp-route-id="@item.TeacherId" asp-action="Details">
+                                                <i class="fa fa-check-circle"></i>
+                                                @item.FirstName @item.LastName
+                                            </a>
+                                        </h2>
+                                    </a>
+                                </td>
                                     }
 
 
                                     <td>@item.Position</td>
                                     <td>@item.Email / @item.Phone</td>
-                                    <td>@item.HireDate</td>
 
 
                                     <td class="text-end">
-                                        <div class="actions">
-                                            <a asp-action="Details" asp-route-id="@item.TeacherId" class="btn btn-sm bg-success-light me-2">
-                                                <i class="feather-eye"></i>
-                                            </a>
-                                            <a asp-action="Edit" asp-route-id="@item.TeacherId" class="btn btn-sm bg-danger-light">
-                                                <i class="feather-edit"></i>
-                                            </a>
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">List</button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.TeacherId">Edit  </a>
 
-                                            <a onclick='LoadFiles("@item.TeacherId")' class="btn btn-sm bg-danger-light">
-                                                <i class="fa fa-certificate"></i>
-                                            </a>
+                                               <a class="dropdown-item" href="#" onclick='LoadFiles("@item.TeacherId")'>Fils </a>
+                                                <div role="separator" class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#">Info</a>
+                                            </div>
                                         </div>
                                     </td>
+                           
                                 </tr>
                                 }
 

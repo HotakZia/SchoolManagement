@@ -37,6 +37,8 @@ namespace SchoolManagement.Models.Entities
         public string Number { get; set; }
         public int? ExamNumber { get; set; }
         public int? ClassSubjectNumber { get; set; }
+        public int PayFeesCount { get; set; }
+        public int AssignFeesCount { get; set; }
         public  IList<Models.Entities.Payment> studentFeesPayments { get; set; }
     }
 }

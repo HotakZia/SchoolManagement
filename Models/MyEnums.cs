@@ -236,5 +236,18 @@ SixthHour=6,
             Friday,
             Saturday
         }
+        public enum FeesType
+        {
+            Tuition,
+            Registration,
+            Library,
+            Exam,
+            Sports,
+            Technology,
+            Activity,
+            Fine,
+            Transportation,
+            Other
+        }
     }
 }

@@ -12,7 +12,7 @@
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
 
 
@@ -48,7 +48,7 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Teacher <span class="login-danger">*</span></label>
-           
+
                                     @Html.DropDownList("TeacherId", null, htmlAttributes: new { @class = "form-control select", @placeholder = "-- Please Select --" })
                                     <span asp-validation-for="TeacherId" class="text-danger"></span>
                                 </div>
@@ -63,7 +63,7 @@
                                     <span asp-validation-for="Shift" class="text-danger"></span>
                                 </div>
                             </div>
-                  
+
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Year" class="control-label"></label>
@@ -80,8 +80,17 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Number" class="control-label">Class Number</label>
-                                    <input asp-for="Number" class="form-control" />
+                                    <input required asp-for="Number" class="form-control" placeholder="Cls-@DateTime.Now.Year-_____" data-slots="_" data-accept="\d" maxlength="15" title="Please enter role number: Cls-YYYY-XXXXX">
+
                                     <span asp-validation-for="Number" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="NumberOfSubject" class="control-label"></label>
+                                    <input required asp-for="NumberOfSubject" type="text" class="form-control" placeholder="__" data-slots="_" data-accept="\d" maxlength="3" max="20" title="enter a numbe between 1 - 20">
+
+                                    <span asp-validation-for="NumberOfSubject" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
@@ -101,17 +110,17 @@
                                 </div>
                             </div>
                             @*<div class="col-12 col-sm-4">
-                                <div class="form-group students-up-files">
-                                    <label>Upload Attachment</label>
-                                    <div class="uplod">
-                                        <label class="file-upload image-upbtn mb-0">
-                                            Choose File <input type="file" name="Image">
-                                            <span asp-validation-for="Attachment" class="text-danger"></span>
-                                        </label>
+                                    <div class="form-group students-up-files">
+                                        <label>Upload Attachment</label>
+                                        <div class="uplod">
+                                            <label class="file-upload image-upbtn mb-0">
+                                                Choose File <input type="file" name="Image">
+                                                <span asp-validation-for="Attachment" class="text-danger"></span>
+                                            </label>
 
+                                        </div>
                                     </div>
-                                </div>
-                            </div>*@
+                                </div>*@
 
 
                             <div class="col-12">
@@ -120,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-</form>
+                    </form>
                 </div>
             </div>
         </div>

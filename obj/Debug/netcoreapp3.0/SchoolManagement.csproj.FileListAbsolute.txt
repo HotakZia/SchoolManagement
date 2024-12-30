@@ -585,3 +585,4 @@ D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcore
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Classes\TimeTable.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Classes\_Subject.cshtml.g.cs
 D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Classes\TimeTableEdit.cshtml.g.cs
+D:\Projects\SchoolManagement\SchoolManagement\SchoolManagement\obj\Debug\netcoreapp3.0\Razor\Views\Fees\_paymentlist.cshtml.g.cs

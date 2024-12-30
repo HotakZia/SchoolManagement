@@ -88,12 +88,13 @@ namespace SchoolManagement.Controllers
             return PartialView("_pass", list);
         }
         [HttpPost]
-        public async Task<IActionResult> getResult(int Year, Guid Id)
+        public async Task<IActionResult> getResult(int Grad,Guid? cId, Guid? sId)
         {
-            var student = db.Students.Where(x => x.StudentId == Id).FirstOrDefault();
+            
+           
             var list = await (from Exam in db.Exams
                               join Schulde in db.Schedules on Exam.SubJectId equals Schulde.Id
-                              where Exam.StudentId == Id &&Exam.ClassId==student.ClassId&& Exam.Year == Year && Exam.Status == true
+                              where Exam.StudentId == sId && Schulde.Grad == Grad && Exam.Status == true
                               select new Models.Entities.Exam
                               {
 
@@ -397,7 +398,7 @@ namespace SchoolManagement.Controllers
         // GET: Students
         public async Task<IActionResult> Index(Guid?Id)
         {
-            ViewBag.Id = new SelectList(db.Classes.ToList(), "Id", "Name");
+            ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
             IList<Models.Entities.Student> list = new List<Models.Entities.Student>();
             if (Id==null)
             {
@@ -597,6 +598,8 @@ namespace SchoolManagement.Controllers
             ViewBag.parents = db.Parents.Where(x => x.StudentId == id).ToList();
             ViewBag.files = db.Files.Where(x => x.RelationId == id).ToList();
             ViewBag.userId = id;
+         
+
             return View(data);
         }
 

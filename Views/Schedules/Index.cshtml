@@ -70,7 +70,7 @@
                                     <td>@item.Grad</td>
                                     <td>@item.Year</td>
                                     <td>@item.Shift</td>
-
+                                   
 
                                     <td class="text-end">
                                         <div class="actions">
@@ -78,16 +78,12 @@
                                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm bg-danger-light">
                                                 <i class="feather-edit"></i>
                                             </a>
-                                            <a asp-action="Create" asp-controller="Exams" asp-route-ScheduleId="@item.Id" class="btn btn-sm bg-info-light">
-                                                <i class="feather-alert-circle"></i>
-
-                                            </a>
-                                            <a asp-action="details" asp-controller="Exams" asp-route-id="@item.Id" class="btn btn-sm bg-info-light">
-                                                <i class="fa fa-certificate"></i>
-
-                                            </a>
+                                        
                                         </div>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="10">@item.Comment</td>
                                 </tr>
                                 }
 

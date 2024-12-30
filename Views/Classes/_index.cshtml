@@ -6,7 +6,7 @@
 <div class="table-responsive">
     <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
         <thead class="student-thread">
-            <tr>
+            <tr style="text-align:center">
               <th>#</th>
                 <th>Name</th>
                 <th>Teacher</th>
@@ -14,10 +14,10 @@
                 <th>Rome</th>
 
                 <th>Year</th>
-              
+                <th>Subject#</th>
 
 
-                <th class="text-end" style="width:30%">Action</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -26,43 +26,36 @@
                 int number = 0;
                 foreach (var item in Model)
                 {
-                  
 
-            <tr>
-                <td>
-                   @number
-                </td>
-                <td><a asp-action="Details" asp-route-id="@item.Id">@item.Name</a> </td>
-                <td>@item.TeacherName</td>
-                <td>@item.Shift </td>
-                <td>@item.Room </td>
-                <td>@item.Year </td>
-              
 
-                <td class="text-end" style="width:30%">
-                    <div class="actions">
+                    <tr style="text-align:center">
+                        <td>
+                            @number
+                        </td>
+                        <td><a asp-action="Details" asp-route-id="@item.Id">@item.Name</a> </td>
+                        <td>@item.TeacherName</td>
+                        <td>@item.Shift </td>
+                        <td>@item.Room </td>
+                        <td>@item.Year </td>
+                        <td>@item.NumberOfSubject </td>
+                        <td>
+                            <div class="input-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">List</button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit  </a>
 
-                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm bg-danger-light">
-                            <i class="feather-edit"></i>
-                        </a>
+                                    <a class="dropdown-item" asp-action="Create" asp-controller="AttendanceLogs" asp-route-ClassId="@item.Id">  Attendance </a>
+                                    <a class="dropdown-item" asp-action="TimeTable" asp-controller="Classes" asp-route-Id="@item.Id"> Time Table   </a>
+                                    <a class="dropdown-item" asp-action="TimeTableEdit" asp-controller="Classes" asp-route-Id="@item.Id">Time Table Edit </a>
+                                    <a class="dropdown-item" href="#" onclick='LoadSubjects("@item.Id")'>Subjects </a>
+                                    <div role="separator" class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Info</a>
+                                </div>
+                            </div>
+                        </td>
 
-                        <a asp-action="Create" asp-controller="AttendanceLogs" asp-route-ClassId="@item.Id" class="btn btn-sm bg-info-light">
-                            <i class="feather-alert-circle"></i>
-                            Attendance
-                        </a>
-                        <a asp-action="TimeTable" asp-controller="Classes" asp-route-Id="@item.Id" class="btn btn-sm bg-info-light">
-                          Time Table  <i class="feather-tablet"></i>
-                        </a>
-                        <a asp-action="TimeTableEdit" asp-controller="Classes" asp-route-Id="@item.Id" class="btn btn-sm bg-info-light">
-                           TT Edit <i class="feather-tablet"></i>
-                        </a>
-                        <a onclick='LoadSubjects("@item.Id")' class="btn btn-sm bg-info-light">
-                            Subjects<i class="feather-external-link"></i>
-                        </a>
-                        @item.Grad
-                    </div>
-                </td>
-            </tr>
+
+                    </tr>
                     number++;
                 }
             }

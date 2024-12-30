@@ -20,8 +20,9 @@ namespace SchoolManagement.Models.db
         public string Comment { get; set; }
         public byte[] Attachment { get; set; }
         public bool? Status { get; set; }
-        public int? Number { get; set; }
+        public int Number { get; set; }
         public Guid? ClassId { get; set; }
         public int? Year { get; set; }
+        public string PaidBy { get; set; }
     }
 }

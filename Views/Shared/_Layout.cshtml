@@ -119,18 +119,6 @@
             </div>
         </div>
     </div>
-    <div class="modal fade bd-example-modal-lg" id="AModel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body" id="AModelBody">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="printDiv()"><i class="fa fa-print"></i> Print</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="modal fade bd-example-modal-lg" id="A4Model_" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -354,19 +342,12 @@
 
                             </ul>
                         </li>
+          
                         <li class="submenu">
                             <a href="#"><i class="fas fa-book-reader"></i> <span> Subjects</span> <span class="menu-arrow"></span></a>
                             <ul>
-                                <li><a asp-action="index" asp-controller="Subjects">Subject List</a></li>
-                                <li><a asp-action="create" asp-controller="Subjects">Subject Add</a></li>
-                                <li><a asp-action="Assign" asp-controller="Subjects">Assign</a></li>
-                            </ul>
-                        </li>
-                        <li class="submenu">
-                            <a href="#"><i class="fas fa-table"></i> <span> Time Table</span> <span class="menu-arrow"></span></a>
-                            <ul>
-                                <li><a asp-action="index" asp-controller="Schedules">Schedual List</a></li>
-                                <li><a asp-action="create" asp-controller="Schedules">Schedual Add</a></li>
+                                <li><a asp-action="index" asp-controller="Schedules">Subjects List</a></li>
+                                <li><a asp-action="create" asp-controller="Schedules">Subjects Add</a></li>
 
                             </ul>
                         </li>

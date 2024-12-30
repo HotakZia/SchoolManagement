@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<SchoolManagement.Models.Entities.Exam>
 
-
+@{ decimal? number = 0;}
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
@@ -28,17 +28,23 @@
                                 <td>@item.Attendance</td>
 
                             </tr>
-
+                            number += item.FirstExam + item.SecondExam + item.ClassActivity + item.HomeActivity + item.Attendance;
                         }
-                        
+
                     </tbody>
 
                 </table>
-                <p>Status:</p><strong>@ViewBag.Result</strong>
+              
             </div>
-        </div>
-        <div class="col-lg-4">
-            <p>100$ passed </p>
+
+            <div class="col-lg-4">
+                <p>Total Marks: @number </p>
+                <hr />
+                <p>Status:</p><strong>@ViewBag.Result</strong>
             </div>
 
         </div>
+        <hr />
+        <p>Note:</p>
+    </div>
+

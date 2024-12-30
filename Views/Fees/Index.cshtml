@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group">
-                        @Html.DropDownList("Id", null, "-- Please Select --", htmlAttributes: new { @class = "form-control select" })
+                        @Html.DropDownList("ClassId", null, "-- Please Select --", htmlAttributes: new { @class = "form-control select" })
 
                     </div>
                 </div>
@@ -37,11 +37,11 @@
                         <input type="hidden" id="StudentId" name="StudentId" />
                     </div>
                 </div>
-                @*<div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search by Phone ...">
+                        <input type="date" name="date" class="form-control" placeholder="Search by Phone ...">
                     </div>
-                </div>*@
+                </div>
                 <div class="col-lg-2">
                     <div class="search-student-btn">
                         <button type="btn" class="btn btn-primary">Search</button>
@@ -63,10 +63,9 @@
                                 <h3 class="page-title">Studnets</h3>
                             </div>
                             <div class="col-auto text-end float-end ms-auto download-grp">
-                                <a href="teachers.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
-                                <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
+              
                                 <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
-                                <a href="add-teacher.html" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                             </div>
                         </div>
                     </div>

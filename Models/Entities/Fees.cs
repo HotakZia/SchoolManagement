@@ -28,5 +28,6 @@ namespace SchoolManagement.Models.Entities
         public String GrandFatherName { get; set; }
         public String RollId { get; set; }
         public String ClassName { get; set; }
+        public string PaidBy { get; set; }
     }
 }

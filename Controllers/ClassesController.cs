@@ -442,7 +442,13 @@ namespace SchoolManagement.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                showMessageString = new
+                {
+                    status = "true",
+                    message = @class.Name + " has been updated."
+
+                };
+                return Json(showMessageString);
             }
             return View(@class);
         }

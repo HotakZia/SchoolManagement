@@ -19,22 +19,23 @@ namespace SchoolManagement.Controllers
         //}
         //[HttpPost]
 
-            public async Task<IActionResult> ReciptInvoice(Guid? Id)
+            public async Task<IActionResult> ReciptInvoice(Guid? Id,DateTime Date)
             {
                 if (Id == null)
             {
                
             }
-            var fees = (from fee in db.Fees
+
+            var fees = await (from fee in db.Fees
 
 
                         join student in db.Students on fee.StudentId equals student.StudentId
                         join class_ in db.Classes on student.ClassId equals class_.Id
-                        where fee.Id == Id
+                        where fee.StudentId == Id&&fee.Date.Value.Year==Date.Year&&fee.Date.Value.Month==Date.Month
 
                         select new Models.Entities.Fees
                         {
-
+                            PaidBy=fee.PaidBy,
                             FeeType = fee.FeeType,
                             ClassId = fee.ClassId,
                             CreatedDate = fee.CreatedDate,
@@ -52,32 +53,15 @@ namespace SchoolManagement.Controllers
                             PaymentId = fee.PaymentId,
                             Year = fee.Year,
                             ModifiedDate = fee.ModifiedDate,
-                            ClassName=class_.Name,
-                            FatherName=student.FatherName,
-                            GrandFatherName=student.GfatherName,
-                            RollId=student.RoleNumber
+                            ClassName = class_.Name,
+                            FatherName = student.FatherName,
+                            GrandFatherName = student.GfatherName,
+                            RollId = student.RoleNumber,
                             
 
-                        }).FirstOrDefault();
-            if (fees!=null)
-            {
-                ViewBag.list = (from sp in db.StudentPayments
 
-                            join payment in db.Payments on sp.PaymentId equals payment.Id
-
-
-                            where sp.StudentId == fees.Id
-
-                            select new Models.db.Payment
-                            {
-
-                                Id = payment.Id,
-                                Name = payment.Name,
-                                Amount = payment.Amount,
-
-
-                            })/*.OrderByDescending(x => x.CreatedDate)*/.ToList();
-            }
+                        }).ToListAsync();
+   
 
             ViewBag.systemInfo = db.TableCompanies.FirstOrDefault();
 
@@ -90,30 +74,37 @@ namespace SchoolManagement.Controllers
         public async Task<IActionResult> getStudentPayments(Guid Id)
         {
 
-            var list = await (from spayments in db.StudentPayments
+            var list1 = await (from spayments in db.StudentPayments
                           
                                  join payment in db.Payments on spayments.PaymentId equals payment.Id
-
+                                
 
                               where spayments.StudentId==Id
 
-                              select new Models.db.Payment
+                              select new Models.Entities.Payment
                               {
 
                                   Id = payment.Id,
-                                  Name=payment.Name,
-                                  Amount=payment.Amount,
-                               
+                                  PaymentName=payment.Name,
+                                  Amount=payment.Amount??0,
+                               Total=0,
+                               StudentId=spayments.StudentId,
+                               PaymentId=spayments.PaymentId,
 
-                              })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
-            return Json(list);
+                              }).ToListAsync();
+            var list = new List<Models.db.Fee>();
+            foreach (var item in list1)
+            {
+                list.Add(new Fee { PaymentId = item.PaymentId, StudentId = item.StudentId, Amount = item.Amount,FeeType=item.PaymentName });
+            }
+            return PartialView("_paymentlist", list);
         }
         // GET: Fees
-        public ActionResult Index(Guid? Id, DateTime date)
+        public ActionResult Index(Guid? ClassId, DateTime date)
         {
-            ViewBag.Id = new SelectList(db.Classes.ToList(), "Id", "Name");
+            ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
             IList<Models.Entities.Student> list = new List<Models.Entities.Student>();
-            if (Id == null)
+            if (ClassId == null)
             {
                 return View(list);
             }
@@ -122,20 +113,18 @@ namespace SchoolManagement.Controllers
                 date = DateTime.Now;
             }
              list =  (from student in db.Students
-                          join class_ in db.Classes on student.ClassId equals class_.Id
-                          join fees in db.Fees on student.StudentId equals fees.StudentId
-                          where student.ClassId == Id
+                          //join fees in db.Fees on student.StudentId equals fees.StudentId
+                          where student.ClassId == ClassId
 
                           select new Models.Entities.Student
                           {
-                              ClassId = fees.Id,
+                           
                               StudentId = student.StudentId,
                               Tazkira = student.Tazkira,
                               RoleNumber = student.RoleNumber,
                               FirstName = student.FirstName,
                               LastName = student.LastName,
                               FatherName = student.FatherName,
-                              ClassName = class_.Name,
                               Attachment = student.Attachment,
                               Contact = student.Contact,
                               Status = student.Status,
@@ -144,14 +133,16 @@ namespace SchoolManagement.Controllers
                           
                               GuardianName = student.GuardianName,
                               GuardianPhone = student.GuardianPhone,
-                              studentFeesPayments = (from sfees in db.StudentPayments
-                                                    join payment in db.Payments on sfees.PaymentId equals payment.Id
-                                                    where sfees.StudentId==student.StudentId
-                                                    select new Models.Entities.Payment
-                                                    {
-                                                        PaymentName = payment.Name,
-                                                        Amount = payment.Amount
-                                                    }).ToList()
+                              AssignFeesCount=db.StudentPayments.Where(x=>x.StudentId==student.StudentId).Count(),
+                              PayFeesCount=db.Fees.Where(x => x.StudentId == student.StudentId && x.Date.Value.Year == date.Year && x.Date.Value.Month == date.Month).Count(),
+                              //studentFeesPayments = (from sfees in db.StudentPayments
+                              //                      join payment in db.Payments on sfees.PaymentId equals payment.Id
+                              //                      where sfees.StudentId==student.StudentId
+                              //                      select new Models.Entities.Payment
+                              //                      {
+                              //                          PaymentName = payment.Name,
+                              //                          Amount = payment.Amount
+                              //                      }).ToList()
             //db.StudentPayments.Where(x=>x.StudentId==student.StudentId).ToList()
 
 
@@ -189,76 +180,79 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StudentId,Amount,FeeType,Date,PaymentId,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number")] Fee fee)
+      
+        public async Task<IActionResult> Create(IEnumerable<Fee> fee)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var studentAssignPayments = await (from spayments in db.StudentPayments
-
-                                                       join payment in db.Payments on spayments.PaymentId equals payment.Id
-
-                                                       where spayments.StudentId == fee.StudentId
-
-                                      select new Models.db.Payment
-                                      {
-
-                                          Id = payment.Id,
-                                          Name = payment.Name,
-                                          Amount = payment.Amount,
-                                          
-
-                                      })/*.OrderByDescending(x => x.CreatedDate)*/.ToListAsync();
-                    //var studentAssignPayments = db.StudentPayments.Where(x => x.StudentId == fee.StudentId).ToList();
-                    if (studentAssignPayments!=null)
+                  
+                    foreach (var item in fee)
                     {
                       
-                     
-                            var duplicate = db.Fees.Where(x => x.StudentId == fee.StudentId
-                   && fee.Date.Value.Month == fee.Date.Value.Month
-                   && x.Date.Value.Year == fee.Date.Value.Year
-                   ).FirstOrDefault();
-                            if (duplicate != null)
-                            {
-                                showMessageString = new
-                                {
-                                    status = "duplicate",
-                                    message = "student already paid for the"+" "+fee.Date.Value.Month+"-"+fee.Date.Value.Year
+                        //var assignFee = db.StudentPayments.ToList();
 
-                                };
-                                return Json(showMessageString);
-                            }
-                            
-                            fee.Id = Guid.NewGuid();
-                            fee.Status = true;
-                            fee.CreatedDate = DateTime.Now;
-                            db.Fees.Add(fee);
-                        
+                        var checkDuplicate = db.Fees.Where(x => x.Date.Value.Month == item.Date.Value.Month
+                        && x.Date.Value.Year == item.Date.Value.Year
+                        && x.PaymentId == item.PaymentId
+                        && x.StudentId == item.StudentId).FirstOrDefault();
+                        if (checkDuplicate != null)
+                        {
+                            showMessageString = new
+                            {
+                                status = "duplicate",
+                                message = "duplicatefor " + item.FeeType + item.Date.Value.Month + "-" + item.Date.Value.Year
+
+                            };
+                            return Json(showMessageString);
+
+                        }
+
+                        /////////
+                        ///  
+                        /// 
+                        /// 
+                        var feesPay = new Models.db.Fee();
+                        var transection = new Transaction();
+                        feesPay.Id = Guid.NewGuid();
+                        feesPay.CreatedDate = DateTime.Now;
+                        feesPay.Amount = item.Amount;
+                        feesPay.FeeType = item.FeeType;
+                        feesPay.PaidBy = item.PaidBy;
+                        feesPay.Date = item.Date;
+                        feesPay.Status = true;
+                        feesPay.ClassId = item.ClassId;
+                        feesPay.StudentId = item.StudentId;
+                        feesPay.PaymentId = item.PaymentId;
+                        feesPay.Comment = item.Comment;
+                        db.Fees.Add(feesPay);
+
+                        ///////////////
+                        transection.Id = Guid.NewGuid();
+                        transection.CreatedDate = DateTime.Now;
+                        transection.Amount = item.Amount;
+                        transection.Comment = item.FeeType;
+                        transection.PaidBy = "Fees";
+                        transection.Type = "Credit";
+                        transection.RelationId = item.Id;
+                        db.Transactions.Add(transection);
 
                     }
 
-                    var transection = new Transaction();
-                    transection.Id = Guid.NewGuid();
-                    transection.CreatedDate = DateTime.Now;
-                    transection.Amount = fee.Amount;
-                    transection.Comment ="Fees"+ fee.Number.ToString();
-                    transection.PaidBy ="Fees"+ fee.Number.ToString();
-                    transection.Type = "Credit";
-                    transection.Year = fee.Year;
-                    transection.Attachment = fee.Attachment;
-                    db.Transactions.Add(transection);
-                
-                    await db.SaveChangesAsync();
-                    //return RedirectToAction(nameof(Index));
+
+                     db.SaveChangesAsync();
+                 //return PartialView("_ReciptInvoice", fee);
                     showMessageString = new
                     {
                         status = "true",
-                        message =  "payments have been added.",
-                        Id=fee.Id,
+                        message = "payments have been added.",
+                        Id= fee.FirstOrDefault().StudentId,Date=fee.FirstOrDefault().Date,
                     };
                     return Json(showMessageString);
                 }
+
+
                 catch (Exception ex)
                 {
 
