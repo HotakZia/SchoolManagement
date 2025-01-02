@@ -1,0 +1,79 @@
+﻿@model IEnumerable<SchoolManagement.Models.Entities.Teacher>
+<table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+    <thead class="student-thread">
+        <tr>
+
+            <th>Role#</th>
+            <th>Teacher Name</th>
+            <th>Position</th>
+            <th>Date</th>
+           <th>Payment</th>
+
+     
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            string Imge = "";
+         
+
+            <tr>
+
+                <td>@item.RoleNumber</td>
+
+                @if (item.Status == true)
+                {
+                    Imge = Convert.ToBase64String(item.Attachment);
+
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.TeacherId">
+                            <h2 class="table-avatar">
+                                <a asp-route-id="@item.TeacherId" asp-action="Details" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="@string.Format("data:image/jpeg;base64,{0}",Imge)" alt="User Image"></a>
+                                <a asp-route-id="@item.TeacherId" asp-action="Details">
+                                    <i class="fa fa-check-circle"></i>
+                                    @item.FirstName @item.LastName
+                                </a>
+                            </h2>
+                        </a>
+                    </td>
+                }
+                else
+                {
+                    Imge = Convert.ToBase64String(item.Attachment);
+
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.TeacherId">
+
+                            <h2 class="table-avatar">
+                                <a asp-route-id="@item.TeacherId" asp-action="Details" class="avatar avatar-sm me-2"><img class="avatar-img rounded-circle" src="@string.Format("data:image/jpeg;base64,{0}",Imge)" alt="User Image"></a>
+                                <a asp-route-id="@item.TeacherId" asp-action="Details">
+                                    <i class="fa fa-check-circle"></i>
+                                    @item.FirstName @item.LastName
+                                </a>
+                            </h2>
+                        </a>
+                    </td>
+                }
+
+                <td>@item.Position</td>
+                <td>@ViewBag.salaryDate.Year/@ViewBag.salaryDate.Month</td>
+                <td>@if (item.Salary!=0)
+                {
+                   @item.Salary <strong>(Paid)</strong>
+                }
+                else
+                {
+                    @item.Salary <strong>(Not Paid)</strong>
+                }
+                </td>
+             
+     
+
+
+            </tr>
+        }
+
+
+    </tbody>
+</table>

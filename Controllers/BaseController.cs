@@ -12,7 +12,7 @@ using System.Web;
 
 namespace SchoolManagement.Controllers
 {
-    [Authorize(Roles = ("Authorize"))]
+    //[Authorize(Roles = ("Authorize"))]
 
     public class BaseController : Controller
     {

@@ -99,6 +99,7 @@
             }
         }
     </style>
+
 </head>
 <body>
 
@@ -362,12 +363,12 @@
                         <li class="submenu">
                             <a href="#"><i class="fas fa-clipboard"></i> <span> Invoices</span> <span class="menu-arrow"></span></a>
                             <ul>
-                                <li><a href="invoices.html">Invoices List</a></li>
-                                <li><a href="invoice-grid.html">Invoices Grid</a></li>
-                                <li><a href="add-invoice.html">Add Invoices</a></li>
-                                <li><a href="edit-invoice.html">Edit Invoices</a></li>
+                                <li><a asp-action="SalesList" asp-controller="Transactions">Invoices List</a></li>
+                               
+                                <li><a asp-action="Sales" asp-controller="Transactions">Add Invoices</a></li>
+                   
                                 <li><a href="view-invoice.html">Invoices Details</a></li>
-                                <li><a href="invoices-settings.html">Invoices Settings</a></li>
+                       
                             </ul>
                         </li>
                         <li class="menu-title">
@@ -377,12 +378,14 @@
                         <li class="submenu">
                             <a href="#"><i class="fas fa-file-invoice-dollar"></i> <span> Accounts</span> <span class="menu-arrow"></span></a>
                             <ul>
-                                <li><a asp-controller="Fees" asp-action="Index">Fees Collection</a></li>
-                                <li><a href="expenses.html">Expenses</a></li>
-                                <li><a href="salary.html">Salary</a></li>
-                                <li><a asp-controller="Fees" asp-action="Create"> Add Fees</a></li>
-                                <li><a href="add-expenses.html">Add Expenses</a></li>
-                                <li><a href="add-salary.html">Add Salary</a></li>
+                                <li><a asp-controller="Transactions" asp-action="FeesList">Fees Collection</a></li>
+                                <li><a asp-controller="Transactions" asp-action="Fees"> Add Fees</a></li>
+                                <li><a asp-action="Index" asp-controller="Transactions">Expenses</a></li>
+                                <li><a asp-action="Details" asp-controller="Transactions">Add Expenses</a></li>
+                                <li><a asp-action="SalaryList" asp-controller="Transactions">Salary</a></li>
+                                <li><a asp-action="Salary" asp-controller="Transactions">Add Salary</a></li>
+
+
                             </ul>
                         </li>
                         <li class="submenu">
@@ -464,7 +467,7 @@
                                 <li><a asp-action="Create" asp-controller="Inventories">Add Items </a></li>
 
 
-                            </ul>
+                            </ul>in
                         </li>
                         <li class="submenu">
                             <a href="#"><i class="fas fa-baseball-ball"></i> <span> Sports </span> <span class="menu-arrow"></span></a>
@@ -524,6 +527,7 @@
     <script src="~/template/assets/plugins/select2/js/select2.min.js" type="f4c59587db699f42642ee9f4-text/javascript"></script>
 
     <!-- Bootstrap Core JS -->
+
     <script src="~/template/assets/js/bootstrap.bundle.min.js" type="c437656adcf261e14fc51405-text/javascript"></script>
 
     <!-- Feather Icon JS -->

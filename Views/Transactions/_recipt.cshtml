@@ -1,0 +1,195 @@
+﻿@model IEnumerable<SchoolManagement.Models.Entities.Transection>
+@{
+
+    //string Image = "";
+    //if (ViewBag.systemInfo.Logo != null)
+    //{
+    //    Image = Convert.ToBase64String(ViewBag.systemInfo.Logo);
+    //}
+    decimal? total = 0;
+}
+
+
+
+
+
+@if (Model != null&&Model.Count()>=1)
+{
+
+    <div class="invoice p-3 mb-3" id='DivIdToPrint'>
+
+        @*<img class="img-circle" src="@string.Format("data:image/jpeg;base64,{0}",Image)" id="ImagePreview" height="30" width="30" align-items:center />*@
+
+        <h3 style="text-align:center">@ViewBag.SystemInfo.Name</h3>
+
+
+        <h5 style="text-align:center">@ViewBag.SystemInfo.TagLine</h5>
+
+        <table width="100%">
+            <tbody>
+                <tr>
+                    <td>Receipt:  <strong>@Model.FirstOrDefault().Number</strong></td>
+
+                    <td><strong>Date: </strong>@Model.FirstOrDefault().Date.Value.ToString("MM-yyyy")</td>
+
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <table border="1" class="table table-bordered table-hover" width="100%" align="center" id="Rtable">
+            <thead>
+                <tr style="text-align:center">
+                    <th>#</th>
+                    <th>Payment Name</th>
+
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    int _RowNumber = 0;
+
+
+
+                    foreach (var item in Model)
+                    {
+                        <tr style="text-align:center">
+                            <td>@_RowNumber</td>
+                            <td>@item.Type</td>
+                            <td>@string.Format("{0:0.0}", @item.Amount)</td>
+                         
+                        </tr>
+                  
+                        _RowNumber = _RowNumber + 1;
+                        total += item.Amount;
+                    }
+                }
+
+
+            </tbody>
+
+
+        </table>
+        <hr />
+
+
+        <table width="100%">
+
+            <tbody>
+                <tr>
+                    <td>Sub Total
+                    <td>
+                    <td>@total<small> AFN</small></td>
+
+                </tr>
+
+
+                <tr>
+                    <td>Discount
+                    <td>
+                    <td>0% <small> AFN</small></td>
+                </tr>
+
+            </tbody>
+        </table>
+        <hr />
+        <table width="100%">
+
+
+            <tbody>
+
+
+
+                <tr>
+                    <td>Total</td>
+                    <td>@total<small>AFN</small></td>
+                </tr>
+                <tr>
+                    <td>Paid Amount</td>
+                    <td>
+                        @total<small>  AFN</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td>PaidBy</td>
+                    <td>@Model.FirstOrDefault().PaidBy</td>
+                </tr>
+
+
+            </tbody>
+        </table>
+
+
+        <br />
+        <p style="text-align:center"> <strong>Thank you for trusting us!</strong></p>
+
+        <p style="text-align:center"> ******************************</p>
+
+        <p style="text-align:center">
+            @ViewBag.SystemInfo.Location<br />
+            @ViewBag.SystemInfo.Email /    @ViewBag.SystemInfo.PhoneNumber<br />
+            @ViewBag.SystemInfo.Website
+        </p>
+    </div>
+
+                    }
+
+                    else
+                    {
+                        <h4 style="color:orangered;vertical-align:central;text-align:center">no recipt found!</h4>
+                    }
+
+@*<script>window.addEventListener("load", window.print());</script>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -249,5 +249,17 @@ SixthHour=6,
             Transportation,
             Other
         }
+        public enum SchoolExpense
+        {
+            Tuition,
+            Books,
+            Supplies,
+            Uniform,
+            Transportation,
+            Lunch,
+            FieldTrip,
+            Technology,
+            Extracurricular
+        }
     }
 }

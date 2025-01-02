@@ -743,6 +743,10 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.Date).HasColumnType("date");
 
+                entity.Property(e => e.Drcr)
+                    .HasMaxLength(50)
+                    .HasColumnName("DRCR");
+
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");

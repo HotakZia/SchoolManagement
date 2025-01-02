@@ -1,12 +1,12 @@
-﻿@model List<SchoolManagement.Models.db.Fee>
+﻿@model List<SchoolManagement.Models.db.Transaction>
 @{ int number = 0;}
     <div class="row">
         @foreach (var item in Model)
         {
     
             <p></p>
-            <input asp-for="@Model[number].StudentId"    type="hidden" required class="form-control" value="@item.StudentId" />
-            <input asp-for="@Model[number].PaymentId" type="hidden" required class="form-control" value="@item.PaymentId" />
+            <input asp-for="@Model[number].RelationId"    type="hidden" required class="form-control" value="@item.RelationId" />
+            <input asp-for="@Model[number].Type" type="hidden" required class="form-control" value="@item.Type" />
 
             <div class="form-group local-forms col-lg-4">
        
@@ -18,15 +18,15 @@
 
             <div class="form-group local-forms col-lg-4">
            
-                    <label asp-for="@Model[number].FeeType" class="control-label">Payment Name<span class="login-danger"> *</span></label>
-                    <input asp-for="@Model[number].FeeType" type="text" required class="form-control" value="@item.FeeType" />
-                    <span asp-validation-for="@Model[number].FeeType" class="text-danger"></span>
+                    <label asp-for="@Model[number].Type" class="control-label">Payment Name<span class="login-danger"> *</span></label>
+                    <input asp-for="@Model[number].Type" type="text" required class="form-control" value="@item.Type" />
+                    <span asp-validation-for="@Model[number].Type" class="text-danger"></span>
                
             </div>
             <div class="form-group local-forms col-lg-4">
              
                     <label asp-for="@Model[number].Date" class="control-label">Date<span class="login-danger"> *</span></label>
-                    <input asp-for="@Model[number].Date" type="date" required class="form-control" value="@DateTime.Now.ToString("MM/dd/YYYY")" />
+                    <input asp-for="@Model[number].Date" type="text" required class="form-control" value="@DateTime.Now.ToString("MM/dd/yyyy")" />
                     <span asp-validation-for="@Model[number].Date" class="text-danger"></span>
                
             </div>

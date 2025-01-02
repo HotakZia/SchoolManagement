@@ -1,0 +1,197 @@
+﻿@model SchoolManagement.Models.db.Transaction
+
+
+
+
+
+<div class="content container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card comman-shadow">
+                <div class="card-body">
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
+                          data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="Type" value="Teacher-Salary" />
+                        <input type="hidden" asp-for="Drcr" value="Credit" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title student-info">Pay Salary <span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="RelationId" class="control-label">Teacher<span class="login-danger">*</span></label>
+                                    <input type="text" id="txtTeacher" class="form-control" />
+                                    <input asp-for="RelationId" type="hidden" required id="TeacherId" class="form-control" />
+                                    <span asp-validation-for="RelationId" class="text-danger"></span>
+                                    <div class="invalid-feedback">Please enter teacher name.</div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms ">
+                                    <label asp-for="Amount" class="control-label">Amount <span class="login-danger">*</span></label>
+                                    <input asp-for="Amount" max="99999" maxlength="5" required class="form-control" />
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms ">
+                                    <label asp-for="Date" class="control-label">Date<span class="login-danger">*</span></label>
+                                    <input asp-for="Date" type="date" required class="form-control" />
+                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms ">
+                                    <label asp-for="PaidBy" class="control-label">Paid By<span class="login-danger">*</span></label>
+                                    <input asp-for="PaidBy" required class="form-control" />
+                                    <span asp-validation-for="PaidBy" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+
+                                    <label asp-for="Comment" class="control-label">Comment<span class="login-danger">*</span></label>
+                                    <input asp-for="Comment" class="form-control" />
+                                    <span asp-validation-for="Comment" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <div class="form-group local-forms">
+                                    <label asp-for="Attachment" class="control-label">File</label>
+                                    <input type="file" name="Image" class="form-control" id="uploadInput" accept="image/*">
+                                    <span asp-validation-for="Attachment" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="student-submit">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/jQuery JavaScript Library v3.7.1.js"></script>
+<link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+         if (data.status == "true") {
+
+                 swal("Saved!",  data.message, "success");
+
+
+             $("#Comment").val("");
+
+           @*document.location.href = "@Url.Action("Index","tbl_Transiction")",true;*@
+         }
+         else if (data.status=="duplicate") {
+              swal("Dupplicate Record!",  data.message, "warning");
+         }
+        else {
+        swal("False!", data.message, "error");
+        }
+
+
+        //$('#listContainer').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+    </script>
+}
+<script>
+    $('#txtTeacher').autocomplete({
+
+        minlength: 1,
+        source: function (request, response) {
+
+
+            var SearchText = $('#txtTeacher').val();
+            //alert(SearchText);
+            $('#txtTeacher').removeClass('notfound');
+            $('#txtTeacher').addClass('loading');
+
+            $.ajax({
+
+                type: "POST",
+                async: true,
+                url: "/Teachers/getTeacherByName",
+                //data: "{term:'" + SearchText + "'}",
+                data: { "term": SearchText },
+                //contentType: "application/json;characterset=utf-8",
+
+                success: function (data) {
+                    if (data.length == 0) {
+
+                        $('#txtTeacher').removeClass('loading');
+                        $('#txtTeacher').addClass('notfound');
+
+
+                    }
+                    else {
+                        $('#txtTeacher').removeClass('loading');
+
+
+                    }
+
+                    response($.map(data, function (item) {
+                        return { label: item.Name, value: item.Id };
+                    }))
+
+                },
+
+                error: function (result) {
+                    debugger
+
+                    console.log(result);
+                }
+            });
+
+
+
+        },
+
+        select: function (event, ui) {
+
+            $('#txtTeacher').val(ui.item.label);
+
+            $('#TeacherId').val(ui.item.value);
+            $('#txtTeacher').removeClass('notfound');
+            $('#txtTeacher').addClass('checked');
+
+            return false;
+
+        },
+
+
+
+    });
+
+</script>

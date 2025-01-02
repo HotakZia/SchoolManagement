@@ -96,8 +96,8 @@ namespace SchoolManagement.Controllers
                     string[] From_To_Dates = date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
                     @event.StartDate = DateTime.Parse(From_To_Dates[0].ToString());
                     @event.EndDate = DateTime.Parse(From_To_Dates[1].ToString());
-                    @event.StartDate = DateTime.ParseExact(@event.StartDate.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-US"));
-                    @event.EndDate = DateTime.ParseExact(@event.EndDate.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-US"));
+                    //@event.StartDate = DateTime.ParseExact(@event.StartDate.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-US"));
+                    //@event.EndDate = DateTime.ParseExact(@event.EndDate.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-US"));
 
                     var duplicate = db.Events.Where(x => x.Name == @event.Name && x.StartDate==@event.StartDate&&@event.EndDate == @event.EndDate).FirstOrDefault();
                     if (duplicate != null)
@@ -162,33 +162,64 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Color,Allday,Id,Name,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Year,Number,StartDate,EndDate")] Event @event)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Color,Allday,Id,Name,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Year,Number,StartDate,EndDate")] Event @event, string date)
         {
             if (id != @event.Id)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Split authors separated by a comma followed by space
+                    string[] From_To_Dates = date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
+                    @event.StartDate = DateTime.Parse(From_To_Dates[0].ToString());
+                    @event.EndDate = DateTime.Parse(From_To_Dates[1].ToString());
+                    //@event.StartDate = DateTime.ParseExact(@event.StartDate.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-US"));
+                    //@event.EndDate = DateTime.ParseExact(@event.EndDate.Value.ToString("dd/MM/yyyy"), "dd/MM/yyyy", CultureInfo.GetCultureInfo("en-US"));
+
+                    var duplicate = db.Events.Where(x => x.Name == @event.Name && x.StartDate == @event.StartDate && @event.EndDate == @event.EndDate&&x.Id!=@event.Id).FirstOrDefault();
+                    if (duplicate != null)
+                    {
+                        showMessageString = new
+                        {
+                            status = "duplicate",
+                            message = @event.Name + " " + " is dupplicate name!"
+
+                        };
+                        return Json(showMessageString);
+                    }
+                  
+                    @event.ModifiedDate = DateTime.Now;
                     db.Update(@event);
                     await db.SaveChangesAsync();
+                    //return RedirectToAction(nameof(Index));
+                    showMessageString = new
+                    {
+                        status = "true",
+                        message = @event.Name + " has been added."
+
+                    };
+                    return Json(showMessageString);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception ex)
                 {
-                    if (!EventExists(@event.Id))
+
+                    showMessageString = new
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                        status = "false",
+                        message = ex.InnerException.Message
+
+                    };
+                    return Json(showMessageString);
                 }
-                return RedirectToAction(nameof(Index));
+
             }
+
+            
+                return RedirectToAction(nameof(Index));
+            
             return View(@event);
         }
 

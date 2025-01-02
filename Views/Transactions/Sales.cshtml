@@ -1,0 +1,445 @@
+﻿
+@model List<SchoolManagement.Models.db.Transaction>
+
+
+
+
+
+<div class="card">
+
+
+    <div class="card-body">
+
+
+
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <table class="table table-bordered table-hover" id="tbl_Order_Items">
+                    <thead>
+
+                        <tr id="first" style=" background-color:darkgray;">
+
+
+
+
+                            <td> <input type="number" id="Item" class="item form-control" placeholder="Total"  /></td>
+                            <td> <input type="number" id="quantity" class="quantity form-control" placeholder="Quantity" /> </td>
+                            <td> <input type="number" id="Price" class="Price form-control"  placeholder="Price" /></td>
+                            <td> <input type="number" id="Total" class="total form-control" placeholder="Total" readonly /></td>
+                            <td class="text-center">
+                                <button id="addnewRow" type="button" class="btn btn-primary"><i class="fa fa-plus-circle me-1"></i></button>
+
+
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <h6>
+
+                    <span style="color:red" id="ErrorCounter"></span>
+                </h6>
+                <div class="row clearfix" style="margin-top:20px">
+                    <div class="pull-right col-md-6">
+                        <table class="table table-bordered table-hover" id="tab_logic_total">
+                            <tbody>
+                                <tr>
+
+                                    <td>
+
+                                        <div class="input-group">
+                                            <input type="text" maxlength="30" id="Customer" class="form-control" placeholder="Customer Name" name="Customer Name" />
+
+                                            <span class="input-group-btn">-</span>
+
+                                          
+                                            <input id="Total_Amount" type="number" class="form-control" readonly value="0.00" />
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+
+                                    <td class="text-center">
+                                        <div class="input-group mb-2 mb-sm-0">
+                                            <input type="text" id="Description" class="form-control" placeholder="Comment" />
+
+                                            <span class="input-group-btn"></span>
+                                            <button id='SubmitPurchase' class="pull-right btn btn-success">Create</button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+
+
+
+
+
+
+<script src="~/js/jQuery JavaScript Library v3.7.1.js"></script>
+
+
+
+
+
+<script>
+
+
+
+
+    $(document).ready(function () {
+
+
+
+
+
+
+
+
+
+
+
+        $('#tbl_Order_Items tbody').on('keyup change', function () {
+
+            $(this).find("td._quantity input[type='number']").on("input", function () {
+
+
+
+
+                $(this).css('border-color', '');
+
+            });
+            $(this).find("td.Price input[type='number']").on("input", function () {
+
+                $(this).css('border-color', '');
+            });
+         
+
+            calc();
+        });
+        function calc() {
+            total = 0;
+            $('#tbl_Order_Items tbody tr').each(function (i, element) {
+                var html = $(this).html();
+
+                if (html != '') {
+                    var qty = $(this).find("td._quantity input[type='number']").val();
+                    var price = $(this).find("td.Price input[type='number']").val();
+                    var sub_total = parseFloat(qty * price);
+                    $(this).find("td.Total input[type='number']").val(sub_total);
+
+
+
+
+
+                    if ($.isNumeric(sub_total)) {
+                        total += sub_total;
+
+                    }
+
+                }
+
+            });
+         
+
+            $('#Total_Amount').val(total.toFixed(1));
+        }
+
+
+
+
+        //Add button click event
+        $('#addnewRow').click(function () {
+
+            //validation and add order items
+            var isAllValid = true;
+
+            if (isAllValid) {
+
+                //////////// add new tr to purchase table
+                var _total = parseFloat(document.getElementById("Price").value * document.getElementById("quantity").value).toFixed(1);
+                $("#tbl_Order_Items tbody").prepend(`<tr class="row-index text-center>
+
+
+<td class="Total">     <input type="number" class="form-control" readonly  value="${_total}"></td>
+<td class="Total">     <input type="number" class="form-control" readonly  value="${_total}"></td>
+<td class="Total">     <input type="number" class="form-control" readonly  value="${_total}"></td>
+<td class="Total">     <input type="number" class="form-control" readonly  value="${_total}"></td>
+<td class="Total">     <input type="number" class="form-control" readonly  value="${_total}"></td>
+
+<td class="text-center"><button id="tbn_remove" type="button" class="btn btn-outline-danger"><i class="fa fa-minus-circle me-1 remove"></i></button></button></td>
+          </tr>`);
+
+                calc();
+
+                $("#").val("");
+                $('#').val("");
+                $("#").val("");
+                $('#').val("");
+                 $('#').val("");
+
+                $("#").focus();
+            }
+
+
+        })
+        //remove button click event
+        $('#tbl_Order_Items').on('click', '.remove', function () {
+
+            //counsume money from bill total
+
+            $(this).parents('tr').remove();
+
+
+
+            calc();
+
+
+        });
+
+        $('#SubmitPurchase').click(function () {
+
+            var isAllValid = true;
+
+            //validate order items
+            $('#orderItemError').text('');
+            var list = [];
+            var errorItemCount = 0;
+
+            if ($('#tbl_Order_Items >tbody >tr').length == 0) {
+                $('#ErrorCounter').text('At least 1  item required.');
+                  isAllValid = false;
+            }
+
+            $('#tbl_Order_Items tbody tr').each(function (index, ele) {
+                $(this).find("td._quantity input[type='number']").css('border-color', '');
+
+                $(this).find("td.Price input[type='number']").css('border-color', '');
+            });
+            $('#tbl_Order_Items tbody tr').each(function (index, ele) {
+
+
+
+                if ($(this).find("td._quantity input[type='number']").val() == $.isNumeric("") || $(this).find("td._quantity input[type='number']").val() == 0 ||$(this).find("td._quantity input[type='number']").val() == $.isNumeric(null)) {
+                    errorItemCount++;
+                    $(this).find("td._quantity input[type='number']").css('border-color', 'red');
+                }
+
+                if ($(this).find("td.ProductName input[type='text']").val() == "" || $(this).find("td.ProductId input[type='text']").val() == "") {
+                    errorItemCount++;
+                    $(this).find("td.ProductName input[type='text']").css('border-color', 'red');
+                }
+                if ($(this).find("td.Price input[type='number']").val() == "" || $(this).find("td.Price input[type='number']").val() == $.isNumeric(null)) {
+                    errorItemCount++;
+                    $(this).find("td.Price input[type='number']").css('border-color', 'red');
+                }
+                if ($(this).find("td.BarCode input[type='text']").val() == "") {
+                    errorItemCount++;
+                    $(this).find("td.BarCode input[type='text']").css('border-color', 'red');
+                }
+
+
+                else {
+
+
+                    var tbl_OrdersItems = {
+
+                        Product_Id: $(this).find("td.Product_Id input[type='text']").val(),
+                        Unit: $(this).find("td.Unit option:selected").val(),
+                        Quantity: $(this).find("td._quantity input[type='number']").val(),
+                        Price: $(this).find("td.Price input[type='number']").val(),
+                        Total: $(this).find("td.Total input[type='number']").val(),
+                         Product_Name: $(this).find("td.ProductName input[type='text']").val(),
+                    }
+
+                    list.push(tbl_OrdersItems);
+                }
+
+            })
+
+
+
+
+
+               if (errorItemCount >= 1) {
+                 $("#ErrorCounter").text(errorItemCount +"int the list");
+                isAllValid = false;
+            }
+
+            if ($('#Order_Date').val().trim() == '') {
+                $('#Order_Date').css('border-color', 'red');
+                isAllValid = false;
+            }
+
+            if ($("#Customer_Id").val() == "") {
+                $("#Customer").css('border-color', 'red');
+                isAllValid = false;
+            }
+
+               if ($('#Discount').val().trim() == '') {
+                $('#Discount').css('border-color', 'red');
+                isAllValid = false;
+            }
+               if ($('#Tax').val().trim() == '') {
+                $('#Tax').css('border-color', 'red');
+                isAllValid = false;
+            }
+
+            if ($('#Payment_Methode').val().trim() == '') {
+                $('#Payment_Methode').css('border-color', 'red');
+                isAllValid = false;
+            }
+
+            if ($("#PaidAmmount").val().trim() == "") {
+                $("#PaidAmmount").css('border-color', 'red');
+                isAllValid = false;
+            }
+
+
+            if (isAllValid) {
+                     $(this).attr('disabled', true);
+             $(this).text('Please wait...');
+
+                var data = {
+
+                    PaidAmmount: $('#PaidAmmount').val().trim(),
+                    //Order_No: $('#Order_Number').val().trim(),
+                    Order_Date: $('#Order_Date').val().trim(),
+                    Comment: $('#Description').val().trim(),
+                    Customer_Id: $('#Customer_Id').val().trim(),
+                    Discount: $('#Discount').val().trim(),
+                        Tax: $('#Tax').val().trim(),
+
+                    //Amount: $('#Total_Amount').val().trim(),
+                    Amount: total,
+                    Payment_Methode: $('#Payment_Methode').val().trim(),
+                    //Payment_Status: $('#Payment_Status').val().trim(),
+                    //Store_Id: $('#Store_Id').val().trim(),
+
+                    tbl_OrdersItems: list
+                }
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/tbl_Orders/save',
+                    data: JSON.stringify(data), PaidAmmount,
+                    contentType: 'application/json',
+                    success: function (data) {
+                        if (data.status) {
+                            $("#success").trigger("click");
+                            $('#SubmitPurchase').text('Create');
+                              $("#SubmitPurchase").prop('disabled', false);
+                            $("#Rtable tr").remove();
+                            $.each(list, function (index, value) {
+
+
+                                $("#Rtable").last().append("<tr><td >" + value.Product_Name + "</td><td>" + value.Quantity + "</td><td>" + value.Price + "</td><td>" + value.Total + "</td></tr>");
+
+                            });
+
+                            $("#Rtotal").text($('#Total_Amount').val());
+                            $("#Rname").text($("#Customer").val())
+                            $("#Rmethod").text($("#Payment_Methode").val())
+                            $("#Rbillno").text(data.billid)
+
+                            $("#RTax").text($("#Tax").val())
+                            $("#RDiscount").text($("#Discount").val())
+                            $("#RST").text(parseFloat($("#Tax").val()) + parseFloat(total) - parseFloat($("#Discount").val()))
+                          $("#RPaidAmount").text($("#PaidAmmount").val())
+
+
+
+
+
+
+
+
+
+
+                             //location.href = url;
+                            //////////////////////////////////
+
+                            //$.get("/tbl_orders/index", { /*Id: data.Id*/ }, function (data) { });
+                            @*window.location.href = '@Url.Action("index", "tbl_orders",new { })';*@
+
+                            list = [];
+
+                            $('#Description,#Total_Amount,#Customer,#Customer_Id,#PaidAmmount,#BarrowAmmount,#Tax,#Discount').val('');
+
+                            $("#tbl_Order_Items > tbody").empty();
+                                  printDiv();
+                        }
+                        else if (data.error == "login_required") {
+                            $('#SubmitPurchase').text('Create');
+                               $("#SubmitPurchase").prop('disabled', false);
+
+                            $("#loginFrom_").modal('show');
+                        }
+                        else {
+                            alert(data.error);
+                            $('#SubmitPurchase').text('Create');
+                               $("#SubmitPurchase").prop('disabled', false);
+
+                        }
+
+
+                    },
+                    error: function (error) {
+                        alert('system error')
+
+                    }
+                });
+            }
+
+        });
+
+    });
+
+
+
+    function printDiv() {
+
+        var divToPrint = document.getElementById('DivIdToPrint');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write('<html><body onload="window.print()">' + divToPrint.innerHTML + '</body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+        $("#Cancel").trigger("click");
+
+
+
+
+
+    }
+
+
+</script>
+
+

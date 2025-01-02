@@ -1,25 +1,10 @@
 ﻿@model IEnumerable<SchoolManagement.Models.db.Transaction>
-<!-- Datatables CSS -->
 
-
-<link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
 
 <div class="content container-fluid">
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col">
-                <h3 class="page-title">Students</h3>
-                <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Students</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!-- /Page Header -->
-    <form asp-action="Index" method="get" data-ajax="true" data-ajax-update="#studentsList"
+
+    <form asp-action="Index" method="get" data-ajax="true" data-ajax-update="#transactionList"
           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure">
         <!-- Form fields go here -->
 
@@ -27,19 +12,18 @@
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group">
-                        @*@Html.DropDownList("Id", null, "-- Please Select --", htmlAttributes: new { @class = "form-control select" })*@
+                      <input type="date" name="fromDate" class="form-control" />
 
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="form-group">
-                        <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Search by Name ...">
-                        <input type="hidden" id="StudentId" name="StudentId" />
+                        <input type="date" name="toDate" class="form-control" />
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search by Phone ...">
+                        @*<input type="text" class="form-control" placeholder="Search by Phone ...">*@
                     </div>
                 </div>
                 <div class="col-lg-2">
@@ -60,18 +44,18 @@
                     <div class="page-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h3 class="page-title">Transection</h3>
+                                <h3 class="page-title">Transections</h3>
                             </div>
                             <div class="col-auto text-end float-end ms-auto download-grp">
-                                <a href="teachers.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
-                                <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>
+                                @*<a href="teachers.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
+                                <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>*@
                                 <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
-                                <a href="add-teacher.html" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                             </div>
                         </div>
                     </div>
                     <!-- /Page Header -->
-                    <div class="row" id="studentsList"> @Html.Partial("_index", Model)</div>
+                    <div class="row" id="transactionList"> @Html.Partial("_index", Model)</div>
 
                 </div>
             </div>
@@ -79,14 +63,11 @@
     </div>
 </div>
 
-<script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
-
 
 
 
 
 <link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
 
 
@@ -170,7 +151,7 @@
 
         }
         function OnSuccess(data) {
-            $('#studentsList').html(data);
+            $('#transactionList').html(data);
         }
         function OnComplete() {
             $('.page-loader').hide();

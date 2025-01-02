@@ -22,5 +22,6 @@ namespace SchoolManagement.Models.db
         public string PaidBy { get; set; }
         public int? Year { get; set; }
         public Guid? RelationId { get; set; }
+        public string Drcr { get; set; }
     }
 }
