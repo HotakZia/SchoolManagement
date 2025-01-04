@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using SchoolManagement.Models.db;
-
+using SchoolManagement.Models;
 namespace SchoolManagement.Controllers
 {
     public class TransactionsController : BaseController
@@ -19,15 +20,153 @@ namespace SchoolManagement.Controllers
         //{
         //    _context = context;
         //}
+        [HttpPost]
+        public async Task<IActionResult> lineChart(string Date)
+        {
+            DateTime startDate = DateTime.Now.AddMonths(-1);
+            DateTime toDate = DateTime.Now;
+            if (!string.IsNullOrEmpty(Date))
+            {
+                string[] From_To_Dates = Date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
+                startDate = DateTime.Parse(From_To_Dates[0].ToString());
+                toDate = DateTime.Parse(From_To_Dates[1].ToString());
+            }
+            List<Models.DataPoint> dataPointsCredit = new List<Models.DataPoint>();
+            List<Models.DataPoint> dataPointsDebit = new List<Models.DataPoint>();
+            var credit = db.Transactions.Where(x=>x.Drcr=="Credit").GroupBy(c => c.Date.Value.Month).
+                 Select(g => new Models.GroupByResult
+                 {
+                     Key = g.Key.ToString(),
+                     decimalValue = g.Sum(x => x.Amount)
+                 }).ToList();
+            //var creditByDate =  db.Transactions.Select(item => new { Label = item.Date.Value.Month, Value = item.Amount.ToString() }).ToList();
+            foreach (var item in credit)
+            {
+                dataPointsCredit.Add(new Models.DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
+            }
+            ViewBag.DataPointsCredit = JsonConvert.SerializeObject(dataPointsCredit);
+            //ViewBag.DataPointsDebit = JsonConvert.SerializeObject(dataPointsDebit);
 
+
+
+
+
+            //////////////////
+            ///
+
+            List<DataPoint> dataPoints = new List<DataPoint>();
+            List<DataPoint> dataPoints2 = new List<DataPoint>();
+            List<DataPoint> dataPoints1 = new List<DataPoint>();
+            var studentByGender = db.Students.GroupBy(c => c.Gender).
+                  Select(g => new Models.GroupByResult
+                  {
+                      Key = g.Key.ToString(),
+                      decimalValue = g.Count()
+                  }).ToList();
+            var feesResult = db.Fees.GroupBy(c => c.CreatedDate.Value.Month).
+                      Select(g => new Models.GroupByResult
+                      {
+                          Key = g.Key.ToString(),
+                          decimalValue = g.Sum(x => x.Amount)
+                      }).ToList();
+            var studentByGroup = db.Students.GroupBy(c => c.Shift).
+                      Select(g => new Models.GroupByResult
+                      {
+                          Key = g.Key.ToString(),
+                          Value = g.Count().ToString()
+                      })/*.OrderByDescending(i => i.Value)*//*.Take(10)*/.ToList();
+            foreach (var item in studentByGender)
+            {
+                dataPoints1.Add(new DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
+            }
+            foreach (var item in feesResult)
+            {
+                dataPoints.Add(new DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
+            }
+
+            foreach (var item in studentByGroup)
+            {
+                dataPoints2.Add(new DataPoint(item.Key, double.Parse(item.Value.ToString())));
+            }
+
+            ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints);
+            ViewBag.DataPoints1 = JsonConvert.SerializeObject(dataPoints1);
+            ViewBag.DataPoints2 = JsonConvert.SerializeObject(dataPoints2);
+
+            return PartialView("");
+        }
         public async Task<IActionResult> Sales()
         {
             return View();
         }
         [RequireHttps]
-        public async Task<IActionResult> SalesCreate(List<Transaction> transactions)
+        public async Task<IActionResult> SalesCreate(List<Transaction> transactions,Guid? StudentId, string Comment,string PaidBy,DateTime Date)
         {
-            return View();
+
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+
+                    showMessageString = new
+                    {
+                        status = "false",
+                        message = ModelState.ErrorCount
+
+                    };
+                    return Json(showMessageString);
+                }
+                if (transactions.Count()==0)
+                {
+                    showMessageString = new
+                    {
+                        status = "false",
+                        message ="atleast 1 row required1"
+
+                    };
+                    return Json(showMessageString);
+                }
+
+                var tr = new Transaction();
+                foreach (var item in transactions)
+                {
+                    tr = new Transaction();
+                    tr.Id = Guid.NewGuid();
+                    tr.CreatedDate = DateTime.Now;
+                    tr.RelationId = StudentId;
+                    tr.Drcr = "Credit";
+                    tr.Type = item.Type;
+                    tr.PaidBy = PaidBy;
+                    tr.Comment = Comment;
+                    tr.Date = Date;
+                    tr.Amount = item.Amount;
+                    db.Transactions.Add(tr);
+
+                }
+                db.SaveChanges();
+                //return PartialView("_ReciptInvoice", fee);
+                showMessageString = new
+                {
+                    status = "true",
+                    message = "payments have been added.",
+                    Id = StudentId,
+                    Date = Date,
+                };
+   
+                return Json(showMessageString);
+            }
+            catch (Exception ex)
+            {
+
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+
+                };
+                return Json(showMessageString);
+            }
+
         }
         [HttpPost]
         public async Task<IActionResult> getStudentPayments(Guid Id)
@@ -59,15 +198,15 @@ namespace SchoolManagement.Controllers
             return PartialView("_paymentlist", list);
         }
         // GET: Transactions/recipt
-        public async Task<IActionResult> Recipt(Guid? Id, DateTime feeDate)
+        public async Task<IActionResult> Recipt(Guid? Id, DateTime? feeDate)
         {
             //if (Id == null)
             //{
             //    return NotFound();
             //}
         
-            int year = int.Parse(feeDate.ToString("yyyy"));
-            int month = int.Parse(feeDate.ToString("MM"));
+            int year = int.Parse(feeDate.Value.ToString("yyyy"));
+            int month = int.Parse(feeDate.Value.ToString("MM"));
             var fees = await (from fee in db.Transactions
 
 
@@ -134,22 +273,108 @@ namespace SchoolManagement.Controllers
         }
 
         // GET: Transactions/Details/5
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Details(string? Date)
         {
+            DateTime startDate = DateTime.Now.AddMonths(-1);
+            DateTime toDate = DateTime.Now;
+            if (!string.IsNullOrEmpty(Date))
+            {
+                string[] From_To_Dates = Date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
+               startDate = DateTime.Parse(From_To_Dates[0].ToString());
+               toDate = DateTime.Parse(From_To_Dates[1].ToString());
+            }
+           
      
-            var result = db.Transactions
+            ViewBag.Credit = db.Transactions.Where(x=>x.Drcr=="Credit" && x.Date >= startDate && x.Date <= toDate)
                 .GroupBy(t => t.Type)
-                .Select(g => new
+                .Select(g => new Models.GroupBy
                 {
-                    Category = g.Key,
-                    TotalAmount = g.Sum(t => t.Amount)
+                    Name = g.Key,
+                    Value = g.Sum(t => t.Amount)
+                })
+                .ToList();
+            ViewBag.Debit = db.Transactions.Where(x => x.Drcr == "Debit"&&x.Date>=startDate&&x.Date<=toDate)
+                .GroupBy(t => t.Type)
+                .Select(g => new Models.GroupBy
+                {
+                    Name = g.Key,
+                    Value = g.Sum(t => t.Amount)
                 })
                 .ToList();
 
-          
-        
 
-            return View(result);
+            ////////////////////////////
+            ///
+
+         
+            if (!string.IsNullOrEmpty(Date))
+            {
+                string[] From_To_Dates = Date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
+                startDate = DateTime.Parse(From_To_Dates[0].ToString());
+                toDate = DateTime.Parse(From_To_Dates[1].ToString());
+            }
+            List<Models.DataPoint> dataPointsCredit = new List<Models.DataPoint>();
+            List<Models.DataPoint> dataPointsDebit = new List<Models.DataPoint>();
+            var credit = db.Transactions.Where(x => x.Drcr == "Credit").GroupBy(c => c.Date.Value.Month).
+                 Select(g => new Models.GroupByResult
+                 {
+                     Key = g.Key.ToString(),
+                     decimalValue = g.Sum(x => x.Amount)
+                 }).ToList();
+            //var creditByDate =  db.Transactions.Select(item => new { Label = item.Date.Value.Month, Value = item.Amount.ToString() }).ToList();
+            foreach (var item in credit)
+            {
+                dataPointsCredit.Add(new Models.DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
+            }
+            ViewBag.DataPointsCredit = JsonConvert.SerializeObject(dataPointsCredit);
+            //ViewBag.DataPointsDebit = JsonConvert.SerializeObject(dataPointsDebit);
+
+
+
+
+
+            //////////////////
+            ///
+
+            List<DataPoint> dataPoints = new List<DataPoint>();
+            List<DataPoint> dataPoints2 = new List<DataPoint>();
+            List<DataPoint> dataPoints1 = new List<DataPoint>();
+            var studentByGender = db.Students.GroupBy(c => c.Gender).
+                  Select(g => new Models.GroupByResult
+                  {
+                      Key = g.Key.ToString(),
+                      decimalValue = g.Count()
+                  }).ToList();
+            var feesResult = db.Fees.GroupBy(c => c.CreatedDate.Value.Month).
+                      Select(g => new Models.GroupByResult
+                      {
+                          Key = g.Key.ToString(),
+                          decimalValue = g.Sum(x => x.Amount)
+                      }).ToList();
+            var studentByGroup = db.Students.GroupBy(c => c.Shift).
+                      Select(g => new Models.GroupByResult
+                      {
+                          Key = g.Key.ToString(),
+                          Value = g.Count().ToString()
+                      })/*.OrderByDescending(i => i.Value)*//*.Take(10)*/.ToList();
+            foreach (var item in studentByGender)
+            {
+                dataPoints1.Add(new DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
+            }
+            foreach (var item in feesResult)
+            {
+                dataPoints.Add(new DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
+            }
+
+            foreach (var item in studentByGroup)
+            {
+                dataPoints2.Add(new DataPoint(item.Key, double.Parse(item.Value.ToString())));
+            }
+
+            ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints);
+            ViewBag.DataPoints1 = JsonConvert.SerializeObject(dataPoints1);
+            ViewBag.DataPoints2 = JsonConvert.SerializeObject(dataPoints2);
+            return View();
         }
        
     

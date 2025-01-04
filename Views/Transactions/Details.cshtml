@@ -1,5 +1,230 @@
 ﻿
+
+
 @model List<SchoolManagement.Models.db.Transaction>
+@{decimal totalCredit = 0; decimal totalDebit = 0; }
+@*<script src="~/js/jQuery JavaScript Library v3.7.1.js"></script>*@
 
-<h1>School Items for Sale</h1>
+<script src="~/Chart/canvasjs.min.js.js"></script>
 
+<div class="content container-fluid">
+
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card">
+                <div class="card-body row">
+                    <h4>Financail Report</h4>
+                    <hr />
+                    <form asp-action="Details" method="post" data-ajax-success="OnSuccess"
+                          data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+
+                        <div class="col-12 col-sm-4">
+
+                            <div class="form-group local-forms">
+                                <label>Start | End Dates <span class="login-danger">*</span></label>
+
+
+                                <div class="input-group">
+                                    <span class="input-group-text" id="date3-1">Date</span>
+                                    <input type="text" class="form-control" id="inputDate3-1" placeholder="Start - End" aria-label="Dates" aria-describedby="basic-addon1">
+                                </div>
+                                <input type="hidden" name="date" id="Date" class="form-control" required />
+
+                            </div>
+
+
+                        </div>
+                        <div class="col-12 col-sm-2">
+                            <div class="student-submit">
+                                <button type="submit" class="btn btn-primary">Load</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5>Credited Amount Report</h5>
+
+                    <hr />
+
+                    <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                        <thead class="student-thread">
+                            <tr>
+                                <th>Category</th>
+                                <th>Amount (AFN)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.Credit)
+                            {
+
+
+                                <tr>
+
+                                    <td>@item.Name</td>
+                                    <td>@item.Value</td>
+
+                                </tr>
+                                totalCredit += item.Value;
+                            }
+
+
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color:yellowgreen">
+                                <td><strong> Total Credit</strong></td>
+                                <td colspan="10">@totalCredit</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+
+            <div class="card">
+                <div class="card-body">
+                    <div id="result_">    @Html.Partial("_lineChart")</div>
+                
+
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5>Debited Amount Report</h5>
+                    <hr />
+
+                    <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                        <thead class="student-thread">
+                            <tr>
+                                <th>Category</th>
+                                <th>Amount (AFN)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.Debit)
+                            {
+
+
+                                <tr>
+
+                                    <td>@item.Name</td>
+                                    <td>@item.Value</td>
+
+                                </tr>
+                                totalDebit += item.Value;
+                            }
+
+
+                        </tbody>
+                        <tfoot>
+                            <tr style="background-color:yellow">
+                                <td><strong> Total Credit</strong></td>
+                                <td colspan="10">@totalDebit</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+
+            <div class="card">
+                <div class="card-body">
+                    <hr />
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<link href="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
+<script src="~/Persion-datepicker/dist/upper.main.js"></script>
+<script src="~/Persion-datepicker/dist/Slim.min.js"></script>
+<script src="~/Persion-datepicker/dist/bootstrap.min.js.js"></script>
+<script src="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.js"></script>
+<script type="text/javascript">
+    $('#date3-1').MdPersianDateTimePicker({
+        targetTextSelector: '#inputDate3-1',
+        targetDateSelector: '#Date',
+        monthsToShow: [0, 0],
+        selectedDate: new Date(),
+        selectedRangeDate: [new Date(), new Date()],
+        rangeSelector: true,
+
+
+    });
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+        function OnBegin() {
+            $('.page-loader').show();
+
+        }
+        function OnSuccess(data) {
+
+
+
+            //$('#listContainer').html(data); // Replace the list with the updated content
+            $('.page-loader').hide();
+
+        }
+        function OnComplete() {
+            $('.page-loader').hide();
+
+        }
+    </script>
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $.ajax({
+            type: "POST",
+            url: "/Transactions/lineChart",
+            data: { "Data": $("#Date").val() },
+            //contentType: "application/json; charset=utf-8",
+            dataType: "html",
+
+
+            success: function (responce) {
+
+
+
+                //$('#result_').html(responce); // Replace the list with the updated content
+
+
+
+            },
+
+            error: function (result) {
+                debugger
+
+                console.log(result);
+            }
+        });
+
+
+    });
+</script>
