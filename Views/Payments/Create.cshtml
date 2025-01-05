@@ -6,7 +6,7 @@
 <div class="content container-fluid">
 
     <!-- Page Header -->
-    <div class="page-header">
+    @*<div class="page-header">
         <div class="row align-items-center">
             <div class="col-sm-12">
                 <div class="page-sub-header">
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>*@
     <!-- /Page Header -->
 
     <div class="row">
@@ -26,7 +26,7 @@
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess"  class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
 
 
@@ -43,20 +43,20 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label>Payment Name <span class="login-danger">*</span></label>
-                                    <input class="form-control" type="text" name="Name" maxlength="50" id="Name" placeholder="Enter  Name">
+                                    <input class="form-control" type="text" name="Name" required maxlength="50" id="Name" placeholder="Enter  Name">
                                 </div>
                             </div>
                             <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms calendar-icon">
+                                <div class="form-group local-forms ">
                                     <label>Amount  <span class="login-danger">*</span></label>
-                                    <input class="form-control datetimepicker" name="Amount" type="text" id="Amount" placeholder="Enther Comment">
+                                    <input class="form-control" required name="Amount" type="text" maxlength="5" max="99999" id="Amount" placeholder="Enther Amont">
                                 </div>
                             </div>
 
                             <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms calendar-icon">
-                                    <label>Comment  <span class="login-danger">*</span></label>
-                                    <input class="form-control datetimepicker" name="Comment" type="text" id="Comment" placeholder="Enther Comment">
+                                <div class="form-group local-forms">
+                                    <label>Comment  <span class="login-danger"></span></label>
+                                    <input class="form-control " name="Comment" type="text" id="Comment" placeholder="Enther Comment">
                                 </div>
                             </div>
 

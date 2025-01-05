@@ -1,0 +1,174 @@
+﻿
+@model SchoolManagement.Models.db.Closing
+
+<!-- Ckeditor CSS-->
+<link rel="stylesheet" href="~/template/assets/css/ckeditor.css">
+
+<div class="content container-fluid">
+    <div class="row">
+        <div class="col-xl-12">
+
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="bank-inner-details">
+                        <div class="row">
+                            <form asp-action="ClosingSave" method="post" data-ajax-success="OnSuccess"
+                                  data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+
+
+                                @Html.AntiForgeryToken()
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5 class="form-title student-info">Close the listed transactions.<span><a href="javascript:;"><i class="feather-more-vertical"></i></a></span></h5>
+                                    </div>
+
+
+                                    <div class="col-12 col-sm-6">
+                                        <div class="form-group local-forms">
+
+                                            <label asp-for="Comment" class="control-label">Description<span class="login-danger">*</span></label>
+                                            <input asp-for="Comment" id="Comment" class="form-control" />
+                                            <span asp-validation-for="Comment" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-2">
+                                        <div class="student-submit">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                    <hr />
+
+                    <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
+                        <thead class="student-thread">
+                            <tr>
+
+                                <th>No#</th>
+                                <th>Paid By</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Debit / Credit</th>
+                                <th> Date</th>
+
+
+
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.TransactionList)
+                            {
+                                string Imge = "";
+
+                                <tr>
+
+
+
+                                    <td>@item.Number</td>
+
+                                    <td>  @item.PaidBy </td>
+                                    <td> @item.Type</td>
+                                    <td>@item.Amount</td>
+                                    <td>@item.Drcr</td>
+                                    <td>@item.CreatedDate.ToLongDateString()</td>
+
+
+
+
+                                    <td>
+                                        <div class="input-group">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">List</button>
+                                            <div class="dropdown-menu">
+
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="dropdown-item">Edit</a>
+
+                                                <div role="separator" class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#">Info</a>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- ckeditor JS -->
+<script src="~/template/assets/js/ckeditor.js" type="b10a95405c9c06f6a9707a74-text/javascript"></script>
+
+
+
+<!-- Custom JS -->
+@*<script src="~/template/assets/js/script.js" type="b10a95405c9c06f6a9707a74-text/javascript"></script>*@
+
+<script src="../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="b10a95405c9c06f6a9707a74-|49" defer></script>
+
+
+
+
+@*<script>
+        CKEDITOR.replace('a12', {
+            toolbar: 'Basic',
+            language: 'en'
+        });
+    </script>*@
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+         if (data.status == "true") {
+
+                 swal("Saved!",  data.message, "success");
+
+
+             $("#Comment").val("");
+
+           @*document.location.href = "@Url.Action("Index","tbl_Transiction")",true;*@
+         }
+         else if (data.status=="duplicate") {
+              swal("Dupplicate Record!",  data.message, "warning");
+         }
+        else {
+        swal("False!", data.message, "error");
+        }
+
+
+        //$('#listContainer').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+    </script>
+}

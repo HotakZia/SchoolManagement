@@ -24,9 +24,16 @@
                         <input type="hidden" id="StudentId" name="StudentId" />
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="form-group">
-                        <input type="date" name="feeDate" class="form-control" placeholder="Search by Phone ...">
+       
+                <div class="col-12 col-sm-4">
+                    <div class="form-group local-forms ">
+                        <label class="control-label">Dates<span class="login-danger">*</span></label>
+
+                        <div class="input-group">
+                            <span class="input-group-text" id="date3-1">Select</span>
+                            <input type="text" class="form-control" id="inputDate3-1" placeholder="Start - End" aria-label="Dates" aria-describedby="basic-addon1">
+                        </div>
+                        <input id="Date" name="feedate" type="hidden" required class="form-control" />
                     </div>
                 </div>
                 <div class="col-lg-2">
@@ -196,6 +203,26 @@
         </div>
     </div>
 </div>
+
+<script src="~/js/jQuery JavaScript Library v3.7.1.js"></script>
+<link href="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
+<script src="~/Persion-datepicker/dist/upper.main.js"></script>
+@*<script src="~/Persion-datepicker/dist/Slim.min.js"></script>*@
+<script src="~/Persion-datepicker/dist/bootstrap.min.js.js"></script>
+<script src="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.js"></script>
+<script type="text/javascript">
+    $('#date3-1').MdPersianDateTimePicker({
+        targetTextSelector: '#inputDate3-1',
+        targetDateSelector: '#Date',
+        monthsToShow: [0, 0],
+        selectedDate: new Date(),
+        selectedRangeDate: [new Date(), new Date()],
+        rangeSelector: false,
+
+
+
+    });
+</script>
 @* printer button function *@
 <script>
 

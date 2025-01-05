@@ -20,6 +20,99 @@ namespace SchoolManagement.Controllers
         //{
         //    _context = context;
         //}
+        public async Task<IActionResult> Closing()
+        {
+            ViewBag.TransactionList = db.Transactions.Where(x => x.Status != true).ToList();
+
+            return View();
+        }
+        public async Task<IActionResult> ClosingList()
+        {
+            var list = db.Closings.ToList();
+            return View(list);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ClosingSave(Closing closing)
+        {
+
+            try
+            {
+
+            
+            var checkDuplicate = db.Closings.Where(x => x.CreatedDate.Value.Year == DateTime.Now.Year && x.CreatedDate.Value.Month == DateTime.Now.Month &&
+              x.CreatedDate.Value.Day == DateTime.Now.Day).FirstOrDefault();
+            if (checkDuplicate!=null)
+            {
+                showMessageString = new
+                {
+                    status = "duplicate",
+                    message = "Already closing done today!"
+
+                };
+                return Json(showMessageString);
+            }
+            var list = db.Transactions.Where(x => x.Status != true).ToList();
+            decimal? totalCredit = 0;
+            decimal? totalDebit = 0;
+            
+            if (list.Count()>=1)
+            {
+                
+                foreach (var item in list)
+                {
+                    item.Status = true;
+                    db.Transactions.Update(item);
+                    if (item.Type=="Credit")
+                    {
+                        totalCredit += item.Amount;
+                    }
+                    else if (item.Type == "Debit")
+                    {
+                        totalDebit += item.Amount;
+                    }
+                        db.Transactions.Update(item);
+                        db.Entry(item).Property("Number").IsModified = false;
+
+                    }
+                }
+            else
+            {
+                showMessageString = new
+                {
+                    status = "false",
+                    message = "you don't have new records!"
+
+                };
+                return Json(showMessageString);
+            }
+            closing.OldDebit = db.Transactions.Where(x => x.Status !=true&&x.Drcr=="Debit").Sum(x=>x.Amount);
+            closing.OldCredit = db.Transactions.Where(x => x.Status != true && x.Drcr == "Credit").Sum(x => x.Amount);
+            closing.Id = Guid.NewGuid();
+            closing.CreatedDate = DateTime.Now;
+            db.Closings.Add(closing);
+            db.SaveChanges();
+                showMessageString = new
+                {
+                    status = "true",
+                    message = "the closing has been done."
+
+                };
+                return Json(showMessageString);
+
+            }
+            catch (Exception ex)
+            {
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+
+                };
+                return Json(showMessageString);
+            }
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> lineChart(string Date)
         {
@@ -49,49 +142,6 @@ namespace SchoolManagement.Controllers
 
 
 
-
-
-            //////////////////
-            ///
-
-            List<DataPoint> dataPoints = new List<DataPoint>();
-            List<DataPoint> dataPoints2 = new List<DataPoint>();
-            List<DataPoint> dataPoints1 = new List<DataPoint>();
-            var studentByGender = db.Students.GroupBy(c => c.Gender).
-                  Select(g => new Models.GroupByResult
-                  {
-                      Key = g.Key.ToString(),
-                      decimalValue = g.Count()
-                  }).ToList();
-            var feesResult = db.Fees.GroupBy(c => c.CreatedDate.Value.Month).
-                      Select(g => new Models.GroupByResult
-                      {
-                          Key = g.Key.ToString(),
-                          decimalValue = g.Sum(x => x.Amount)
-                      }).ToList();
-            var studentByGroup = db.Students.GroupBy(c => c.Shift).
-                      Select(g => new Models.GroupByResult
-                      {
-                          Key = g.Key.ToString(),
-                          Value = g.Count().ToString()
-                      })/*.OrderByDescending(i => i.Value)*//*.Take(10)*/.ToList();
-            foreach (var item in studentByGender)
-            {
-                dataPoints1.Add(new DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
-            }
-            foreach (var item in feesResult)
-            {
-                dataPoints.Add(new DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
-            }
-
-            foreach (var item in studentByGroup)
-            {
-                dataPoints2.Add(new DataPoint(item.Key, double.Parse(item.Value.ToString())));
-            }
-
-            ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints);
-            ViewBag.DataPoints1 = JsonConvert.SerializeObject(dataPoints1);
-            ViewBag.DataPoints2 = JsonConvert.SerializeObject(dataPoints2);
 
             return PartialView("");
         }
@@ -251,15 +301,15 @@ namespace SchoolManagement.Controllers
         }
 
         // GET: Transactions
-        public async Task<IActionResult> Index(DateTime? fromDate,DateTime? toDate)
+        public async Task<IActionResult> Index(string Date)
         {
-            if (fromDate==null)
+            DateTime fromDate = DateTime.Now.AddMonths(-1);
+            DateTime toDate = DateTime.Now;
+            if (!string.IsNullOrEmpty(Date))
             {
-                fromDate = DateTime.Now;
-            }
-            if (toDate==null)
-            {
-                toDate = DateTime.Now;
+                string[] From_To_Dates = Date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
+                toDate = DateTime.Parse(From_To_Dates[0].ToString());
+                toDate = DateTime.Parse(From_To_Dates[1].ToString());
             }
             var list = db.Transactions.Where(x=>x.Date>=fromDate&&x.Date<=toDate).ToList();
             bool isAjaxRequest = Request.Headers["X-Requested-With"] == "XMLHttpRequest";
@@ -333,47 +383,7 @@ namespace SchoolManagement.Controllers
 
 
 
-            //////////////////
-            ///
-
-            List<DataPoint> dataPoints = new List<DataPoint>();
-            List<DataPoint> dataPoints2 = new List<DataPoint>();
-            List<DataPoint> dataPoints1 = new List<DataPoint>();
-            var studentByGender = db.Students.GroupBy(c => c.Gender).
-                  Select(g => new Models.GroupByResult
-                  {
-                      Key = g.Key.ToString(),
-                      decimalValue = g.Count()
-                  }).ToList();
-            var feesResult = db.Fees.GroupBy(c => c.CreatedDate.Value.Month).
-                      Select(g => new Models.GroupByResult
-                      {
-                          Key = g.Key.ToString(),
-                          decimalValue = g.Sum(x => x.Amount)
-                      }).ToList();
-            var studentByGroup = db.Students.GroupBy(c => c.Shift).
-                      Select(g => new Models.GroupByResult
-                      {
-                          Key = g.Key.ToString(),
-                          Value = g.Count().ToString()
-                      })/*.OrderByDescending(i => i.Value)*//*.Take(10)*/.ToList();
-            foreach (var item in studentByGender)
-            {
-                dataPoints1.Add(new DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
-            }
-            foreach (var item in feesResult)
-            {
-                dataPoints.Add(new DataPoint(item.Key, double.Parse(item.decimalValue.ToString())));
-            }
-
-            foreach (var item in studentByGroup)
-            {
-                dataPoints2.Add(new DataPoint(item.Key, double.Parse(item.Value.ToString())));
-            }
-
-            ViewBag.DataPoints = JsonConvert.SerializeObject(dataPoints);
-            ViewBag.DataPoints1 = JsonConvert.SerializeObject(dataPoints1);
-            ViewBag.DataPoints2 = JsonConvert.SerializeObject(dataPoints2);
+   
             return View();
         }
        
@@ -654,14 +664,14 @@ namespace SchoolManagement.Controllers
                     if (transaction.Type=="Teacher-Salary"|| transaction.Type == "Student-Fees")
                     {
                          duplicate = db.Transactions.Where(x => x.RelationId == transaction.RelationId &&
-                         x.Date.Value.Year==transaction.Year&&
+                         x.Date.Value.Year==transaction.Date.Value.Year&&
                          x.Date.Value.Month==transaction.Date.Value.Month).FirstOrDefault();
                         if (duplicate != null)
                         {
                             showMessageString = new
                             {
                                 status = "duplicate",
-                                message = transaction.Amount + " " + " is dupplicate amount!"
+                                message = "already paid for "+transaction.Date.Value.ToString("MMMM-yy") + ".  dupplicate record!"
 
                             };
                             return Json(showMessageString);

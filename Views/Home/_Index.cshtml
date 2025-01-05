@@ -17,8 +17,8 @@
                     </div>
                     <div class="col-6">
                         <ul class="chart-list-out">
-                            <li><span class="circle-blue"></span>Teacher</li>
-                            <li><span class="circle-green"></span>Student</li>
+                            @*<li><span class="circle-blue"></span>Teacher</li>
+                            <li><span class="circle-green"></span>Student</li>*@
                             <li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li>
                         </ul>
                     </div>
@@ -43,8 +43,8 @@
                     </div>
                     <div class="col-6">
                         <ul class="chart-list-out">
-                            <li><span class="circle-blue"></span>Girls</li>
-                            <li><span class="circle-green"></span>Boys</li>
+                            @*<li><span class="circle-blue"></span>Girls</li>
+                            <li><span class="circle-green"></span>Boys</li>*@
                             <li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li>
                         </ul>
                     </div>
@@ -71,7 +71,7 @@ window.onload = function () {
 		text: "Resource.From @DateTime.Now.Year"
 	}],*@
 	axisY: {
-		title: "Monthly 2",
+		//title: "Monthly 2",
 		gridThickness: 0
 	},
 	data: [{
@@ -83,7 +83,7 @@ window.onload = function () {
 lchart.render();
 var Cchart = new CanvasJS.Chart("CchartContainer", {
 	theme: "light2", // "light1", "light2", "dark1", "dark2"
-	exportEnabled: true,
+	//exportEnabled: true,
 	animationEnabled: true,
 	//title: {
 	//	text: "Quantity",

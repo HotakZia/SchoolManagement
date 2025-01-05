@@ -28,7 +28,7 @@
                                 <h5 class="form-title student-info">Pay Fees<span><a href="javascript:;"><span id="TotalAmountText"></span></a></span></h5>
                             </div>
                             <div class="row">
-                                <div class="form-group local-forms col-lg-5">
+                                <div class="form-group local-forms col-lg-3">
                                     <div class="form-group local-forms">
                                         <input type="text" required id="txtName" name="txtName" class="form-control" />
 
@@ -42,11 +42,23 @@
                                         <span asp-validation-for="@Model[number].PaidBy" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="form-group local-forms col-lg-4">
+                                <div class="form-group local-forms col-lg-3">
                                     <div class="form-group local-forms">
                                         <label asp-for="@Model[number].Comment" class="control-label">Comment <span class="login-danger"> *</span></label>
                                         <input asp-for="@Model[number].Comment" id="Comment" maxlength="50" value="na" required class="form-control" />
                                         <span asp-validation-for="@Model[number].Comment" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-3">
+                                    <div class="form-group local-forms ">
+                                        <label asp-for="@Model[number].Date" class="control-label">Date<span class="login-danger">*</span></label>
+
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="date3-1">Date</span>
+                                            <input type="text" class="form-control" id="inputDate3-1" placeholder="Start - End" aria-label="Dates" aria-describedby="basic-addon1">
+                                        </div>
+                                        <input asp-for="@Model[number].Date" id="Date" type="hidden" required class="form-control" />
+                                        <span asp-validation-for="@Model[number].Date" class="text-danger"></span>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +97,24 @@
 
 
 
+<link href="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
+<script src="~/Persion-datepicker/dist/upper.main.js"></script>
+@*<script src="~/Persion-datepicker/dist/Slim.min.js"></script>*@
+<script src="~/Persion-datepicker/dist/bootstrap.min.js.js"></script>
+<script src="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.js"></script>
+<script type="text/javascript">
+    $('#date3-1').MdPersianDateTimePicker({
+        targetTextSelector: '#inputDate3-1',
+        targetDateSelector: '#Date',
+        monthsToShow: [0, 0],
+        selectedDate: new Date(),
+        selectedRangeDate: [new Date(), new Date()],
+        rangeSelector: false,
 
+
+
+    });
+</script>
 
 <script>
 
@@ -240,7 +269,7 @@
 
 
     });
-  
+
 </script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

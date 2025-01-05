@@ -51,12 +51,17 @@
                             </div>
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms ">
-                                    <label asp-for="Date" class="control-label">Date<span class="login-danger">*</span></label>
-                                    <input asp-for="Date" type="date" required class="form-control" />
-                                    <span asp-validation-for="Date" class="text-danger"></span>
+                                    <label asp-for="@Model.Date" class="control-label">Date<span class="login-danger">*</span></label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="date3-1">Date</span>
+                                        <input type="text" class="form-control" id="inputDate3-1" placeholder="Start - End" aria-label="Dates" aria-describedby="basic-addon1">
+                                    </div>
+                                    <input asp-for="@Model.Date" id="Date" type="hidden" required class="form-control" />
+                                    <span asp-validation-for="@Model.Date" class="text-danger"></span>
                                 </div>
                             </div>
-                  
+
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
 
@@ -85,7 +90,26 @@
         </div>
     </div>
 </div>
+
 <script src="~/js/jQuery JavaScript Library v3.7.1.js"></script>
+<link href="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
+<script src="~/Persion-datepicker/dist/upper.main.js"></script>
+@*<script src="~/Persion-datepicker/dist/Slim.min.js"></script>*@
+<script src="~/Persion-datepicker/dist/bootstrap.min.js.js"></script>
+<script src="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.js"></script>
+<script type="text/javascript">
+    $('#date3-1').MdPersianDateTimePicker({
+        targetTextSelector: '#inputDate3-1',
+        targetDateSelector: '#Date',
+        monthsToShow: [0, 0],
+        selectedDate: new Date(),
+        selectedRangeDate: [new Date(), new Date()],
+        rangeSelector: false,
+
+
+
+    });
+</script>
 <link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
 <script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
 

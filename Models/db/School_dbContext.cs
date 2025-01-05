@@ -22,6 +22,7 @@ namespace SchoolManagement.Models.db
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<BookAssignee> BookAssignees { get; set; }
         public virtual DbSet<Class> Classes { get; set; }
+        public virtual DbSet<Closing> Closings { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Exam> Exams { get; set; }
         public virtual DbSet<Fee> Fees { get; set; }
@@ -155,6 +156,35 @@ namespace SchoolManagement.Models.db
                 entity.Property(e => e.Shift).HasMaxLength(50);
 
                 entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
+            });
+
+            modelBuilder.Entity<Closing>(entity =>
+            {
+                entity.ToTable("Closing");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(250);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy).HasMaxLength(250);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.NewAmount).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.NewCredit).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.NewDebit).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.OldAmount).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.OldCredit).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.OldDebit).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
             });
 
             modelBuilder.Entity<Event>(entity =>

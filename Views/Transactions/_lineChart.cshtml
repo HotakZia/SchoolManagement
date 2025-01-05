@@ -6,7 +6,6 @@
     </div>*@
 
 
-<div class="col-md-12 col-lg-6">
 
     <!-- Revenue Chart -->
     <div class="card card-chart">
@@ -30,9 +29,8 @@
     </div>
     <!-- /Revenue Chart -->
 
-</div>
 
-<div class="col-md-12 col-lg-6">
+
 
     <!-- Student Chart -->
     <div class="card card-chart">
@@ -55,7 +53,6 @@
         </div>
     </div>
     <!-- /Student Chart -->
-</div>
 
 <script src="~/Chart/canvasjs.min.js.js"></script>
 
@@ -77,7 +74,7 @@ window.onload = function () {
 	data: [{
 		type: "bar",
 		indexLabel: "{y}",
-		dataPoints: @Html.Raw(ViewBag.DataPoints)
+		dataPoints: @Html.Raw(ViewBag.DataPointsCredit)
 	}]
 });
 lchart.render();
