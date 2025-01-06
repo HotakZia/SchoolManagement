@@ -301,7 +301,7 @@ namespace SchoolManagement.Controllers
 
 
                         }).ToList();
-            ViewBag.AssigneeList = new SelectList(list, "Id", "Name");
+            ViewBag.AssigneeList = new SelectList(list, "Id", "Name",singleClass.Id);
 
             return View();
         }

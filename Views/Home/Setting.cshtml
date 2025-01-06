@@ -1,0 +1,210 @@
+﻿@model SchoolManagement.Models.db.TableCompany
+
+@{ int number = 0;}
+<script src="~/js/jQuery JavaScript Library v3.7.1.js"></script>
+
+<div class="content container-fluid">
+
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="card comman-shadow">
+                <div class="card-body">
+                    <form asp-action="SettingSave" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
+                          data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
+
+
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="Creator" />
+                        <input type="hidden" asp-for="CreateTime" />
+                        <input type="hidden" asp-for="Type" />
+                        <input type="hidden" asp-for="LogoName" />
+                        <input type="hidden" asp-for="LogoType" />
+
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                        <div class="col-12">
+                            <h5 class="form-title student-info">Update System Info<span><a href="javascript:;"><span id="TotalAmountText"></span></a></span></h5>
+                        </div>
+                        <div class="row">
+
+                            <div class="form-group local-forms col-lg-3">
+                                <div class="form-group local-forms">
+                                    <label asp-for="@Model.Name" class="control-label">Name <span class="login-danger"> *</span></label>
+                                    <input asp-for="@Model.Name" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group local-forms col-lg-3">
+                                <div class="form-group local-forms">
+                                    <label asp-for="@Model.TagLine" class="control-label">Services <span class="login-danger"> *</span></label>
+                                    <input asp-for="@Model.TagLine" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <span asp-validation-for="@Model.TagLine" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group local-forms col-lg-3">
+                                <div class="form-group local-forms">
+                                    <label asp-for="@Model.PhoneNumber" class="control-label">Phone <span class="login-danger"> *</span></label>
+                                    <input asp-for="@Model.PhoneNumber" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group local-forms col-lg-3">
+                                <div class="form-group local-forms">
+                                    <label asp-for="@Model.Email" class="control-label">Email <span class="login-danger"> *</span></label>
+                                    <input asp-for="@Model.Email" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group local-forms col-lg-3">
+                                <div class="form-group local-forms">
+                                    <label asp-for="@Model.Location" class="control-label">Locaiton <span class="login-danger"> *</span></label>
+                                    <input asp-for="@Model.Location" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <span asp-validation-for="@Model.Location" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group local-forms col-lg-3">
+                                <div class="form-group local-forms">
+                                    <label asp-for="@Model.FacebookName" class="control-label">Facebook Name <span class="login-danger"> *</span></label>
+                                    <input asp-for="@Model.FacebookName" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <span asp-validation-for="@Model.FacebookName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group local-forms col-lg-3">
+                                <div class="form-group local-forms">
+                                    <label asp-for="@Model.TwitterName" class="control-label">Twitter Name <span class="login-danger"> *</span></label>
+                                    <input asp-for="@Model.TwitterName" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <span asp-validation-for="@Model.TwitterName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group local-forms col-lg-3">
+                                <div class="form-group local-forms">
+                                    <label asp-for="@Model.Website" class="control-label">Website <span class="login-danger"> *</span></label>
+                                    <input asp-for="@Model.Website" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <span asp-validation-for="@Model.Website" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group local-forms col-lg-6">
+                                <div class="form-group local-forms">
+                                    <label asp-for="@Model.Description" class="control-label">Description <span class="login-danger"> *</span></label>
+                                    <input asp-for="@Model.Description" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-4">
+
+                                <div class="profile-user-box">
+                                    <div class="profile-user-img">
+
+                                        @if (Model.Logo != null)
+                                        {
+                                            string Image = "";
+                                            Image = Convert.ToBase64String(Model.Logo);
+
+                                            <img src="@string.Format("data:image/jpeg;base64,{0}", Image)" id="uploadedImage" height="150" width="150" />
+
+                                        }
+
+                                        <div class="form-group students-up-files profile-edit-icon mb-0">
+                                            <div class="uplod d-flex">
+                                                <label class="file-upload profile-upbtn mb-0">
+                                                    <i class="feather-edit-3"></i>
+                                                    <input type="file" name="Image" id="uploadInput" accept="image/*"  onchange="displayImage(event)">
+
+                                                </label>
+                                                <div class="invalid-feedback">
+                                                    Please typ a comment.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div class="col-12">
+                                <div class="student-submit">
+                                    <button type="submit" class="btn btn-primary" id=""> Submit</button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+
+    function OnBegin() {
+        $('.page-loader').show();
+
+    }
+    function OnSuccess(data) {
+         if (data.status == "true") {
+
+
+             swal("Saved!", data.message, "success");
+
+
+         }
+         else if (data.status=="duplicate") {
+              swal("Dupplicate Record!",  data.message, "warning");
+         }
+        else {
+        swal("False!", data.message, "error");
+        }
+
+
+        //$('#listContainer').html(data); // Replace the list with the updated content
+
+
+    }
+    function OnComplete() {
+        $('.page-loader').hide();
+
+    }
+    </script>
+}
+
+<script>
+    function displayImage(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            document.getElementById('uploadedImage').src = e.target.result;
+        }
+
+        reader.readAsDataURL(file);
+    }
+</script>
+
+

@@ -9,7 +9,7 @@
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="AddPerants" method="post" data-ajax-success="OnSuccess"
+                    <form asp-action="AddPerants" method="post" data-ajax-success="OnSuccess"  class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <input type="hidden" name="Id" value="@ViewBag.StudentId"/>

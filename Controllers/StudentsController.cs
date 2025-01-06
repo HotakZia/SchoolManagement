@@ -289,6 +289,13 @@ namespace SchoolManagement.Controllers
               
                 db.SaveChanges();
                 ViewBag.ParentsList = db.Parents.Where(x => x.StudentId == Id).OrderByDescending(x=>x.CreatedDate).ToList();
+                showMessageString = new
+                {
+                    status = "true",
+                    message ="relation has been added"
+
+                };
+                return Json(showMessageString);
             }
             catch (Exception ex)
             {
@@ -396,20 +403,20 @@ namespace SchoolManagement.Controllers
             
         }
         // GET: Students
-        public async Task<IActionResult> Index(Guid?Id)
+        public async Task<IActionResult> Index(Guid? ClassId)
         {
             ViewBag.ClassId = new SelectList(db.Classes.ToList(), "Id", "Name");
             IList<Models.Entities.Student> list = new List<Models.Entities.Student>();
-            if (Id==null)
+            if (ClassId == null)
             {
                 return View(list);
             }
              list= await(from student in db.Students
              join class_ in db.Classes on student.ClassId equals class_.Id
 
-             where student.ClassId==Id
+             where student.ClassId== ClassId
 
-             select new Models.Entities.Student
+                         select new Models.Entities.Student
              {
                   ClassId= student.ClassId,
                  StudentId=student.StudentId,

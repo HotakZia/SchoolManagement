@@ -7,19 +7,7 @@
 
 <div class="content container-fluid">
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col">
-                <h3 class="page-title">Students</h3>
-                <ul class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Students</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <!-- /Page Header -->
+   
     <form asp-action="Index" method="get" data-ajax="true" data-ajax-update="#studentsList"
           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure">
         <!-- Form fields go here -->
@@ -32,7 +20,7 @@
 
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
+                @*<div class="col-lg-4 col-md-6">
                     <div class="form-group">
                         <input type="date" class="form-control" name="date">
                     </div>
@@ -42,7 +30,7 @@
                         <input type="text" id="txtName" name="txtName" class="form-control" placeholder="Search by Name ...">
                         <input type="hidden" id="StudentId" name="StudentId" />
                     </div>
-                </div>
+                </div>*@
 
                 <div class="col-lg-2">
                     <div class="search-student-btn">
@@ -96,19 +84,18 @@
 
 
 
-<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
 
 
 
 
-@*<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>*@
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
 
 
 <script>

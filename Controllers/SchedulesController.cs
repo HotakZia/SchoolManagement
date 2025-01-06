@@ -49,14 +49,17 @@ namespace SchoolManagement.Controllers
                         && x.Status == true 
                         && x.SubjectId == item.SubjectId
                         &&x.Year==item.Year).FirstOrDefault();
+                   
                         if (dupplicate != null)
                         {
-                            showMessageString = new
-                            {
-                                status = "false",
-                                message ="in "+ item.DayOfWeek +" "+ item.HourOfDay + " hour is duplicate record!"
-                            };
-                            return Json(showMessageString);
+                            //showMessageString = new
+                            //{
+                            //    status = "false",
+                            //    message ="in "+ item.DayOfWeek +" "+ item.HourOfDay + " hour is duplicate record!"
+                            //};
+                            //return Json(showMessageString);
+                            db.TimeTables.Update(dupplicate);
+                            db.Entry(dupplicate).Property("Number").IsModified = false;
                         }
                         item.Id = Guid.NewGuid();
                         item.CreatedDate = DateTime.Now;

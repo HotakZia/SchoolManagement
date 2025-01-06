@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -21,6 +23,91 @@ namespace SchoolManagement.Controllers
         //{
         //    _logger = logger;
         //}
+        public async Task<IActionResult> Setting()
+        {
+            var list = db.TableCompanies.FirstOrDefault();
+            return View(list);
+        }
+      
+     public async Task<IActionResult> SettingSave(Models.db.TableCompany  company, IFormFile Image)
+        {
+            try
+            {
+
+
+                if (Image != null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+
+                        Image.CopyToAsync(memoryStream);
+                        Byte[] fileBytes = memoryStream.ToArray();
+                        int maxFileSizeInBytes = 1 * 1024 * 1024 / 2; // 10MB (adjust as needed)
+                        if (
+                   Image.ContentType.ToLower() != "image/jpg" &&
+                   Image.ContentType.ToLower() != "image/jpeg" &&
+                   Image.ContentType.ToLower() != "image/pjpeg" &&
+                   Image.ContentType.ToLower() != "image/gif" &&
+                   Image.ContentType.ToLower() != "image/x-png" &&
+                   Image.ContentType.ToLower() != "image/png" &&
+                   Image.ContentType.ToLower() != "image/svg"
+               )
+                        {
+
+                            showMessageString = new
+                            {
+                                status = "false",
+                                message = "Profile photo must be a JPEG, PNG or SVG format."
+                            };
+                            return Json(showMessageString);
+                        }
+                        if (Image.Length > maxFileSizeInBytes)
+                        {
+
+                            showMessageString = new
+                            {
+                                status = "false",
+                                message = " Profile photo max size must be 512 KB."
+                            };
+                            return Json(showMessageString);
+                        }
+                        else
+                        {
+                            company.Logo = fileBytes;
+
+                        }
+                    }
+                }
+                var setting = db.TableCompanies.FirstOrDefault();
+                db.TableCompanies.Remove(setting);
+             
+                company.Creator = Guid.Empty;
+     
+                db.TableCompanies.Add(company);
+             
+                db.SaveChanges();
+                showMessageString = new
+                {
+                    status = "true",
+                    message = "the setting info has been update."
+
+                };
+                return Json(showMessageString);
+            }
+            catch (Exception ex)
+
+            {
+
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+
+                };
+                return Json(showMessageString);
+            }
+           
+        }
         public async Task<IActionResult> getActiveScedule()
         {
             string day = DateTime.Now.DayOfWeek.ToString();
@@ -111,7 +198,61 @@ namespace SchoolManagement.Controllers
         [Authorize(Roles = ("Teacher"))]
         public IActionResult Teacher()
         {
-            return View();
+            Guid Id =Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "userId").Value.ToString());
+
+
+
+ViewBag.hourCount = (from subject in db.TimeTables
+                  join assignee in db.Schedules on subject.SubjectId equals assignee.Id
+                  join teacher in db.Teachers on assignee.TeacherId equals teacher.TeacherId
+                  where subject.Status == true
+                  select new
+                  {
+                     
+                  }).Count();
+
+ 
+
+
+
+            ViewBag.subjectCount = db.Schedules.Where(x => x.TeacherId == Id).Count();
+            ViewBag.classCount = (from class_ in db.Classes
+                                  join assignee in db.Schedules on class_.Grad equals assignee.Grad
+                                  join teacher in db.Teachers on assignee.TeacherId equals teacher.TeacherId
+                                  where assignee.Status == true
+
+                                  select new 
+                                  {
+
+
+
+                                  }).Count();
+            ViewBag.studentCount = db.Students.Count();
+            var list = (from class_ in db.TimeTables
+                                  join shc in db.Schedules on class_.SubjectId equals shc.Id
+                                  join teacher in db.Teachers on shc.TeacherId equals teacher.TeacherId
+                        join classlist in db.Classes on class_.ClassId equals classlist.Id
+                        where shc.TeacherId == Id
+
+                                  select new Models.Entities.TimeTable
+                                  {
+                                      Id = class_.Id,
+                                      ClassId = class_.Id,
+                                      ClassName=classlist.Name,
+                                      Subject = shc.Subject,
+                                      SubjectId = shc.Id,
+                                      DayOfWeek = class_.DayOfWeek,
+                                      HourOfDay = class_.HourOfDay,
+                                      CreatedBy = class_.CreatedBy,
+                                      CreatedDate = class_.CreatedDate,
+                                      ModifiedBy = class_.ModifiedBy,
+                                      ModifiedDate = class_.ModifiedDate,
+                                      Number = class_.Number,
+                                      Status = class_.Status,
+                                      Year = class_.Year,
+                                      Teacher = teacher.FirstName + " " + teacher.LastName,
+                                  }).ToList();
+            return View(list);
 
         }
         [Route("student")]
@@ -119,7 +260,36 @@ namespace SchoolManagement.Controllers
         [Authorize(Roles = ("Student"))]
         public IActionResult Student()
         {
-            return View();
+            Guid Id = Guid.Parse(User.Claims.FirstOrDefault(x => x.Type == "userId").Value.ToString());
+            var Student = db.Students.Where(x => x.StudentId == Id).FirstOrDefault();
+            var classs = db.Classes.Where(x => x.Id == Student.ClassId).FirstOrDefault();
+            ViewBag.Subject = db.Schedules.Where(x => x.Grad == classs.Grad).Count();
+            ViewBag.Exam = db.Exams.Where(x => x.StudentId == Id).Count();
+            ViewBag.Fees = db.Transactions.Where(x => x.RelationId == Id).Count();
+           
+            var list = (from class_ in db.TimeTables
+                        join shc in db.Schedules on class_.SubjectId equals shc.Id
+                        join teacher in db.Teachers on shc.TeacherId equals teacher.TeacherId
+                        where class_.ClassId == Student.ClassId
+
+                        select new Models.Entities.TimeTable
+                        {
+                            Id = class_.Id,
+                            ClassId = class_.Id,
+                            Subject = shc.Subject,
+                            SubjectId = shc.Id,
+                            DayOfWeek = class_.DayOfWeek,
+                            HourOfDay = class_.HourOfDay,
+                            CreatedBy = class_.CreatedBy,
+                            CreatedDate = class_.CreatedDate,
+                            ModifiedBy = class_.ModifiedBy,
+                            ModifiedDate = class_.ModifiedDate,
+                            Number = class_.Number,
+                            Status = class_.Status,
+                            Year = class_.Year,
+                            Teacher = teacher.FirstName + " " + teacher.LastName,
+                        }).ToList();
+            return View(list);
         }
         [Route("dashboard")]
 

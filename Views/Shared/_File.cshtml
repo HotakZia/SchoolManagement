@@ -21,14 +21,14 @@
                                 <div class="col-lg-2">
                                     <div class="form-group local-forms">
                                         <label asp-for="Name" class="control-label">Full Name<span class="login-danger"></span></label>
-                                        <input asp-for="Name" class="form-control" autofocus />
+                                        <input asp-for="Name" class="form-control" autofocus required />
                                         <span asp-validation-for="Name" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
                                     <div class="form-group local-forms">
                                         <label asp-for="Type" class="control-label">Type Of<span class="login-danger"></span></label>
-                                        <select asp-for="Type" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.DocumentType>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="District" class="form-control select2" required></select>
+                                        <select  asp-for="Type" asp-items="Html.GetEnumSelectList<SchoolManagement.Models.MyEnums.DocumentType>().Select(item => new SelectListItem { Text = item.Text, Value = item.Text.ToString() })" id="District" class="form-control select2" required></select>
 
 
                                         <span asp-validation-for="Type" class="text-danger"></span>
@@ -54,7 +54,7 @@
 
                                         <div class="uplod">
                                             <label class="file-upload image-upbtn mb-0">
-                                                File <input type="file" name="Image">
+                                                File <input type="file" name="Image" required>
                                                 <span asp-validation-for="@Model.Attachment" class="text-danger"></span>
                                             </label>
 

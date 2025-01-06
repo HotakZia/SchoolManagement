@@ -21,5 +21,6 @@ namespace SchoolManagement.Models.Entities
         public int Number { get; set; }
         public string Teacher { get; set; }
         public string Subject { get; set; }
+        public string ClassName { get; set; }
     }
 }
