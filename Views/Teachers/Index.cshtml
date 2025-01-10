@@ -18,9 +18,10 @@
                             </div>
                             <div class="col-auto text-end float-end ms-auto download-grp">
                                 @*<a href="teachers.html" class="btn btn-outline-gray me-2 active"><i class="feather-list"></i></a>
-                    <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>*@
+        <a href="teachers-grid.html" class="btn btn-outline-gray me-2"><i class="feather-grid"></i></a>*@
                                 <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Download</a>
                                 <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                              
                             </div>
                         </div>
                     </div>
@@ -91,9 +92,10 @@
                                         <div class="input-group">
                                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">List</button>
                                             <div class="dropdown-menu">
+                                                <a onclick='LoadIdCard("@item.TeacherId")' href="#" class="dropdown-item">Get Teacher Id</a>
                                                 <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.TeacherId">Edit  </a>
 
-                                               <a class="dropdown-item" href="#" onclick='LoadFiles("@item.TeacherId")'>Fils </a>
+                                                <a class="dropdown-item" href="#" onclick='LoadFiles("@item.TeacherId")'>Fils </a>
                                                 <div role="separator" class="dropdown-divider"></div>
                                                 <a class="dropdown-item" href="#">Info</a>
                                             </div>
@@ -117,6 +119,34 @@
 
 <script>
 
+         function LoadIdCard(Id) {
+
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Home/LoadIdCard", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
     function LoadFiles(Id) {
 
         $('.page-loader').show();
@@ -170,6 +200,49 @@
             }
         });
         $('.page-loader').hide();
+    }
+        function printDiv() {
+
+
+
+
+        var divToPrint = document.getElementById('PrintIdCard');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write(`<html>
+           <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+                <title>
+
+
+                  ID Card
+                </title>
+
+
+<head>
+
+
+
+
+
+            </head>
+<body onload="window.print()">` + divToPrint.innerHTML + ' </body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+        $("#Cancel").trigger("click");
+
+
+
+
+
     }
 
 </script>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using QRCoder;
 using SchoolManagement.Models;
 
 namespace SchoolManagement.Controllers
@@ -23,6 +25,97 @@ namespace SchoolManagement.Controllers
         //{
         //    _logger = logger;
         //}
+    
+            public async Task<IActionResult> LoadIdCard(Guid? Id)
+        {
+            //PM> Install-Package QRCoder
+            var list = new Models.Entities.IdCard();
+            var student = db.Students.Where(x => x.StudentId == Id).FirstOrDefault();
+            var teacher = new Models.db.Teacher();
+            if (student==null)
+            {
+                teacher = db.Teachers.FirstOrDefault();
+                list.Name = teacher.FirstName + " " + teacher.LastName;
+                list.IdCardNumber = teacher.RoleNumber;
+                list.Attachment = teacher.Attachment;
+                list.Position = teacher.Position;
+                list.ExpireDate = DateTime.Now.AddYears(2);
+         
+                    
+            }
+            else
+            {
+              
+                list.Name = student.FirstName + " " + teacher.LastName;
+                list.IdCardNumber = student.RoleNumber;
+                list.Attachment = student.Attachment;
+                list.Position = "Student";
+                list.ExpireDate = DateTime.Now.AddYears(2);
+            }
+            ViewBag.SystemInfo = db.TableCompanies.FirstOrDefault();
+
+
+            // Convert model data to JSON for QR code encoding
+            string jsonData = JsonConvert.SerializeObject("Info: "+list.Name+list.IdCardNumber+list.Position+list.ExpireDate);
+
+            // Generate QR code from the JSON data
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            //QRCodeData qrCodeData = qrGenerator.CreateQrCode("Hello, World!", QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(jsonData, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new QRCode(qrCodeData);
+            Bitmap qrCodeImage = qrCode.GetGraphic(10);
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                qrCodeImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                byte[] qrCodeImageBytes = stream.ToArray();
+
+               list.QRcode = Convert.ToBase64String(qrCodeImageBytes);
+            }
+            return PartialView("_IdCard",list);
+        }
+        public async Task<IActionResult> LoadClassIdCards(Guid? Id)
+        {
+            var list = new List<Models.Entities.IdCard>();
+            var student = db.Students.Where(x => x.ClassId == Id).ToList();
+
+            foreach (var item in student)
+            {
+
+
+
+                list.Add(new Models.Entities.IdCard { Attachment = item.Attachment, IdCardNumber = item.RoleNumber,
+
+                     Name = item.FirstName + " " + item.LastName, ExpireDate = DateTime.Now.AddYears(2), Position = "Student" });
+
+
+             
+            }
+            foreach (var item in list)
+            {
+                // Convert model data to JSON for QR code encoding
+                string jsonData = JsonConvert.SerializeObject("Info: " + item.Name + item.IdCardNumber + item.Position + item.ExpireDate);
+                // Generate QR code from the JSON data
+                QRCodeGenerator qrGenerator = new QRCodeGenerator();
+                //QRCodeData qrCodeData = qrGenerator.CreateQrCode("Hello, World!", QRCodeGenerator.ECCLevel.Q);
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(jsonData, QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(qrCodeData);
+                Bitmap qrCodeImage = qrCode.GetGraphic(10);
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    qrCodeImage.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] qrCodeImageBytes = stream.ToArray();
+
+                    item.QRcode = Convert.ToBase64String(qrCodeImageBytes);
+                }
+            }
+
+              
+            
+            ViewBag.SystemInfo = db.TableCompanies.FirstOrDefault();
+            return PartialView("_IdCardsList", list);
+        }
         public async Task<IActionResult> Setting()
         {
             var list = db.TableCompanies.FirstOrDefault();
@@ -298,8 +391,8 @@ ViewBag.hourCount = (from subject in db.TimeTables
         {
             ViewBag.Student = db.Students.Where(x => x.Status == true).Count();
             ViewBag.Class = db.Classes.Where(x => x.Status == true).Count();
-            ViewBag.Staff = db.staff.Where(x => x.Status == true).Count();
-            ViewBag.Subject = db.Subjects.Where(x => x.Status == true).Count();
+            ViewBag.Staff = db.Teachers.Where(x => x.Status == true).Count();
+            ViewBag.Subject = db.Schedules.Where(x => x.Status == true).Count();
             ViewBag._Class = db.Classes.Where(x=>x.Status==true).ToList();
 
 

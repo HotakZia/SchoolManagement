@@ -17,7 +17,40 @@ namespace SchoolManagement.Controllers
         //{
         //    db = context;
         //}
+        public async Task<IActionResult> Attendance()
+        {
+            return View();
+        }
+            public async Task<IActionResult> getClassAttendance( Guid? classId, string date)
+        {
+            // Split authors separated by a comma followed by space
+            string[] From_To_Dates = date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
+           var StartDate = DateTime.Parse(From_To_Dates[0].ToString());
+         var EndDate = DateTime.Parse(From_To_Dates[1].ToString());
+            var list =await (from AttendanceLog in db.AttendanceLogs
+                        join student in db.Students on AttendanceLog.StudentId equals student.StudentId
+                        where AttendanceLog.ClassId == classId&&AttendanceLog.Date>=StartDate&&AttendanceLog.Date<=EndDate
 
+                        select new Models.Entities.Attendance
+                        {
+
+
+                            Status = AttendanceLog.Status,
+                            Attachment = AttendanceLog.Attachment,
+                            ClassId = AttendanceLog.ClassId,
+                            StudentName = student.FirstName + " " + student.LastName + " " + student.RoleNumber,
+                            Id = AttendanceLog.Id,
+                            In = AttendanceLog.In,
+                            Out = AttendanceLog.Out,
+                            
+
+
+
+
+                        }).AsNoTracking().ToListAsync();
+
+            return PartialView("_Attendance", list);
+        }
         public async Task<IActionResult> loadClassSubjects(int? grad, Guid? Id)
         {
             var list =  (from timeTable in db.TimeTables

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<SchoolManagement.Models.Entities.Attendance>
+<h1>Udacity Attendance</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th class="name-col">Student Name</th>
+           @for (int i = 1; i <=31; i++)
+           {
+               <th class="name-col">@i</th>
+           }
+            <th class="missed-col">Days Missed-col</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="student">
+            <td class="name-col">Slappy the Frog</td>
+            @for (int i = 1; i <= 31; i++)
+            {
+                if (Model.Where(x => x.Date.Value.Day == i).Select(x=>x.Date).FirstOrDefault() !=null)
+                {
+                    <td class="attend-col"><input checked readonly type="checkbox"></td>
+
+                }
+                else
+                {
+                    <td class="attend-col"><input readonly type="checkbox"></td>
+
+                }
+            }
+            <td class="missed-col">0</td>
+        </tr>
+ 
+    </tbody>
+</table>

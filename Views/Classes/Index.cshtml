@@ -170,6 +170,62 @@
 }
 
 <script>
+          function loadAttendance(Id) {
+
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Classes/getClassAttendance", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
+      function LoadIdCard(Id) {
+
+        $('.page-loader').show();
+
+        $.ajax({
+
+
+            type: "POST",
+            async: true,
+            url: "/Home/LoadClassIdCards", //url to load partial view
+            //data: "{term:'" + SearchText + "'}",
+            data: { "Id": Id },
+            //contentType: "application/json;characterset=utf-8",
+            success: function (response) {
+                $('#AModelBody').html(response);
+                $('#AModel').modal('show');
+
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                alert(response.responseText);
+            }
+
+        });
+        $('.page-loader').hide();
+    }
     function LoadSubjects(Id) {
 
         $('.page-loader').show();
@@ -197,6 +253,49 @@
 
         });
         $('.page-loader').hide();
+    }
+        function printDiv() {
+
+
+
+
+        var divToPrint = document.getElementById('PrintIdCard');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write(`<html>
+           <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+                <title>
+
+
+                  ID Card
+                </title>
+
+
+<head>
+
+
+
+
+
+            </head>
+<body onload="window.print()">` + divToPrint.innerHTML + ' </body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+        $("#Cancel").trigger("click");
+
+
+
+
+
     }
 </script>
 <div class="modal fade bd-example-modal-lg" id="AModel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">

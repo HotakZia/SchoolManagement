@@ -22,7 +22,7 @@
                         <input type="hidden" asp-for="Type" />
                         <input type="hidden" asp-for="LogoName" />
                         <input type="hidden" asp-for="LogoType" />
-
+                        <input type="hidden" asp-for="Logo" />
 
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -35,63 +35,63 @@
                             <div class="form-group local-forms col-lg-3">
                                 <div class="form-group local-forms">
                                     <label asp-for="@Model.Name" class="control-label">Name <span class="login-danger"> *</span></label>
-                                    <input asp-for="@Model.Name" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <input asp-for="@Model.Name" id="PaidBy" maxlength="50" required class="form-control" />
                                     <span asp-validation-for="@Model.Name" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group local-forms col-lg-3">
                                 <div class="form-group local-forms">
                                     <label asp-for="@Model.TagLine" class="control-label">Services <span class="login-danger"> *</span></label>
-                                    <input asp-for="@Model.TagLine" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <input asp-for="@Model.TagLine" id="PaidBy" maxlength="50" required class="form-control" />
                                     <span asp-validation-for="@Model.TagLine" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group local-forms col-lg-3">
                                 <div class="form-group local-forms">
                                     <label asp-for="@Model.PhoneNumber" class="control-label">Phone <span class="login-danger"> *</span></label>
-                                    <input asp-for="@Model.PhoneNumber" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <input asp-for="@Model.PhoneNumber" id="PaidBy" maxlength="50" required class="form-control" />
                                     <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group local-forms col-lg-3">
                                 <div class="form-group local-forms">
                                     <label asp-for="@Model.Email" class="control-label">Email <span class="login-danger"> *</span></label>
-                                    <input asp-for="@Model.Email" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <input asp-for="@Model.Email" id="PaidBy" maxlength="50" required class="form-control" />
                                     <span asp-validation-for="@Model.Email" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group local-forms col-lg-3">
                                 <div class="form-group local-forms">
                                     <label asp-for="@Model.Location" class="control-label">Locaiton <span class="login-danger"> *</span></label>
-                                    <input asp-for="@Model.Location" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <input asp-for="@Model.Location" id="PaidBy" maxlength="50" required class="form-control" />
                                     <span asp-validation-for="@Model.Location" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group local-forms col-lg-3">
                                 <div class="form-group local-forms">
                                     <label asp-for="@Model.FacebookName" class="control-label">Facebook Name <span class="login-danger"> *</span></label>
-                                    <input asp-for="@Model.FacebookName" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <input asp-for="@Model.FacebookName" id="PaidBy" maxlength="50" required class="form-control" />
                                     <span asp-validation-for="@Model.FacebookName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group local-forms col-lg-3">
                                 <div class="form-group local-forms">
                                     <label asp-for="@Model.TwitterName" class="control-label">Twitter Name <span class="login-danger"> *</span></label>
-                                    <input asp-for="@Model.TwitterName" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <input asp-for="@Model.TwitterName" id="PaidBy" maxlength="50" required class="form-control" />
                                     <span asp-validation-for="@Model.TwitterName" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group local-forms col-lg-3">
                                 <div class="form-group local-forms">
                                     <label asp-for="@Model.Website" class="control-label">Website <span class="login-danger"> *</span></label>
-                                    <input asp-for="@Model.Website" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <input asp-for="@Model.Website" id="PaidBy" maxlength="50" required class="form-control" />
                                     <span asp-validation-for="@Model.Website" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group local-forms col-lg-6">
                                 <div class="form-group local-forms">
                                     <label asp-for="@Model.Description" class="control-label">Description <span class="login-danger"> *</span></label>
-                                    <input asp-for="@Model.Description" id="PaidBy" maxlength="50" required class="form-control"  />
+                                    <input asp-for="@Model.Description" id="PaidBy" maxlength="50" required class="form-control" />
                                     <span asp-validation-for="@Model.Description" class="text-danger"></span>
                                 </div>
                             </div>
@@ -113,7 +113,7 @@
                                             <div class="uplod d-flex">
                                                 <label class="file-upload profile-upbtn mb-0">
                                                     <i class="feather-edit-3"></i>
-                                                    <input type="file" name="Image" id="uploadInput" accept="image/*"  onchange="displayImage(event)">
+                                                    <input type="file" name="Image" id="uploadInput" accept="image/*" onchange="displayImage(event)">
 
                                                 </label>
                                                 <div class="invalid-feedback">

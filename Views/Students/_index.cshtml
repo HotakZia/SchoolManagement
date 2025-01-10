@@ -82,6 +82,7 @@
                                 <a asp-action="Edit" asp-route-id="@item.StudentId" class="dropdown-item">Edit</a>
                                 <a onclick='LoadPerants("@item.StudentId")' href="#" class="dropdown-item">Parents</a>
                                 <a onclick='LoadFiles("@item.StudentId")' href="#" class="dropdown-item">Files</a>
+                                <a onclick='LoadIdCard("@item.StudentId")' href="#" class="dropdown-item">Get Student Id</a>
                                 <div role="separator" class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Info</a>
                             </div>
