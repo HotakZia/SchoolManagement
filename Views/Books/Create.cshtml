@@ -26,7 +26,7 @@
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess" class="needs-validation" 
+                    <form asp-action="Create" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
 
 
@@ -42,7 +42,7 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="Name" class="control-label">Book Name<span class="login-danger">*</span></label>
-                                    <input asp-for="Name" class="form-control "  maxlength="3"/>
+                                    <input asp-for="Name" class="form-control" required  maxlength="30"/>
                                     <span asp-validation-for="Name" class="text-danger"></span>
                                     <div class="invalid-feedback">Please enter a valid email address.</div>
                                 </div>
@@ -50,7 +50,7 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms ">
                                     <label asp-for="Type" class="control-label">Book Type<span class="login-danger">*</span></label>
-                                    <input asp-for="Type" class="form-control" />
+                                    <input asp-for="Type" class="form-control" required maxlength="50" />
                                     <span asp-validation-for="Type" class="text-danger"></span>
                                 </div>
                             </div>
@@ -59,7 +59,7 @@
                                 <div class="form-group local-forms">
 
                                     <label asp-for="Comment" class="control-label">Comment<span class="login-danger">*</span></label>
-                                    <input asp-for="Comment" class="form-control" />
+                                    <input asp-for="Comment" maxlength="100" class="form-control" />
                                     <span asp-validation-for="Comment" class="text-danger"></span>
                                 </div>
                             </div>

@@ -1,35 +1,66 @@
 ﻿@model IEnumerable<SchoolManagement.Models.Entities.Attendance>
-<h1>Udacity Attendance</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th class="name-col">Student Name</th>
-           @for (int i = 1; i <=31; i++)
-           {
-               <th class="name-col">@i</th>
-           }
-            <th class="missed-col">Days Missed-col</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="student">
-            <td class="name-col">Slappy the Frog</td>
-            @for (int i = 1; i <= 31; i++)
-            {
-                if (Model.Where(x => x.Date.Value.Day == i).Select(x=>x.Date).FirstOrDefault() !=null)
+    <div class="table-responsive"id="PrintAttendance">
+        <p style="text-align:center">@ViewBag.SystemInfo.Name<br />
+        @ViewBag.SystemInfo.PhoneNumber / @ViewBag.SystemInfo.Email
+        <br />
+        <strong>@ViewBag.className</strong> Attendance  from @ViewBag.startDate.ToLongDateString() to @ViewBag.endDate.ToLongDateString()</p>
+        <strong></strong>
+        <table class="table table-bordered">
+            <thead class="student-thread">
+                <tr style="text-align:center">
+                    <th class="name-col">Student Name</th>
+                    @foreach (var item in ViewBag.daysList)
+                    {
+
+
+                        <th class="name-col">
+                            @item.Number
+                            <p style="  writing-mode: vertical-rl; /* Set the text to be vertical (from right to left) */
+            text-orientation: sideways; /* Set the text orientation to be sideways */
+            transform: rotate(180deg); /* Rotate the text for vertical display */
+            white-space: nowrap; /* Prevent text wrapping */">
+                                @item.Name
+                            </p>
+                        </th>
+
+                    }
+
+                    <th class="missed-col">Total</th>
+                    <th class="missed-col">Present</th>
+                    <th class="missed-col">Absent</th>
+                    <th class="missed-col">Leave</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    <td class="attend-col"><input checked readonly type="checkbox"></td>
+                    <tr class="student" style="text-align:center">
+                        <td class="name-col">@item.StudentName</td>
+
+                        @foreach (var days in ViewBag.daysList)
+                        {
+
+                            if (item.list.Where(x => x.Date.Value.Day == days.Number).Select(x => x.Name).FirstOrDefault() == "Present"
+                                )
+                            {
+                                <td class="attend-col"><input checked readonly type="checkbox"></td>
+
+                            }
+                            else
+                            {
+                                <td class="attend-col"><input readonly type="checkbox"></td>
+
+                            }
+                        }
+                        <td class="missed-col">@item.list.Count()</td>
+                        <td class="missed-col">@item.list.Where(x => x.Name == "Present").Count()</td>
+                        <td class="missed-col">@item.list.Where(x => x.Name == "Absent").Count()</td>
+                        <td class="missed-col">@item.list.Where(x => x.Name == "Leave").Count()</td>
+                    </tr>
 
                 }
-                else
-                {
-                    <td class="attend-col"><input readonly type="checkbox"></td>
 
-                }
-            }
-            <td class="missed-col">0</td>
-        </tr>
- 
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>

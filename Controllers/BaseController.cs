@@ -19,13 +19,30 @@ namespace SchoolManagement.Controllers
       
         public dynamic showMessageString = string.Empty;
         #region Localization
-        public IActionResult ChangeLanguage(string culture)
+
+        public IActionResult SetLanguage(string culture, string returnUrl)
         {
+            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+        public IActionResult ChangeLanguage(string culture)
+        {        // Set culture based on user preference
+            //string culture = "en-US"; // English (United States)
+            //System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(culture);
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(culture);
+
             Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName, CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)), new CookieOptions()
             {
                 Expires = DateTimeOffset.UtcNow.AddYears(1)
             });
             return Redirect(Request.Headers["Referer"].ToString());
+
+
+    
+
         }
         #endregion
         public SchoolManagement.Models.db.School_dbContext db = new SchoolManagement.Models.db.School_dbContext();

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 #nullable disable
 
@@ -52,25 +50,12 @@ namespace SchoolManagement.Models.db
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<staff> staff { get; set; }
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseSqlServer("Data Source=Dell; Initial Catalog=School_db;user=sa;password=123; Integrated Security=True; Connect Timeout=30; Encrypt=False; TrustServerCertificate=False; ApplicationIntent=ReadWrite; MultiSubnetFailover=False");
-//            }
-//        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var configuration = new ConfigurationBuilder()
-              .SetBasePath(Directory.GetCurrentDirectory())
-              .AddJsonFile("appsettings.json")
-              .Build();
-                var connectionString = configuration.GetConnectionString("jobBoardOnline");
-                optionsBuilder.UseSqlServer(connectionString);
-              
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Data Source=Dell; Initial Catalog=School_db;user=sa;password=123; Integrated Security=True; Connect Timeout=30; Encrypt=False; TrustServerCertificate=False; ApplicationIntent=ReadWrite; MultiSubnetFailover=False");
             }
         }
 
@@ -179,27 +164,19 @@ namespace SchoolManagement.Models.db
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
+                entity.Property(e => e.Amount).HasColumnType("decimal(18, 0)");
+
                 entity.Property(e => e.CreatedBy).HasMaxLength(250);
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Credit).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Debit).HasColumnType("decimal(18, 0)");
+
                 entity.Property(e => e.ModifiedBy).HasMaxLength(250);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.NewAmount).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.NewCredit).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.NewDebit).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.OldAmount).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.OldCredit).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.OldDebit).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.Total).HasColumnType("decimal(18, 0)");
             });
 
             modelBuilder.Entity<Event>(entity =>

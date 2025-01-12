@@ -148,13 +148,17 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Assign([Bind("Id,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number,RelationId,BookId,StartDate,EndDate")] BookAssignee book, IFormFile Image)
+        public async Task<IActionResult> Assign([Bind("Id,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status,Number,RelationId,BookId,StartDate,EndDate")] BookAssignee book, IFormFile Image, string date)
         {
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Split authors separated by a comma followed by space
+                    string[] From_To_Dates = date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
+                    var StartDate = DateTime.Parse(From_To_Dates[0].ToString());
+                    var EndDate = DateTime.Parse(From_To_Dates[1].ToString());
                     var duplicate = db.BookAssignees.Where(x => x.Id == book.Id && x.StartDate == book.StartDate&&x.EndDate==book.EndDate&&x.RelationId==book.RelationId&&x.Status==true).FirstOrDefault();
                     if (duplicate != null)
                     {

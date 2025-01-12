@@ -72,21 +72,22 @@
                                 <div class="follow-group">
 
                                     <div class="students-follows">
-                                        <h5>@Model.Gender</h5>
+                                        <h5>Gender</h5>
+                                        <span> @Model.Gender</span>
+                                      
 
                                     </div>
                                     <div class="students-follows">
-                                        <h5>@Model.DateOfBirth</h5>
+                                        <h5>Date Of Birth</h5>
+                                        <span> @Model.DateOfBirth.Value.ToLongDateString()</span>
 
                                     </div>
                                     <div class="students-follows">
-                                        <h5>@Model.HireDate</h5>
+                                        <h5>Joining Date</h5>
+                                        <span> @Model.HireDate.Value.ToLongDateString()</span>
 
                                     </div>
-                                    <div class="students-follows">
-                                        <h5>@Model.CreatedDate</h5>
-
-                                    </div>
+                           
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-2 d-flex align-items-center">

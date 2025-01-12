@@ -555,7 +555,7 @@ namespace SchoolManagement.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StudentId,ClassId,Date,Status,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Status1,Number,In,Out,Name,TeacherId")] List< AttendanceLog> attendanceLog,List< IFormFile> Image)
+        public async Task<IActionResult> Create([Bind("Id,StudentId,ClassId,Date,Status,CreatedBy,CreatedDate,ModifiedBy,ModifiedDate,Comment,Attachment,Number,In,Out,Name,TeacherId")] List< AttendanceLog> attendanceLog,List< IFormFile> Image)
         {
             if (ModelState.IsValid)
             {

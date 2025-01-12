@@ -3,50 +3,78 @@
 
 <link rel="stylesheet" href="~/template/assets/plugins/datatables/datatables.min.css">
 
+
 <div class="content container-fluid">
 
 
-    <form asp-action="getClassAttendance" method="post" data-ajax="true" data-ajax-update="#_result"
-          data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure">
-        <!-- Form fields go here -->
+    <div class="row">
+        <div class="col-sm-12">
 
-        <div class="student-group-form">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="form-group">
+            <div class="card card-table">
+                <div class="card-body">
 
-                        <input type="text" id="txtClass" name="txtClass" class="form-control" placeholder="Search class by name ...">
-                        <input type="hidden" id="ClassId" name="classId" />
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center">
+               
+                                <form asp-action="getClassAttendance" asp-controller="Classes" method="Post" data-ajax="true"
+                                      data-ajax-success="attendanceOnSuccess" data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure">
+                                    <!-- Form fields go here -->
 
-                    </div>
-                </div>
-                <div class="col-12 col-sm-4">
-                    <div class="form-group local-forms">
-                        <label>Event Start Date <span class="login-danger">*</span></label>
+                      
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+
+                                                <input type="text" id="txtClass" name="txtClass" class="form-control" placeholder="Search class by name ...">
+                                                <input type="hidden" id="ClassId" name="classId" />
+
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="form-group local-forms">
+                                                <label>Event Start Date <span class="login-danger">*</span></label>
 
 
-                        <div class="input-group">
-                            <span class="input-group-text" id="date3-1">Date</span>
-                            <input type="text" class="form-control" id="inputDate3-1" placeholder="Start - End" aria-label="Dates" aria-describedby="basic-addon1">
+                                                <div class="input-group">
+                                                    <span class="input-group-text" id="date3-1">Date</span>
+                                                    <input type="text" class="form-control" id="inputDate3-1" placeholder="Start - End" aria-label="Dates" aria-describedby="basic-addon1">
+                                                </div>
+                                                <input type="hidden" name="date" id="date" class="form-control" required />
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-2">
+                                            <div class="search-student-btn">
+                                                <button type="btn" class="btn btn-primary">Load</button>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-lg-2">
+                                            <div class="search-student-btn">
+                                                <button onclick="printDiv()" class="btn btn-success"><i class="fa fa-print"></i> Print</button>
+                                            </div>
+                                        </div>*@
+                                    </div>
+                                 
+                                </form>
+                     
+
                         </div>
-                        <input type="hidden" name="date" id="date" class="form-control" required />
-
                     </div>
-                </div>
+                    <!-- /Page Header -->
 
-                <div class="col-lg-2">
-                    <div class="search-student-btn">
-                        <button type="btn" class="btn btn-primary">Search</button>
-                    </div>
+
+                    <div id="attendanceList"></div>
                 </div>
             </div>
         </div>
-    </form>
-
-    <div class="row">
-        <div id="_result"></div>
     </div>
 </div>
+
+
+
+
 
 <script src="~/template/assets/plugins/datatables/datatables.min.js" type="63ab970d43efa16255dcd8af-text/javascript"></script>
 <link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
@@ -56,7 +84,6 @@
 
 <link href="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
 <script src="~/Persion-datepicker/dist/upper.main.js"></script>
-@*<script src="~/Persion-datepicker/dist/Slim.min.js"></script>*@
 <script src="~/Persion-datepicker/dist/bootstrap.min.js.js"></script>
 <script src="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.js"></script>
 
@@ -127,8 +154,9 @@
         },
 
         select: function (event, ui) {
-
+    
             $('#txtClass').val(ui.item.label);
+              $('#className').val(ui.item.label);
 
             $('#ClassId').val(ui.item.value);
             $('#txtClass').removeClass('notfound');
@@ -142,6 +170,61 @@
 
 
     });
+            function printDiv() {
+
+
+
+
+        var divToPrint = document.getElementById('PrintAttendance');
+
+        var newWin = window.open('', 'Print-Window');
+
+        newWin.document.open();
+
+        newWin.document.write(`<html>
+           <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+                <title>
+
+
+                  ID Card
+                </title>
+  <style>
+                @@media print {
+                    table {
+                        table-layout: fixed; /* Ensure table keeps its layout for printing */
+                        width: 100%; /* Set table width to 100% for printing */
+                    }
+                    td {
+                        width: 1%; /* Force each table cell to take up minimal width */
+                        white-space: nowrap; /* Prevent text wrapping in cells */
+                    }
+                }
+            </style>
+
+<head>
+
+
+
+
+
+            </head>
+<body onload="window.print()">` + divToPrint.innerHTML + ' </body></html>');
+
+        newWin.document.close();
+
+        setTimeout(function () { newWin.close(); }, 10);
+        $("#Cancel").trigger("click");
+
+
+
+
+
+    }
+
 </script>
 @section Scripts {
 
@@ -153,8 +236,15 @@
             $('.page-loader').show();
 
         }
-        function OnSuccess(data) {
-            //$('#_result').html(data);
+        function attendanceOnSuccess(data) {
+
+            if (data.status == "false") {
+                swal("False!", data.message, "error");
+            }
+            else {
+                $('#attendanceList').html(data);
+            }
+
         }
         function OnComplete() {
             $('.page-loader').hide();

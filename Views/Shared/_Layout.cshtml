@@ -1,12 +1,10 @@
-﻿
-    @*<head>
+﻿@*<head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>@ViewData["Title"] - SchoolManagement</title>
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" />
     </head>*@
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +34,9 @@
     <link rel="stylesheet" href="~/template/assets/plugins/fontawesome/css/all.min.css">
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="~/template/assets/css/style.css">
+
+    <link href="~/template/assets/css/RTL_StyleSheet.css" rel="stylesheet" />
+    @*<link rel="stylesheet" href="~/template/assets/css/style.css">*@
     <link href="~/template/assets/sweetalert/css/sweetalert.css" rel="stylesheet" />
 
     <link href="~/template/assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
@@ -115,20 +115,20 @@
             <!-- /Mobile Menu Toggle -->
             <!-- Header Right Menu -->
             <ul class="nav user-menu">
-                @*<li class="nav-item dropdown noti-dropdown language-drop me-2">
+                <li class="nav-item dropdown noti-dropdown language-drop me-2">
                         <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
                             <img src="~/template/assets/img/icons/header-icon-01.svg" alt="">
                         </a>
                         <div class="dropdown-menu ">
                             <div class="noti-content">
                                 <div>
-                                    <a class="dropdown-item" href="javascript:;"><i class="flag flag-lr me-2"></i>English</a>
-                                    <a class="dropdown-item" href="javascript:;"><i class="flag flag-bl me-2"></i>Francais</a>
-                                    <a class="dropdown-item" href="javascript:;"><i class="flag flag-cn me-2"></i>Turkce</a>
+                                    <a class="dropdown-item" asp-controller="Base" asp-action="SetLanguage" asp-route-culture="en"><i class="flag flag-lr me-2"></i>English</a>
+                                    <a class="dropdown-item" asp-controller="Base" asp-action="SetLanguage" asp-route-culture="ps"><i class="flag flag-lr me-2"></i>Pashto</a>
+                                    <a class="dropdown-item" asp-controller="Base" asp-action="SetLanguage" asp-route-culture="fa"><i class="flag flag-lr me-2"></i>Dari</a>
                                 </div>
                             </div>
                         </div>
-                    </li>*@
+                    </li>
                 <!-- Notifications -->
                 <li class="nav-item dropdown noti-dropdown me-2">
                     <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
@@ -234,7 +234,7 @@
                         </li>
                         <li class="submenu @(ViewContext.RouteData.Values["controller"].ToString().Equals("Home") ? "active" : "")">
 
-                            <a href="#"><i class="feather-grid"></i> <span> Dashboard</span> <span class="menu-arrow"></span></a>
+                            <a href="#"><i class="feather-grid"></i> <span> </span> <span class="menu-arrow"></span>Dashboard</a>
 
                             <ul>
 
@@ -288,7 +288,7 @@
                         <li class="submenu @(ViewContext.RouteData.Values["controller"].ToString().Equals("Students") ? "active" : "")">
                             <a href="#"><i class="fas fa-graduation-cap"></i> <span> Students</span> <span class="menu-arrow"></span></a>
                             <ul>
-                      
+
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Students") && ViewContext.RouteData.Values["action"].ToString().Equals("Index") ? "class=active" : "") href="@Url.Action("Index","Students")">Student List </a></li>
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Students") && ViewContext.RouteData.Values["action"].ToString().Equals("Create") ? "class=active" : "") href="@Url.Action("Create","Students")">Add Student</a></li>
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Students") && ViewContext.RouteData.Values["action"].ToString().Equals("Pass") ? "class=active" : "") href="@Url.Action("Pass","Students")">Pass Student  </a></li>
@@ -311,7 +311,7 @@
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Exams") && ViewContext.RouteData.Values["action"].ToString().Equals("Index") ? "class=active" : "") href="@Url.Action("Index","Exams")">Exam List </a></li>
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Exams") && ViewContext.RouteData.Values["action"].ToString().Equals("Create") ? "class=active" : "") href="@Url.Action("Create","Exams")">Add Exam</a></li>
 
-                  
+
                             </ul>
                         </li>
 
@@ -322,7 +322,7 @@
                         <li class="submenu @(ViewContext.RouteData.Values["controller"].ToString().Equals("Transactions") ? "active" : "")">
                             <a href="#"><i class="fas fa-file-invoice-dollar"></i> <span> Accounts</span> <span class="menu-arrow"></span></a>
                             <ul>
-                        
+
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Transactions") && ViewContext.RouteData.Values["action"].ToString().Equals("FeesList") ? "class=active" : "") href="@Url.Action("FeesList","Transactions")">Fees List </a></li>
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Transactions") && ViewContext.RouteData.Values["action"].ToString().Equals("Fees") ? "class=active" : "") href="@Url.Action("Fees","Transactions")">Pay Fees </a></li>
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Transactions") && ViewContext.RouteData.Values["action"].ToString().Equals("Details") ? "class=active" : "") href="@Url.Action("Details","Transactions")">Details  </a></li>
@@ -330,7 +330,8 @@
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Transactions") && ViewContext.RouteData.Values["action"].ToString().Equals("SalaryList") ? "class=active" : "") href="@Url.Action("SalaryList","Transactions")">Salary List </a></li>
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Transactions") && ViewContext.RouteData.Values["action"].ToString().Equals("Salary") ? "class=active" : "") href="@Url.Action("Salary","Transactions")">Salary </a></li>
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Transactions") && ViewContext.RouteData.Values["action"].ToString().Equals("Sales") ? "class=active" : "") href="@Url.Action("Sales","Transactions")">Sales </a></li>
-
+                                <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Transactions") && ViewContext.RouteData.Values["action"].ToString().Equals("ClosingList") ? "class=active" : "") href="@Url.Action("ClosingList","Transactions")">Closing List </a></li>
+                                <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Transactions") && ViewContext.RouteData.Values["action"].ToString().Equals("Closing") ? "class=active" : "") href="@Url.Action("Closing","Transactions")">Closing </a></li>
 
 
 
@@ -339,7 +340,7 @@
                         <li class="submenu @(ViewContext.RouteData.Values["controller"].ToString().Equals("Inventories") ? "active" : "")">
                             <a href="#"><i class="fas fa-store"></i> <span> Inventory </span> <span class="menu-arrow"></span></a>
                             <ul>
-     
+
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Inventories") && ViewContext.RouteData.Values["action"].ToString().Equals("Create") ? "class=active" : "") href="@Url.Action("Create","Inventories")">Create Inventory </a></li>
 
                                 <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Inventories") && ViewContext.RouteData.Values["action"].ToString().Equals("Index") ? "class=active" : "") href="@Url.Action("Index","Inventories")">List Inventories</a></li>
@@ -360,12 +361,12 @@
                         <li class="menu-title">
                             <span>Management</span>
                         </li>
-                  
+
                         <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Home") && ViewContext.RouteData.Values["action"].ToString().Equals("Setting") ? "class=active" : "") href="@Url.Action("Setting","Home")">Setting </a></li>
 
 
 
-                
+
                         <li class="submenu @(ViewContext.RouteData.Values["controller"].ToString().Equals("TBLUsers") ? "active" : "")">
                             <a href="#"><i class="fas fa-shield-alt"></i> <span> Authenticpation </span> <span class="menu-arrow"></span></a>
                             <ul>
@@ -413,8 +414,21 @@
                         <li class="menu-title">
                             <span>Others</span>
                         </li>
-                        <li>
-                            <a asp-action="Create" asp-controller="Books"><i class="fas fa-book"></i> <span>Library</span></a>
+
+                        <li class="submenu @(ViewContext.RouteData.Values["controller"].ToString().Equals("Books") ? "active" : "")">
+                            <a href="#">
+                                <i class="fa fa-book"></i> <span> Books</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <ul>
+
+                                <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Books") && ViewContext.RouteData.Values["action"].ToString().Equals("Create") ? "class=active" : "") href="@Url.Action("Create","Books")">Create Books </a></li>
+
+                                <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Books") && ViewContext.RouteData.Values["action"].ToString().Equals("Assign") ? "class=active" : "") href="@Url.Action("Index","Books")">List Books</a></li>
+
+                                <li><a @(ViewContext.RouteData.Values["controller"].ToString().Equals("Books") && ViewContext.RouteData.Values["action"].ToString().Equals("Index") ? "class=active" : "") href="@Url.Action("Assign","Books")">Assing Book</a></li>
+
+                            </ul>
                         </li>
                         <li class="submenu @(ViewContext.RouteData.Values["controller"].ToString().Equals("Blogs") ? "active" : "")">
                             <a href="#">
@@ -514,6 +528,12 @@
 
     <script src="../cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="c437656adcf261e14fc51405-|49" defer></script>
     <script src="~/template/assets/js/form-validation.js" type="8fd9cd6760df466b51b89013-text/javascript"></script>
+
+
+    tr
+
+
+    ////////////////////////
 
 
     @RenderSection("scripts", required: false)

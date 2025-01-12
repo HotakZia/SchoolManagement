@@ -32,14 +32,13 @@
                                 <tr>
 
                                     <th>No#</th>
-
-                                    <th>Old Credit</th>
-                                    <th>Old Debit</th>
-                                    <th>Old Total</th>
                                     <th>Closing Date</th>
-                                    <th>New Credit</th>
-                                    <th>New Debit</th>
-                                    <th>New Total</th>
+
+                                    <th>Credit</th>
+                                    <th>Debit</th>
+                                    <th>Total</th>
+
+
 
 
                                     <th class="text-end">Action</th>
@@ -54,19 +53,16 @@
 
                                     <td>@item.Number</td>
                                     <td>@item.CreatedDate.Value.ToShortDateString()</td>
-                                    <td>@item.OldCredit</td>
-                                    <td>@item.OldDebit</td>
-                                    <td>@item.OldAmount</td>
-                                    <td>@item.NewCredit</td>
-                                    <td>@item.NewDebit</td>
-
-                                    <td>@item.NewAmount</td>
+                                    <td>@item.Credit</td>
+                                    <td>@item.Debit</td>
+                                    <td>@item.Amount</td>
+                                  
 
                                     <td class="text-end">
                                         <div class="input-group">
                                             <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">List</button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit  </a>
+                                                @*<a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit  </a>*@
 
                                                 <a class="dropdown-item" href="#" onclick='LoadFiles("@item.CreatedBy")'>Fils </a>
                                                 <div role="separator" class="dropdown-divider"></div>

@@ -62,12 +62,12 @@ namespace SchoolManagement.Controllers
                 foreach (var item in list)
                 {
                     item.Status = true;
-                    db.Transactions.Update(item);
-                    if (item.Type=="Credit")
+                    //db.Transactions.Update(item);
+                    if (item.Drcr=="Credit")
                     {
                         totalCredit += item.Amount;
                     }
-                    else if (item.Type == "Debit")
+                    else if (item.Drcr == "Debit")
                     {
                         totalDebit += item.Amount;
                     }
@@ -86,12 +86,17 @@ namespace SchoolManagement.Controllers
                 };
                 return Json(showMessageString);
             }
-            closing.OldDebit = db.Transactions.Where(x => x.Status !=true&&x.Drcr=="Debit").Sum(x=>x.Amount);
-            closing.OldCredit = db.Transactions.Where(x => x.Status != true && x.Drcr == "Credit").Sum(x => x.Amount);
+                closing.Credit = totalCredit;
+                closing.Debit = totalDebit;
+               
+          
+                var lastClosing = db.Closings.OrderByDescending(x => x.CreatedDate).Select(x=>x.Amount).FirstOrDefault()??0;
+                closing.Amount = totalCredit - (totalDebit + lastClosing);
             closing.Id = Guid.NewGuid();
             closing.CreatedDate = DateTime.Now;
             db.Closings.Add(closing);
             db.SaveChanges();
+                ViewBag.TransactionList = db.Transactions.Where(x => x.Status != true).ToList();
                 showMessageString = new
                 {
                     status = "true",

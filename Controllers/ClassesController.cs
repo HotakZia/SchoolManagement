@@ -21,35 +21,67 @@ namespace SchoolManagement.Controllers
         {
             return View();
         }
-            public async Task<IActionResult> getClassAttendance( Guid? classId, string date)
+        [HttpPost]
+            public async Task<IActionResult> getClassAttendance( Guid? classId, string date,string txtClass)
         {
-            // Split authors separated by a comma followed by space
-            string[] From_To_Dates = date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
-           var StartDate = DateTime.Parse(From_To_Dates[0].ToString());
-         var EndDate = DateTime.Parse(From_To_Dates[1].ToString());
-            var list =await (from AttendanceLog in db.AttendanceLogs
-                        join student in db.Students on AttendanceLog.StudentId equals student.StudentId
-                        where AttendanceLog.ClassId == classId&&AttendanceLog.Date>=StartDate&&AttendanceLog.Date<=EndDate
+            try
+            {
+                // Split authors separated by a comma followed by space
+                string[] From_To_Dates = date.Split(new Char[] { '-',/* '\n', '\t', ' ', ',', '.'*/ });
+                var StartDate = DateTime.Parse(From_To_Dates[0].ToString());
+                var EndDate = DateTime.Parse(From_To_Dates[1].ToString());
+                // Calculate the time difference
+                TimeSpan difference = StartDate - EndDate;
 
-                        select new Models.Entities.Attendance
-                        {
+                ViewBag.startDate = StartDate;ViewBag.endDate = EndDate;
+                // Extract the number of days, hours, minutes, etc. from the TimeSpan
+                //int daysDifference = difference.Days;
+                var daysList = new List<Models.DaysNameAndNumbers> ();
+                int number = 1;
+       
+                // Iterate over the range of dates
+                for (DateTime days = StartDate; days <= EndDate; days = days.AddDays(1))
+                {
+                 
+                    daysList.Add(new Models.DaysNameAndNumbers { Name = days.ToString("dddd"),Number=number,day=days.Day});
+                    number++;
+                }
+                ViewBag.daysList = daysList;
+                var list = await (from student in db.Students
+                                  
+                                  where student.ClassId == classId
+
+                                  select new Models.Entities.Attendance
+                                  {
+
+                                      StudentId=student.StudentId,
+                                      Status = student.Status,
+                                      ClassId = student.ClassId,
+                                      StudentName = student.FirstName + " " + student.LastName + " " + student.RoleNumber,
+                                    list=db.AttendanceLogs.Where(x=>x.Date >= StartDate && x.Date <= EndDate&&x.StudentId==student.StudentId).ToList()
 
 
-                            Status = AttendanceLog.Status,
-                            Attachment = AttendanceLog.Attachment,
-                            ClassId = AttendanceLog.ClassId,
-                            StudentName = student.FirstName + " " + student.LastName + " " + student.RoleNumber,
-                            Id = AttendanceLog.Id,
-                            In = AttendanceLog.In,
-                            Out = AttendanceLog.Out,
-                            
 
 
+                                  }).AsNoTracking().ToListAsync();
 
+                ViewBag.SystemInfo = db.TableCompanies.FirstOrDefault();
+                ViewBag.className = txtClass;
+                return PartialView("_Attendance", list);
 
-                        }).AsNoTracking().ToListAsync();
+            }
+            catch (Exception ex)
+            {
 
-            return PartialView("_Attendance", list);
+                showMessageString = new
+                {
+                    status = "false",
+                    message = ex.InnerException.Message
+
+                };
+                return Json(showMessageString);
+            }
+            
         }
         public async Task<IActionResult> loadClassSubjects(int? grad, Guid? Id)
         {

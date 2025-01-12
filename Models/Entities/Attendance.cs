@@ -26,5 +26,6 @@ namespace SchoolManagement.Models.Entities
         public string StudentName { get; set; }
         public String TeacherName { get; set; }
         public string ClassName { get; set; }
+        public List<Models.db.AttendanceLog> list{ get; set; }
     }
 }

@@ -5,28 +5,14 @@
 
 <div class="content container-fluid">
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="row align-items-center">
-            <div class="col-sm-12">
-                <div class="page-sub-header">
-                    <h3 class="page-title">Add Books</h3>
-                    <ul class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="students.html">Student</a></li>
-                        <li class="breadcrumb-item active">Add Students</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- /Page Header -->
+
 
     <div class="row">
         <div class="col-sm-12">
 
             <div class="card comman-shadow">
                 <div class="card-body">
-                    <form asp-action="Assign" method="post" data-ajax-success="OnSuccess"
+                    <form asp-action="Assign" method="post" data-ajax-success="OnSuccess" class="needs-validation" novalidate
                           data-ajax-begin="OnBegin" data-ajax-complete="OnComplete" data-ajax-failure="OnFailure" data-ajax="true" enctype="multipart/form-data">
 
 
@@ -43,7 +29,7 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="BookId" class="control-label">Search Book<span class="login-danger">*</span></label>
-                                    <input asp-for="BookId" type="hidden" id="BookId" class="form-control" />
+                                    <input asp-for="BookId" type="hidden"  id="BookId" class="form-control" />
                                     <input type="text" required id="txtBook" name="txtBook" class="form-control" />
 
                                     <span asp-validation-for="BookId" class="text-danger"></span>
@@ -52,24 +38,23 @@
                             <div class="col-12 col-sm-4">
                                 <div class="form-group local-forms">
                                     <label asp-for="RelationId" class="control-label">Student / Teacher Name <span class="login-danger">*</span></label>
-                                    <input asp-for="RelationId"  type="hidden" id="RelationId" class="form-control" />
+                                    <input asp-for="RelationId" required type="hidden" id="RelationId" class="form-control" />
                                     <input type="text" required id="txtName" name="txtName" class="form-control" />
 
                                     <span asp-validation-for="RelationId" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-4">
+                            <div class="col-lg-4">
                                 <div class="form-group local-forms">
-                                    <label asp-for="StartDate" class="control-label">Start Date<span class="login-danger">*</span></label>
-                                    <input asp-for="StartDate" class="form-control" />
-                                    <span asp-validation-for="StartDate" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group local-forms ">
-                                    <label asp-for="EndDate" class="control-label">End Date<span class="login-danger">*</span></label>
-                                    <input asp-for="EndDate" class="form-control" />
-                                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                                    <label>Event Start Date <span class="login-danger">*</span></label>
+
+
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="date3-1">Date</span>
+                                        <input type="text" class="form-control" readonly id="inputDate3-1" placeholder="Start - End" aria-label="Dates" aria-describedby="basic-addon1">
+                                    </div>
+                                    <input type="hidden" name="date" id="date" class="form-control" required />
+
                                 </div>
                             </div>
 
@@ -81,18 +66,18 @@
                                     <span asp-validation-for="Comment" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="form-group students-up-files">
-                                    <label>Upload Student Photo (150px X 150px)</label>
-                                    <div class="uplod">
-                                        <label class="file-upload image-upbtn mb-0">
-                                            Choose File <input type="file" name="Image">
-                                            <span asp-validation-for="Attachment" class="text-danger"></span>
-                                        </label>
+                            @*<div class="col-12 col-sm-4">
+                                    <div class="form-group students-up-files">
+                                        <label>Upload Student Photo (150px X 150px)</label>
+                                        <div class="uplod">
+                                            <label class="file-upload image-upbtn mb-0">
+                                                Choose File <input type="file" name="Image">
+                                                <span asp-validation-for="Attachment" class="text-danger"></span>
+                                            </label>
 
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
+                                </div>*@
 
                             <div class="col-12">
                                 <div class="student-submit">
@@ -110,7 +95,22 @@
 <link href="~/jquery-ui-1.14.1/jquery-ui.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script src="~/jquery-ui-1.14.1/jquery-ui.min.js"></script>
+<link href="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.style.css" rel="stylesheet" />
+<script src="~/Persion-datepicker/dist/upper.main.js"></script>
+<script src="~/Persion-datepicker/dist/bootstrap.min.js.js"></script>
+<script src="~/Persion-datepicker/dist/jquery.md.bootstrap.datetimepicker.js"></script>
+<script type="text/javascript">
+    $('#date3-1').MdPersianDateTimePicker({
+        targetTextSelector: '#inputDate3-1',
+        targetDateSelector: '#date',
+        monthsToShow: [0, 0],
+        selectedDate: new Date(),
+        selectedRangeDate: [new Date(), new Date()],
+        rangeSelector: true,
 
+
+    });
+</script>
 
 <script>
     $('#txtName').autocomplete({
@@ -171,7 +171,7 @@
             $('#RelationId').val(ui.item.value);
             $('#txtName').removeClass('notfound');
             $('#txtName').addClass('checked');
-          
+
 
             return false;
 
@@ -180,7 +180,7 @@
 
 
     });
-     $('#txtBook').autocomplete({
+    $('#txtBook').autocomplete({
 
         minlength: 3,
         source: function (request, response) {
@@ -238,7 +238,7 @@
             $('#BookId').val(ui.item.value);
             $('#txtBook').removeClass('notfound');
             $('#txtBook').addClass('checked');
-          
+
 
             return false;
 

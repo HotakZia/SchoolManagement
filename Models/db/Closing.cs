@@ -16,12 +16,8 @@ namespace SchoolManagement.Models.db
         public byte[] Attachment { get; set; }
         public bool? Status { get; set; }
         public int? Number { get; set; }
-        public decimal? NewAmount { get; set; }
-        public decimal? OldAmount { get; set; }
-        public decimal? NewCredit { get; set; }
-        public decimal? OldCredit { get; set; }
-        public decimal? NewDebit { get; set; }
-        public decimal? OldDebit { get; set; }
-        public decimal? Total { get; set; }
+        public decimal? Credit { get; set; }
+        public decimal? Debit { get; set; }
+        public decimal? Amount { get; set; }
     }
 }

@@ -1,6 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+
+<h1>@localizer["Hello"]</h1>
+
+
 <script src="~/Chart/DashboardCharts.js"></script>
 
 <!-- Overview Section -->
@@ -84,11 +90,11 @@
 
 <div class="row">
     <div class="col-xl-12 d-flex" id="activeClassDiv">
-     
+
     </div>
 
     <div class="col-xl-12 d-flex" id="scheduleDiv">
-      
+
     </div>
 </div>
 <div class="row">
@@ -147,23 +153,23 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-  
+
         $.ajax({
-             type: "GET",
-                 url: "/Home/GetActiveClasses",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "html",
-           
+            type: "GET",
+            url: "/Home/GetActiveClasses",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+
 
             success: function (responce) {
-                   
 
-             
+
+
                 $('#activeClassDiv').html(responce); // Replace the list with the updated content
 
 
-               
+
             },
 
             error: function (result) {
@@ -172,22 +178,22 @@
                 console.log(result);
             }
         });
-         $.ajax({
-             type: "GET",
-                 url: "/Home/getActiveScedule",
-                data: '{}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "html",
-           
+        $.ajax({
+            type: "GET",
+            url: "/Home/getActiveScedule",
+            data: '{}',
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+
 
             success: function (responce) {
-                   
 
-             
+
+
                 $('#scheduleDiv').html(responce); // Replace the list with the updated content
 
 
-               
+
             },
 
             error: function (result) {
@@ -196,6 +202,6 @@
                 console.log(result);
             }
         });
-        
+
     });
 </script>
